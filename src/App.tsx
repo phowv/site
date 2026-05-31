@@ -1,9 +1,10 @@
 import { useState } from "react"
 import ViewSection from "./components/sections/ViewSection"
 import Header from "./components/Header/Header"
+import UploadSection from "./components/sections/UploadSection"
 
 function App() {
-  const [section, setSection] = useState('view')
+  const [section, setSection] = useState('upload')
 
   return (
     <>
@@ -11,6 +12,8 @@ function App() {
 
       <main>
         {section == 'view' && <ViewSection/>}
+
+        {section == 'upload' && <UploadSection/>}
       </main>
     </>
   )
