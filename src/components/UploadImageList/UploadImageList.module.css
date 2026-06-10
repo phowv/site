@@ -1,0 +1,11 @@
+.uploadList {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.uploadListElement {
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+}

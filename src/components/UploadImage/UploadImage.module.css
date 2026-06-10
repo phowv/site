@@ -1,0 +1,13 @@
+.uploadImage {
+	display: inline-block;
+	width: 200px;
+	box-sizing: border-box;
+	padding: 8px;
+	cursor:	context-menu;
+}
+
+.uploadImage img {
+	display: block;
+	width: 100%;
+	height: auto;
+}
