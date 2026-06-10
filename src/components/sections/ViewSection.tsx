@@ -26,7 +26,13 @@ const ViewSection = () => {
 			{status == 'loaded' &&
 			<section style={{margin: '10px'}}>
 				{photosList.map(photoDesc =>
-				<Image key={photoDesc.photo_id} title={photoDesc.title} description={photoDesc.description} src={`${API_BASE}/photo/${photoDesc.photo_id}`} width="500"/>)}
+				<Image
+					key={photoDesc.photo_id}
+					title={photoDesc.title}
+					description={photoDesc.description}
+					src={`${API_BASE}/photo/${photoDesc.photo_id}`}
+					width="500px"
+					style={{display:"inline-block", padding: "5px"}}/>)}
 			</section>
 			}
 		</>
