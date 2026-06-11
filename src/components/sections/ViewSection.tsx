@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
-import { API_BASE, fetchPhotos } from "../../lib/api"
+import { fetchPhotos } from "../../lib/photoApi"
 import Image from "../UI/Image/Image"
+import { API_BASE } from "../../lib/axios"
 
 const ViewSection = () => {
 	const [status, setStatus] = useState('empty')

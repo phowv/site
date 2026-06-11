@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Button from '../UI/Button/Button';
-import { uploadPhoto } from '../../lib/api';
+import { uploadPhoto } from '../../lib/photoApi';
 import UploadImageList from '../UploadImageList/UploadImageList';
 import type { UploadingFile } from '../../types/files';
 import ImageEditingModal from '../ImageEditingModal/ImageEditingModal';
