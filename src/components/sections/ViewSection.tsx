@@ -27,10 +27,10 @@ const ViewSection = () => {
 			<section style={{margin: '10px'}}>
 				{photosList.map(photoDesc =>
 				<Image
-					key={photoDesc.photo_id}
+					key={photoDesc.photo_uuid}
 					title={photoDesc.title}
 					description={photoDesc.description}
-					src={`${API_BASE}/photo/${photoDesc.photo_id}`}
+					src={`${API_BASE}/photo/${photoDesc.photo_uuid}`}
 					width="500px"
 					style={{display:"inline-block", padding: "5px"}}/>)}
 			</section>

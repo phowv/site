@@ -1,21 +1,18 @@
-import { useState } from "react"
-import ViewSection from "./components/sections/ViewSection"
-import Header from "./components/Header/Header"
-import UploadSection from "./components/sections/UploadSection"
+import { Route, Routes } from "react-router-dom"
+import MainLayout from "./layouts/MainLayout"
+import HomePage from "./pages/HomePage"
+import ProfilePage from "./pages/ProfilePage"
+import NotFoundPage from "./pages/NotFoundPage"
 
 function App() {
-  const [section, setSection] = useState('upload')
-
   return (
-    <>
-      <Header switchButtonText={section == 'view' ? 'Upload' : 'View'} switchUploadState={() => setSection(section == 'view' ? 'upload' : 'view')}/>
-
-      <main>
-        {section == 'view' && <ViewSection/>}
-
-        {section == 'upload' && <UploadSection/>}
-      </main>
-    </>
+    <Routes>
+      <Route path="/" element={<MainLayout/>}>
+        <Route index element={<HomePage />} />
+        <Route path="profile" element={<ProfilePage />} />
+        <Route path="*" element={<NotFoundPage/>}/>
+      </Route>
+    </Routes>
   )
 }
 
