@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getMe, loginUser, registerUser, type DefaultResponse, type LoginRequest, type RegisterRequest } from "../lib/authApi";
+import { getMe, loginUser, refreshUser, registerUser, type LoginRequest, type RegisterRequest } from "../lib/authApi";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -39,61 +39,72 @@ export function AuthProvider({ children }: Props) {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate()
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      setIsLoading(false);
-      return;
-    }
-
+  const loadUserData = () => {
     getMe()
       .then((userData) => {
         setUser({login: userData.user_login, email: userData.user_email, description: userData.user_description});
       })
       .catch(() => {
-        localStorage.removeItem("token");
+        localStorage.removeItem("access_token");
       })
       .finally(() => {
         setIsLoading(false);
       });
+  }
+
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+
+    setIsLoading(true);
+
+    if (!token) {
+      setIsLoading(false);
+    }
+    
+    loadUserData();
   }, []);
 
   const login = async (data: LoginRequest) => {
     try {
+      setIsLoading(true);
       const response = await loginUser(data);
-      localStorage.setItem("token", response.token);
+      localStorage.setItem("access_token", response.access_token);
 
       const userData = await getMe();
       setUser({login: userData.user_login, email: userData.user_email, description: userData.user_description});
-
       console.debug("fetched user data", userData);
+      setIsLoading(false);
 
     } catch (error: any) {
-      localStorage.removeItem("token");
+      localStorage.removeItem("access_token");
       setUser(null);
+      setIsLoading(false);
       throw error;
     }
   };
 
   const register = async (data: RegisterRequest) => {
     try {
+      setIsLoading(true);
       const response = await registerUser(data);
       if (response.error !== undefined) {
         throw new Error("regisration error: " + response.error);
       }
     } catch (error: unknown) {
+      setIsLoading(false);
       if (axios.isAxiosError(error) && error.response) {
         throw new Error(error.response.data["error"]);
       }
 
       throw error
-    }	
+    }
+
+    setIsLoading(false);
     navigate("/login");
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("access_token");
     setUser(null);
   };
 

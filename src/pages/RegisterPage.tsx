@@ -1,6 +1,6 @@
 import { useState, type SyntheticEvent } from 'react';
 import { useAuth } from '../auth/authContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Input from '../components/UI/Input/Input';
 import Button from '../components/UI/Button/Button';
 

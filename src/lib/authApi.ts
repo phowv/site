@@ -13,7 +13,7 @@ export interface RegisterRequest {
 }
 
 export interface AuthResponse {
-  token: string;
+  access_token: string;
 }
 
 export interface DefaultResponse {
@@ -32,6 +32,11 @@ export async function loginUser(data: LoginRequest): Promise<AuthResponse> {
   return response.data;
 }
 
+export async function refreshUser(): Promise<AuthResponse> {
+  const response = await api.post<AuthResponse>("/auth/refresh", undefined);
+  return response.data;
+}
+
 export async function registerUser(data: RegisterRequest): Promise<DefaultResponse> {
   const response = await api.post<DefaultResponse>("/auth/register", data);
   return response.data;
@@ -41,3 +46,35 @@ export async function getMe(): Promise<GetMeResponse> {
   const response = await api.get<GetMeResponse>("/auth/me");
   return response.data;
 }
+
+let isRefreshing = false
+
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const original = error.config;
+
+    if (original.url?.includes("/auth/refresh")) {
+      localStorage.removeItem("access_token");
+      window.location.href = "/login";
+      return Promise.reject(error);
+    }
+
+    if (error.response?.status !== 401) {
+      return Promise.reject(error);
+    }
+
+    return refreshUser()
+      .then((resp) => {
+        localStorage.setItem("access_token", resp.access_token)
+        return api(original)
+      })
+      .catch((err) => {
+        console.log("Error try to refresh token", err);
+        
+        localStorage.removeItem("access_token");
+        window.location.href = "/login";
+      })
+  }
+);

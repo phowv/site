@@ -1,11 +1,11 @@
-import { useState, type SyntheticEvent } from 'react';
+import { useEffect, useState, type SyntheticEvent } from 'react';
 import { useAuth } from '../auth/authContext';
 import { Link, useNavigate } from 'react-router-dom';
 import Input from '../components/UI/Input/Input';
 import Button from '../components/UI/Button/Button';
 
 const LoginPage = () => {
-	const {login} = useAuth()
+	const {login, isLoading} = useAuth()
 	const navigate = useNavigate()
 
   const [userLogin, setuserLogin] = useState("");
@@ -41,12 +41,16 @@ const LoginPage = () => {
 					<Input type="password" value={userPassword} onChange={(e) => setUserPassword(e.target.value)} required/>
 				</div>
 
-				<Button type="submit">Login</Button>
+				<Button isActive={!isLoading} type="submit">Login</Button>
 			</form>
 
 			<p>
         No account? <Link to="/register">Register</Link>
       </p>
+
+			{
+				isLoading && <p>Loading...</p>
+			}
 		</div>
 	);
 }
