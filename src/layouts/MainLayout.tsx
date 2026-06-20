@@ -25,12 +25,6 @@ export default function MainLayout() {
               <NavLink to="/register">Register</NavLink>
             </>
           )}
-          <Button onClick={async () => {
-                localStorage.removeItem("access_token")
-                const resp = await refreshUser()
-                console.log("refresh user", resp)
-                localStorage.setItem("access_token", resp.access_token)
-              }}>Refresh</Button>
         </nav>
       </Header>
 

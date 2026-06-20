@@ -5,8 +5,8 @@ import ProfilePage from "./pages/ProfilePage"
 import NotFoundPage from "./pages/NotFoundPage"
 import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
-import ProtectedRoute from "./auth/protectedRoute"
 import AnonymousRoute from "./auth/AnonymousRoute"
+import ProtectedRoute from "./auth/ProtectedRoute"
 
 function App() {
   return (

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import FormModal from '../FormModal/FormModal';
 import Input from '../UI/Input/Input';
 import Button from '../UI/Button/Button';
 import type { UploadingFile } from '../../types/files';
-import { rotateFile90 } from '../../lib/utils';
+import { rotateFile90 } from '../../lib/utils/imageUtils';
 
 interface ImageEditingModalProps {
 	visible: boolean;

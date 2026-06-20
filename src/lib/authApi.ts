@@ -1,4 +1,5 @@
 import { api } from "./axios";
+import { triggerLogout } from "./utils/authUtils";
 
 export interface LoginRequest {
   login: string;
@@ -47,17 +48,13 @@ export async function getMe(): Promise<GetMeResponse> {
   return response.data;
 }
 
-let isRefreshing = false
-
-
 api.interceptors.response.use(
   (response) => response,
   (error) => {
     const original = error.config;
 
     if (original.url?.includes("/auth/refresh")) {
-      localStorage.removeItem("access_token");
-      window.location.href = "/login";
+      triggerLogout()
       return Promise.reject(error);
     }
 
@@ -72,9 +69,7 @@ api.interceptors.response.use(
       })
       .catch((err) => {
         console.log("Error try to refresh token", err);
-        
-        localStorage.removeItem("access_token");
-        window.location.href = "/login";
+        triggerLogout()
       })
   }
 );

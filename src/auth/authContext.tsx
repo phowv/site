@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getMe, loginUser, refreshUser, registerUser, type LoginRequest, type RegisterRequest } from "../lib/authApi";
+import { getMe, loginUser, registerUser, type LoginRequest, type RegisterRequest } from "../lib/authApi";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { subscribeToLogout, triggerLogout } from "../lib/utils/authUtils";
 
 interface User {
 	login: string;
@@ -39,7 +40,20 @@ export function AuthProvider({ children }: Props) {
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate()
 
-  const loadUserData = () => {
+  useEffect(() => {
+    subscribeToLogout(() => {
+      localStorage.removeItem("access_token");
+      setUser(null);
+    })
+
+    const token = localStorage.getItem("access_token");
+
+    setIsLoading(true);
+
+    if (!token) {
+      setIsLoading(false);
+    }
+    
     getMe()
       .then((userData) => {
         setUser({login: userData.user_login, email: userData.user_email, description: userData.user_description});
@@ -50,18 +64,6 @@ export function AuthProvider({ children }: Props) {
       .finally(() => {
         setIsLoading(false);
       });
-  }
-
-  useEffect(() => {
-    const token = localStorage.getItem("access_token");
-
-    setIsLoading(true);
-
-    if (!token) {
-      setIsLoading(false);
-    }
-    
-    loadUserData();
   }, []);
 
   const login = async (data: LoginRequest) => {
@@ -104,8 +106,7 @@ export function AuthProvider({ children }: Props) {
   };
 
   const logout = () => {
-    localStorage.removeItem("access_token");
-    setUser(null);
+    triggerLogout()
   };
 
   return (
