@@ -13,8 +13,10 @@ const UploadImage = ({ file, setEditing }: UploadImageProps) => {
 		setEditing(file.file.name)
 	}
 
+	const borderStyle = {"uploading": "2px solid yellow", "uploaded": "2px solid green", "error": "2px solid red", "": undefined}
+
 	return (
-		<div onClick={onImageClick} className={classes.uploadImage}>
+		<div onClick={onImageClick} className={classes.uploadImage} style={{border: borderStyle[file.status ?? ""]}}>
 		 	<img src={URL.createObjectURL(file.file)} alt="photo"/>
 			<p>{file.file.name}</p>
 			<p>{Math.round(file.file.size / 1024)} KB</p>

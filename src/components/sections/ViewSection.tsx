@@ -31,9 +31,10 @@ const ViewSection = () => {
 					key={photoDesc.photo_uuid}
 					title={photoDesc.title}
 					description={photoDesc.description}
+					ownerLogin={photoDesc.owner_login}
 					src={`${API_BASE}/photo/${photoDesc.photo_uuid}`}
 					width="500px"
-					style={{display:"inline-block", padding: "5px"}}/>)}
+					style={{display:"inline-block", padding: "5px", margin: "10px", border: "2px solid gray"}}/>)}
 			</section>
 			}
 		</>

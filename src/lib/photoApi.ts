@@ -1,6 +1,16 @@
 import { api } from "./axios"
 
-export async function fetchPhotos() {
+interface Photo {
+  photo_uuid: string;
+  owner_login: string;
+  title: string;
+  description: string;
+  tags: string;
+  created_at: Date;
+  took_at: Date;
+}
+
+export async function fetchPhotos(): Promise<Array<Photo>> {
 	try {
   	const response = await api.get('/photos')
     return Array.isArray(response.data) ? response.data : []

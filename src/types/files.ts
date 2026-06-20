@@ -6,4 +6,6 @@ export interface UploadingFileMetadata {
 export interface UploadingFile {
 	file: File;
 	metadata: UploadingFileMetadata;
+	isUploaded: boolean;
+	status?: "uploading" | "uploaded" | "error";
 }

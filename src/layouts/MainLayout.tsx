@@ -2,7 +2,6 @@ import { NavLink, Outlet } from "react-router-dom";
 import Header from "../components/Header/Header";
 import { useAuth } from "../auth/authContext";
 import Button from "../components/UI/Button/Button";
-import { refreshUser } from "../lib/authApi";
 
 export default function MainLayout() {
   const {isAuth, user, logout} = useAuth()
@@ -13,6 +12,7 @@ export default function MainLayout() {
         <nav style={{ display: "flex", gap: "16px" }}>
           <NavLink to="/">Home</NavLink>
           <NavLink to="/profile">Profile</NavLink>
+          <NavLink to="/create">Create</NavLink>
 
           {isAuth ? (
             <>

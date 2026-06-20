@@ -7,6 +7,7 @@ import LoginPage from "./pages/LoginPage"
 import RegisterPage from "./pages/RegisterPage"
 import AnonymousRoute from "./auth/AnonymousRoute"
 import ProtectedRoute from "./auth/ProtectedRoute"
+import CreatePage from "./pages/CreatePage"
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
 
         <Route element={<ProtectedRoute />}>
           <Route path="profile" element={<ProfilePage />} />
+          <Route path="create" element={<CreatePage />} />
         </Route>
 
         <Route path="*" element={<NotFoundPage />}/>

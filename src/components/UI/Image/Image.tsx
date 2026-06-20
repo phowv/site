@@ -1,10 +1,20 @@
 import type React from "react";
 
-const Image = ({ title, description, src, width, style}: { title: string, description: string, src: string, width: string, style?: React.CSSProperties }) => {
+interface ImageProps  {
+	title: string;
+	description: string;
+	ownerLogin: string;
+	src: string;
+	width: string;
+	style?: React.CSSProperties;
+}
+
+const Image = ({ title, description, ownerLogin, src, width, style}: ImageProps) => {
 	return (
 		<div style={style}>
 			<h2>{title}</h2>
 			<p>{description}</p>
+			<p>Owner: {ownerLogin}</p>
 			<img src={src} width={width}/>
 		</div>
 	);
