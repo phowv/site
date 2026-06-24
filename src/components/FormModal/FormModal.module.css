@@ -6,6 +6,11 @@
   left: 0;
   display: none;
   background: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  z-index: 100;
 }
 
 .formModalContent {

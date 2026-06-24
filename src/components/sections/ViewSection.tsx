@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react"
-import { fetchPhotos } from "../../lib/photoApi"
+import { fetchPhotos, type Photo } from "../../lib/photoApi"
 import Image from "../UI/Image/Image"
 import { API_BASE } from "../../lib/axios"
+import ImageViewingModal from "../ImageViewingModal/ImageViewingModal"
 
 const ViewSection = () => {
 	const [status, setStatus] = useState('empty')
-	const [photosList, setPhotosList] = useState<Array<any>>([])
+	const [photosList, setPhotosList] = useState<Array<Photo>>([])
+	const [viewingPhoto, setViewingPhoto] = useState<Photo | null>(null)
 
 	useEffect(() => {
 		setStatus('loading')
@@ -22,6 +24,7 @@ const ViewSection = () => {
 
 	return (
 		<>
+			{viewingPhoto ? <ImageViewingModal photoDesc={viewingPhoto} close={() => setViewingPhoto(null)}/> : null}
 			{status == 'loading' && <p>Loading...</p>}
 			{status == 'error' && <p>Loading error</p>}
 			{status == 'loaded' &&
@@ -32,6 +35,7 @@ const ViewSection = () => {
 					title={photoDesc.title}
 					description={photoDesc.description}
 					ownerLogin={photoDesc.owner_login}
+					open={() => setViewingPhoto(photoDesc)}
 					src={`${API_BASE}/photo/${photoDesc.photo_uuid}`}
 					width="500px"
 					style={{display:"inline-block", padding: "5px", margin: "10px", border: "2px solid gray"}}/>)}

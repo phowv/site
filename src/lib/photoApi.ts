@@ -1,6 +1,6 @@
 import { api } from "./axios"
 
-interface Photo {
+export interface Photo {
   photo_uuid: string;
   owner_login: string;
   title: string;
