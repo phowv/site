@@ -28,17 +28,13 @@ const ViewSection = () => {
 			{status == 'loading' && <p>Loading...</p>}
 			{status == 'error' && <p>Loading error</p>}
 			{status == 'loaded' &&
-			<section style={{margin: '10px'}}>
+			<section style={{margin: '10px', columnCount: localStorage.getItem("feedImageColumnsCount") ?? "5", columnGap: "5px"}}>
 				{photosList.map(photoDesc =>
 				<Image
 					key={photoDesc.photo_uuid}
-					title={photoDesc.title}
-					description={photoDesc.description}
-					ownerLogin={photoDesc.owner_login}
 					open={() => setViewingPhoto(photoDesc)}
 					src={`${API_BASE}/photo/${photoDesc.photo_uuid}`}
-					width="500px"
-					style={{display:"inline-block", padding: "5px", margin: "10px", border: "2px solid gray"}}/>)}
+				/>)}
 			</section>
 			}
 		</>

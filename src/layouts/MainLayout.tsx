@@ -11,6 +11,7 @@ export default function MainLayout() {
       <Header>
         <nav style={{ display: "flex", gap: "16px" }}>
           <NavLink to="/">Home</NavLink>
+          <NavLink to="/settings">Settings</NavLink>
           <NavLink to="/profile">Profile</NavLink>
           <NavLink to="/create">Create</NavLink>
 

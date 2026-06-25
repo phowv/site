@@ -1,24 +1,15 @@
-import type React from "react";
 import Button from "../Button/Button";
+import cl from "./Image.module.css"
 
 interface ImageProps  {
-	title: string;
-	description: string;
-	ownerLogin: string;
 	src: string;
-	width: string;
-	style?: React.CSSProperties;
 	open: () => void; 
 }
 
-const Image = ({ title, description, ownerLogin, src, width, style, open }: ImageProps) => {
+const Image = ({ src, open }: ImageProps) => {
 	return (
-		<div style={style}>
-			<h2>{title}</h2>
-			<p>{description}</p>
-			<p>Owner: {ownerLogin}</p>
-			<img src={src} width={width}/>
-			<Button onClick={open}>Open</Button>
+		<div className={cl.imageCard} onClick={open}>
+			<img src={src}/>
 		</div>
 	);
 }

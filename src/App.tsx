@@ -8,6 +8,7 @@ import RegisterPage from "./pages/RegisterPage"
 import AnonymousRoute from "./auth/AnonymousRoute"
 import ProtectedRoute from "./auth/ProtectedRoute"
 import CreatePage from "./pages/CreatePage"
+import SettingsPage from "./pages/SettingsPage"
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="create" element={<CreatePage />} />
         </Route>
 
+        <Route path="settings" element={<SettingsPage />} />
         <Route path="*" element={<NotFoundPage />}/>
       </Route>
     </Routes>
