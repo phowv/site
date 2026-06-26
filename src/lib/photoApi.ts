@@ -10,9 +10,16 @@ export interface Photo {
   took_at: Date;
 }
 
-export async function fetchPhotos(): Promise<Array<Photo>> {
+export interface PatchPhotoProps {
+  title?: string;
+  description?: string; 
+}
+
+export async function fetchPhotos(owner_login?: string): Promise<Array<Photo>> {
 	try {
-  	const response = await api.get('/photos')
+  	const response = await api.get('/photos',
+      {params: owner_login ? {owner_login} : undefined }
+    )
     return Array.isArray(response.data) ? response.data : []
   } catch (error: any) {
     const errorText = error.response?.data ?? error.message ?? '<unknown error>'
@@ -33,5 +40,30 @@ export async function uploadPhoto(metadata: string, photo: File) {
     const errorText = error.response?.data ?? error.message ?? '<unknown error>'
 
     throw new Error(`[api] Error uploading photo ${errorText}`)
+  }
+}
+
+export async function deletePhoto(photo_uuid: string) {
+  try {
+    const response = await api.delete(`/photo/${photo_uuid}`)
+    return response.data
+  } catch (error: any) {
+    const errorText = error.response?.data ?? error.message ?? '<unknown error>'
+
+    throw new Error(`[api] Error deleting photo ${errorText}`)
+  }
+}
+
+export async function patchPhoto(photo_uuid: string, patchPhotoProps: PatchPhotoProps) {
+  const formData = new FormData()
+  formData.append('metadata', JSON.stringify(patchPhotoProps)) 
+  
+  try {
+    const response = await api.patch(`/photo/${photo_uuid}`, formData)
+    return response.data
+  } catch (error: any) {
+    const errorText = error.response?.data ?? error.message ?? '<unknown error>'
+
+    throw new Error(`[api] Error patching photo ${errorText}`)
   }
 }

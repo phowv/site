@@ -1,4 +1,3 @@
-import Button from "../Button/Button";
 import cl from "./Image.module.css"
 
 interface ImageProps  {

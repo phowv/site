@@ -1,63 +1,69 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { API_BASE } from '../../lib/axios';
+import { deletePhoto, patchPhoto, type PatchPhotoProps, type Photo } from '../../lib/photoApi';
 import FormModal from '../FormModal/FormModal';
+import cl from './ImageEditingModal.module.css'
 import Input from '../UI/Input/Input';
 import Button from '../UI/Button/Button';
-import type { UploadingFile } from '../../types/files';
-import { rotateFile90 } from '../../lib/utils/imageUtils';
 
 interface ImageEditingModalProps {
-	visible: boolean;
-	inputFile: UploadingFile;
-	doneEditingImage: (f: UploadingFile | null) => void;
+	photoDesc: Photo;
+	close: () => void;
+	onChangePhoto: () => void;
 }
 
-const ImageEditingModal = ({ visible, inputFile, doneEditingImage }: ImageEditingModalProps) => {
-	const [editingFile, setEditingFile] = useState<UploadingFile>(inputFile);
+const ImageEditingModal = (props: ImageEditingModalProps) => {
+	const [title, setTitle] = useState(props.photoDesc.title)
+	const [description, setDescription] = useState(props.photoDesc.description)
 
-	const [editingFileSrc, setEditingFileSrc] = useState<string | null>(null)
+	const doneEditingCallback = async () => {
+		let patchData: PatchPhotoProps = {};
 
-	useEffect(() => {
-		if (!editingFile) {
-			setEditingFileSrc(null);
-			return;
+		if (title != props.photoDesc.title) {
+			patchData.title = title;
 		}
 
-		const url = URL.createObjectURL(editingFile.file);
-		setEditingFileSrc(url);
-		return () => { URL.revokeObjectURL(url); };
-	}, [editingFile])
+		if (description != props.photoDesc.description) {
+			patchData.description = description;
+		}
 
-	const rotateEditingImage = async (isRight: boolean) => {
-		if (!editingFile) return;
-		const rotated = await rotateFile90(editingFile.file, isRight);
-		setEditingFile(prev => ({...prev, file: rotated}));
+		if (Object.keys(patchData).length !== 0) {
+			try {
+				await patchPhoto(props.photoDesc.photo_uuid, patchData);
+				props.onChangePhoto();
+			} catch {
+				alert("Error update photo")
+			}
+		}
+
+		props.close();
 	}
 
-	const doneEditing = (isRemove: boolean = false) => {
-		if (isRemove) {
-			doneEditingImage(null);
-			return;
+	const deletePhotoCallback = async () => {
+		const ok = confirm("Are you sure?");
+		if (!ok) return;
+
+		try {
+			await deletePhoto(props.photoDesc.photo_uuid);
+			props.onChangePhoto();
+		} catch {
+			alert("Error delete photo")
 		}
-		doneEditingImage(editingFile);
+
+		props.close();
 	}
 
 	return (
-		<FormModal visible={visible} close={doneEditing}>
-			{editingFileSrc ? <img src={editingFileSrc} width="400px" height="auto"/> : <p>Editing image</p>}
-			<p>File name: {editingFile.file.name}</p>
-			<p>File size: {Math.round(editingFile.file.size / 1024)} KB</p>
-			<p>Type image title: </p>
-			<Input value={editingFile.metadata.title ?? ""} onChange={e =>
-				setEditingFile(prev => ({...prev, metadata: {...prev.metadata, title: e.target.value}}))}/>
-			<p>Type image description: </p>
-			<Input value={editingFile.metadata.description ?? ""} onChange={e =>
-				setEditingFile(prev => ({...prev, metadata: {...prev.metadata, description: e.target.value}}))}/>
-			<br />
-			<Button onClick={_ => rotateEditingImage(false)}>Rotate left</Button>
-			<Button onClick={_ => rotateEditingImage(true)}>Rotate right</Button>
-			<br />
-			<Button onClick={_ => doneEditing(true)}>Remove</Button>
-			<Button onClick={_ => doneEditing()}>Done</Button>
+		<FormModal visible={true} close={props.close}>
+			<img className={cl.viewingImage} src={`${API_BASE}/photo/${props.photoDesc.photo_uuid}`} alt="image" />
+
+			<p>Title:</p>
+			<Input value={title} onChange={(e) => setTitle(e.target.value)}/>
+			<p>Description:</p>
+			<Input value={description} onChange={(e) => setDescription(e.target.value)}/>
+
+			<Button onClick={doneEditingCallback}>Done</Button>
+			<Button onClick={deletePhotoCallback}>Delete</Button>
 		</FormModal>
 	);
 }

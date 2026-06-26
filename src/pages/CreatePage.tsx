@@ -3,7 +3,7 @@ import type { UploadingFile } from '../types/files';
 import { uploadPhoto } from '../lib/photoApi';
 import UploadImageList from '../components/UploadImageList/UploadImageList';
 import Button from '../components/UI/Button/Button';
-import ImageEditingModal from '../components/ImageEditingModal/ImageEditingModal';
+import ImageEditingModal from '../components/UploadingImageEditingModal/UploadingImageEditingModal';
 
 const CreatePage = () => {
 	const [isDragging, setIsDragging] = useState(false)
@@ -60,8 +60,6 @@ const CreatePage = () => {
 				return {...f, status: succeededNames.has(f.file.name) ? "uploaded" : "error" };
 			}
 		));
-
-
 	}
 
 	const doneEditingImage = (f: UploadingFile | null) => {
@@ -88,6 +86,8 @@ const CreatePage = () => {
 					textAlign: "center",
 					background: isDragging ? "#f0f8ff" : "transparent",
 					cursor: "pointer",
+					columnCount: 5,
+					columnGap: "5px"
 				}}
 				>
 					{files.length == 0 ? <p>drag and drop .jpg images</p> : null}
@@ -95,7 +95,7 @@ const CreatePage = () => {
 			</div>
 
 			<Button isActive={files.length != 0} onClick={_ => uploadSelectedPhotos()}>Upload</Button>
-			<Button isActive={files.length != 0} onClick={_ => setFiles([])}>Clear</Button>
+			<Button isActive={files.length != 0} onClick={_ => {if (confirm("Are you sure?")) setFiles([])}}>Clear</Button>
 		</section>
 	);
 }
