@@ -39,7 +39,7 @@ const ImageSection = (props: ImageSectionProps) => {
 				<Image
 					key={photoDesc.photo_uuid}
 					open={() => props.open_photo(photoDesc)}
-					src={`${API_BASE}/photo/${photoDesc.photo_uuid}`}
+					src={`${API_BASE}/photo/${photoDesc.photo_uuid}/small`}
 				/>)}
 			</section>
 			}
