@@ -20,9 +20,10 @@ const RegisterPage = () => {
 
     try {
       await register({ login: userLogin, email: userEmail, password: userPassword, description: userDescription });
-      navigate("/login");
+			localStorage.setItem("register_user_login", userLogin);
+      navigate("/register/verify");
     } catch (error: any) {
-      setError(String(error));
+      setError("invalid code");
     }
   };
 

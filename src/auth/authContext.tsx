@@ -68,32 +68,27 @@ export function AuthProvider({ children }: Props) {
 
   const login = async (data: LoginRequest) => {
     try {
-      setIsLoading(true);
       const response = await loginUser(data);
       localStorage.setItem("access_token", response.access_token);
 
       const userData = await getMe();
       setUser({login: userData.user_login, email: userData.user_email, description: userData.user_description});
       console.debug("fetched user data", userData);
-      setIsLoading(false);
 
     } catch (error: any) {
       localStorage.removeItem("access_token");
       setUser(null);
-      setIsLoading(false);
       throw error;
     }
   };
 
   const register = async (data: RegisterRequest) => {
     try {
-      setIsLoading(true);
       const response = await registerUser(data);
       if (response.error !== undefined) {
         throw new Error("regisration error: " + response.error);
       }
     } catch (error: unknown) {
-      setIsLoading(false);
       if (axios.isAxiosError(error) && error.response) {
         throw new Error(error.response.data["error"]);
       }
@@ -101,7 +96,6 @@ export function AuthProvider({ children }: Props) {
       throw error
     }
 
-    setIsLoading(false);
     navigate("/login");
   };
 

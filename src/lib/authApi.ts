@@ -13,6 +13,11 @@ export interface RegisterRequest {
 	description: string;
 }
 
+export interface VerifyRequest {
+  login: string;
+  code: string;
+}
+
 export interface AuthResponse {
   access_token: string;
 }
@@ -40,6 +45,11 @@ export async function refreshUser(): Promise<AuthResponse> {
 
 export async function registerUser(data: RegisterRequest): Promise<DefaultResponse> {
   const response = await api.post<DefaultResponse>("/auth/register", data);
+  return response.data;
+}
+
+export async function verifyUser(data: VerifyRequest): Promise<DefaultResponse> {
+  const response = await api.post<DefaultResponse>("/auth/verify", data);
   return response.data;
 }
 

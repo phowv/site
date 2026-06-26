@@ -9,6 +9,7 @@ import AnonymousRoute from "./auth/AnonymousRoute"
 import ProtectedRoute from "./auth/ProtectedRoute"
 import CreatePage from "./pages/CreatePage"
 import SettingsPage from "./pages/SettingsPage"
+import VerificaticationPage from "./pages/VerificaticationPage"
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route element={<AnonymousRoute />}>
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
+          <Route path="register/verify" element={<VerificaticationPage />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>
