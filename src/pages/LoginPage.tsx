@@ -33,12 +33,12 @@ const LoginPage = () => {
 			<form onSubmit={handleSubmit}>
 				<div>
 					<label>Login</label>
-					<Input value={userLogin} onChange={(e) => setuserLogin(e.target.value)} required/>
+					<Input value={userLogin} onChange={(e) => setuserLogin(e.target.value.trim())} required/>
 				</div>
 
 				<div>
 					<label>Password</label>
-					<Input type="password" value={userPassword} onChange={(e) => setUserPassword(e.target.value)} required/>
+					<Input type="password" value={userPassword} onChange={(e) => setUserPassword(e.target.value.trim())} required/>
 				</div>
 
 				<Button isActive={!isLoading} disabled={isLoading} type="submit">Login</Button>
