@@ -16,7 +16,7 @@ COPY --from=builder /build/dist /usr/share/nginx/site
 COPY nginx-https.conf /nginx-base.conf
 
 COPY build.sh /build.sh
-RUN bash /build.sh
+RUN sh /build.sh
 
 EXPOSE 80 443
 CMD ["nginx", "-g", "daemon off;"]
