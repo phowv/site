@@ -1,10 +1,7 @@
 FROM node:20-alpine AS builder
 
 ARG VITE_API_URL
-ARG DOMAIN_NAME
-
 ENV VITE_API_URL=${VITE_API_URL}
-ENV DOMAIN_NAME=${DOMAIN_NAME}
 
 WORKDIR /build
 
@@ -20,6 +17,9 @@ FROM nginx:1.27-alpine
 
 COPY --from=builder /build/dist /usr/share/nginx/site
 COPY nginx-https.conf /nginx-base.conf
+
+ARG DOMAIN_NAME
+ENV DOMAIN_NAME=${DOMAIN_NAME}
 
 COPY build.sh /build.sh
 RUN sh /build.sh
