@@ -25,4 +25,4 @@ COPY build.sh /build.sh
 RUN sh /build.sh
 
 EXPOSE 80 443
-CMD ["nginx", "-g" "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
