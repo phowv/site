@@ -1,0 +1,17 @@
+name: Notify deploy to prod server
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch deploy event
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.DEPLOY_TOKEN }}
+          repository: phowv/deploy
+          event-type: site-prod-deploy-request
