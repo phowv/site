@@ -9,12 +9,12 @@ interface ImageViewingModalProps {
 	close: () => void;
 }
 
-const ImageViewingModal = ({ photoDesc, close }: ImageViewingModalProps) => {
+const ImageViewingModal = ({ photoDesc, close }: ImageViewingModalProps) => {	
 	return (
 		<FormModal visible={true} close={close}>
 			<div className={cl.imageDescription}>
 				<h1>{photoDesc.title}</h1>
-				<p>Owner: {photoDesc.owner_login}</p>
+				<p>Owner: <a href={`${window.location.origin}/profile/${photoDesc.owner_login}`}>{photoDesc.owner_login}</a></p>
 			</div>
 			<p>{photoDesc.description}</p>
 
