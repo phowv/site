@@ -15,7 +15,7 @@ interface UploadingImageEditingModalProps {
 const UploadingImageEditingModal = ({ visible, inputFile, doneEditingImage }: UploadingImageEditingModalProps) => {
 	const [editingFile, setEditingFile] = useState<UploadingFile>(inputFile);
 	const [editingFileSrc, setEditingFileSrc] = useState<string | null>(null)
-	const [tags, setTags] = useState<Set<string>>(new Set())
+	const [tags, setTags] = useState<Set<string>>(new Set(inputFile.metadata.tags?.split(";").filter(tag => tag !== "")))
 
 	useEffect(() => {
 		if (!editingFile) {

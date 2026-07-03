@@ -4,25 +4,26 @@ import Button from '../Button/Button';
 import Input from '../Input/Input';
 
 interface TagsInputProps {
-	tags: Set<string>
-	setTags: (f: (prev: Set<string>) => Set<string>) => void
+	tags: Set<string>;
+	setTags: (f: (prev: Set<string>) => Set<string>) => void;
+	label?: string;
 }
 
-const TagsInput = ({ tags, setTags }: TagsInputProps) => {
+const TagsInput = ({ tags, setTags, label }: TagsInputProps) => {
 	const [currentTag, setCurrentTag] = useState("");
 
 	const addNewTag = () => {
 		if (currentTag === "") return;
-		
+
 		setTags(prev => new Set(prev).add(currentTag));
 		setCurrentTag("");
 	}
 
 	return (
-		<>
-			<p>New tag:</p>
+		<div className={cl.imageTagInput}>
+			<p>{label ?? "New tag:"}</p>
 				<Input value={currentTag} onKeyDown={(e) => { if (e.key == "Enter") addNewTag(); }} onChange={(e) => setCurrentTag(e.target.value.trim().replaceAll(" ", ""))}/>
-				<Button onClick={addNewTag}>Add new tag</Button>
+				<Button onClick={addNewTag} isActive={currentTag !== ""}>Add new tag</Button>
 
 				{tags.size !== 0 ? <p>Tags:</p> : undefined}
 				{[...tags].map(tag => 
@@ -35,7 +36,7 @@ const TagsInput = ({ tags, setTags }: TagsInputProps) => {
 							})}>Remove</Button>
 					</div>
 				)}
-		</>
+		</div>
 	);
 }
 
