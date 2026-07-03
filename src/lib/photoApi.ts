@@ -12,7 +12,8 @@ export interface Photo {
 
 export interface PatchPhotoProps {
   title?: string;
-  description?: string; 
+  description?: string;
+  tags?: string;
 }
 
 export const PhotoSize = {

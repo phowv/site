@@ -1,6 +1,7 @@
 export interface UploadingFileMetadata {
-	title: string | undefined;
-	description: string | undefined;
+	title?: string;
+	description?: string;
+	tags?: string;
 }
 
 export interface UploadingFile {
