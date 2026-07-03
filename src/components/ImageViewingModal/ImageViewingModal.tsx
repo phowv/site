@@ -9,14 +9,24 @@ interface ImageViewingModalProps {
 	close: () => void;
 }
 
-const ImageViewingModal = ({ photoDesc, close }: ImageViewingModalProps) => {
+const ImageViewingModal = ({ photoDesc, close }: ImageViewingModalProps) => {	
 	return (
 		<FormModal visible={true} close={close}>
 			<div className={cl.imageDescription}>
 				<h1>{photoDesc.title}</h1>
-				<p>Owner: {photoDesc.owner_login}</p>
+				<p>Owner: <a href={`${window.location.origin}/profile/${photoDesc.owner_login}`}>{photoDesc.owner_login}</a></p>
 			</div>
 			<p>{photoDesc.description}</p>
+
+			{photoDesc.tags ? 
+			<div className={cl.imageTagsDiv}>
+				<p>Tags:</p>
+				{photoDesc.tags.split(";").map(tag =>
+				<p key={tag} className={cl.imageTagName}>{tag}</p>
+				)}
+			</div>
+			: undefined}
+
 			<img className={cl.viewingImage} src={`${API_BASE}/photo/${photoDesc.photo_uuid}`} alt="image" />
 			<Button onClick={close}>done</Button>
 		</FormModal>

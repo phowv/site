@@ -10,6 +10,7 @@ import ProtectedRoute from "./auth/ProtectedRoute"
 import CreatePage from "./pages/CreatePage"
 import SettingsPage from "./pages/SettingsPage"
 import VerificaticationPage from "./pages/VerificaticationPage"
+import SelfProfilePage from "./pages/SelfProfilePage"
 
 function App() {
   return (
@@ -24,9 +25,11 @@ function App() {
         </Route>
 
         <Route element={<ProtectedRoute />}>
-          <Route path="profile" element={<ProfilePage />} />
+          <Route path="profile" element={<SelfProfilePage />} />
           <Route path="create" element={<CreatePage />} />
         </Route>
+
+        <Route path="profile/:user" element={<ProfilePage />} />
 
         <Route path="settings" element={<SettingsPage />} />
         <Route path="*" element={<NotFoundPage />}/>

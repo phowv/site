@@ -1,0 +1,10 @@
+.imageTagListElement {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.imageTagInput {
+	padding: 12px;
+	border: 2px dashed green;
+}
