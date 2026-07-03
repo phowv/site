@@ -4,6 +4,7 @@ import Input from '../UI/Input/Input';
 import Button from '../UI/Button/Button';
 import type { UploadingFile } from '../../types/files';
 import { rotateFile90 } from '../../lib/utils/imageUtils';
+import TagsInput from '../UI/TagsInput/TagsInput';
 
 interface UploadingImageEditingModalProps {
 	visible: boolean;
@@ -13,8 +14,8 @@ interface UploadingImageEditingModalProps {
 
 const UploadingImageEditingModal = ({ visible, inputFile, doneEditingImage }: UploadingImageEditingModalProps) => {
 	const [editingFile, setEditingFile] = useState<UploadingFile>(inputFile);
-
 	const [editingFileSrc, setEditingFileSrc] = useState<string | null>(null)
+	const [tags, setTags] = useState<Set<string>>(new Set(inputFile.metadata.tags?.split(";").filter(tag => tag !== "")))
 
 	useEffect(() => {
 		if (!editingFile) {
@@ -35,10 +36,20 @@ const UploadingImageEditingModal = ({ visible, inputFile, doneEditingImage }: Up
 
 	const doneEditing = (isRemove: boolean = false) => {
 		if (isRemove) {
+			const ok = confirm("Are you sure?");
+			if (!ok) return;
+
 			doneEditingImage(null);
 			return;
 		}
-		doneEditingImage(editingFile);
+
+		const nextMetadata = tags.size !== 0 ? { ...editingFile.metadata, tags: [...tags].join(";") } : editingFile.metadata;
+
+		const next = {...editingFile, metadata: nextMetadata};		
+
+		setEditingFile(next);
+
+		doneEditingImage(next);
 	}
 
 	return (
@@ -52,6 +63,9 @@ const UploadingImageEditingModal = ({ visible, inputFile, doneEditingImage }: Up
 			<p>Type image description: </p>
 			<Input value={editingFile.metadata.description ?? ""} onChange={e =>
 				setEditingFile(prev => ({...prev, metadata: {...prev.metadata, description: e.target.value}}))}/>
+
+			<TagsInput tags={tags} setTags={setTags}/>
+
 			<br />
 			<Button onClick={_ => rotateEditingImage(false)}>Rotate left</Button>
 			<Button onClick={_ => rotateEditingImage(true)}>Rotate right</Button>

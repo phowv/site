@@ -17,6 +17,16 @@ const ImageViewingModal = ({ photoDesc, close }: ImageViewingModalProps) => {
 				<p>Owner: {photoDesc.owner_login}</p>
 			</div>
 			<p>{photoDesc.description}</p>
+
+			{photoDesc.tags ? 
+			<div className={cl.imageTagsDiv}>
+				<p>Tags:</p>
+				{photoDesc.tags.split(";").map(tag =>
+				<p key={tag} className={cl.imageTagName}>{tag}</p>
+				)}
+			</div>
+			: undefined}
+
 			<img className={cl.viewingImage} src={`${API_BASE}/photo/${photoDesc.photo_uuid}`} alt="image" />
 			<Button onClick={close}>done</Button>
 		</FormModal>

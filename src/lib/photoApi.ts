@@ -12,7 +12,37 @@ export interface Photo {
 
 export interface PatchPhotoProps {
   title?: string;
-  description?: string; 
+  description?: string;
+  tags?: string;
+}
+
+export const PhotoSize = {
+  small: "small",
+  medium: "medium",
+  raw: "raw",
+} as const;
+
+export type PhotoSize = (typeof PhotoSize)[keyof typeof PhotoSize];
+
+export function toPhotoSize(s: string): PhotoSize | undefined {
+  if (s === PhotoSize.small) return PhotoSize.small;
+  if (s === PhotoSize.medium) return PhotoSize.medium;
+  if (s === PhotoSize.raw) return PhotoSize.raw;
+  return undefined;
+}
+
+export function getPhotoPostfix(photoSize: PhotoSize | undefined): string {
+  switch (photoSize) {
+    case PhotoSize.small:
+      return "/small";
+
+    case PhotoSize.medium:
+      return "/medium";
+
+    case PhotoSize.raw:
+    default:
+      return "";
+  }
 }
 
 export async function fetchPhotos(owner_login?: string): Promise<Array<Photo>> {

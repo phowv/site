@@ -8,12 +8,12 @@
   background: rgba(0, 0, 0, 0.5);
   width: 100%;
   justify-content: center;
-  align-items: center;
-  overflow: hidden;
+  overflow: scroll;
   z-index: 100;
 }
 
 .formModalContent {
+  margin: auto;
   padding: 25px;
   background: white;
   border-radius: 16px;
@@ -23,5 +23,4 @@
 .formModal.active {
   display: flex;
   justify-content: center;
-  align-items: center;
 }

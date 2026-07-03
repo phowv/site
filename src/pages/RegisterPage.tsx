@@ -51,7 +51,7 @@ const RegisterPage = () => {
 
 				<div>
 					<label>Description (optional)</label>
-					<Input value={userDescription} onChange={(e) => setUserDescription(e.target.value.trim())}/>
+					<Input value={userDescription} onChange={(e) => setUserDescription(e.target.value)}/>
 				</div>
 
 				<Button isActive={!isLoading} disabled={isLoading} type="submit">Register</Button>
