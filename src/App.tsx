@@ -11,6 +11,7 @@ import CreatePage from "./pages/CreatePage"
 import SettingsPage from "./pages/SettingsPage"
 import VerificaticationPage from "./pages/VerificaticationPage"
 import SelfProfilePage from "./pages/SelfProfilePage"
+import TagsPage from "./pages/TagsPage"
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="profile" element={<SelfProfilePage />} />
           <Route path="create" element={<CreatePage />} />
+          <Route path="tags" element={<TagsPage />} />
         </Route>
 
         <Route path="profile/:user" element={<ProfilePage />} />

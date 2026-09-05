@@ -18,7 +18,7 @@ const ImageViewingModal = ({ photoDesc, close }: ImageViewingModalProps) => {
 			</div>
 			<p>{photoDesc.description}</p>
 
-			{photoDesc.tags ? 
+			{photoDesc.tags.length !== 0 ? 
 			<div className={cl.imageTagsDiv}>
 				<p>Tags:</p>
 				{photoDesc.tags.map(tag =>

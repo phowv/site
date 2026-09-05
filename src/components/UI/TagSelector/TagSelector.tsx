@@ -41,7 +41,7 @@ const TagSelector = ({ tags, setTags, label}: TagSelectorProps) => {
 			.map(tag => 
 				<p
 					key={tag.tag_uuid}
-					className={cl.tagItem}
+					className={cl.tagAddItem}
 					onClick={() => {					
 						setTags(prev => [...prev, tag.tag_uuid])
 						}}>
@@ -57,46 +57,49 @@ const TagSelector = ({ tags, setTags, label}: TagSelectorProps) => {
 		{status == 'loading' && <p>Loading tags...</p>}
 		{status == 'error' && <p>Failed to load tags</p>}
 		{status == 'loaded' &&
-			<>
-			<div
+			<div 
 				tabIndex={-1}
-				onFocus={() => setIsFocusTagsList(true)}
 				onBlur={(e) => {
 					if (!e.currentTarget.contains(e.relatedTarget)) {
 						setIsFocusTagsList(false);
 					}
 				}}>
+			<Input onFocus={() => setIsFocusTagsList(true)} placeholder='Tag name...' value={tagFilter} onChange={e => setTagFilter(e.target.value)}/>
 
-				<Input placeholder='Tag name...' value={tagFilter} onChange={e => setTagFilter(e.target.value)}/>
+			{isFocusTagsList && <h4>Available tags:</h4>}
+
+			<div className={cl.tagsList}>
 				{isFocusTagsList && 
 				<>
 					{availableTagsList?.length == 0
 						? <p>Available tags list is empty</p>
 						:
 						<>
-							<h4>Available tags:</h4>
 							{availableTagsList}
 						</>
 					}
-					<hr/>
 				</>}
 			</div>
+
+			{isFocusTagsList && <hr/>}
 
 			{tags.length == 0
 			?	<p>Selected tags list is empty</p>
 			:
-			<div>
+			<>
 				<h4>Selected tags:</h4>
-				{selectedTagsList.map(tag =>
-				<p
-					key={tag.tag_uuid}
-					className={cl.tagItem}
-					onClick={() => {
-						setTags(prev => prev.filter(t => t !== tag.tag_uuid));
-					}}>{tag.tag_name}</p>
-				)}
-			</div>}
-			</>
+				<div className={cl.tagsList}>
+					{selectedTagsList.map(tag =>
+					<p
+						key={tag.tag_uuid}
+						className={cl.tagRemoveItem}
+						onClick={() => {
+							setTags(prev => prev.filter(t => t !== tag.tag_uuid));
+						}}>{tag.tag_name}</p>
+					)}
+				</div>
+			</>}
+			</div>
 		}
 	</div>
 	);

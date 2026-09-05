@@ -64,7 +64,7 @@ const UploadingImageEditingModal = ({ visible, inputFile, doneEditingImage }: Up
 			<Input value={editingFile.metadata.description ?? ""} onChange={e =>
 				setEditingFile(prev => ({...prev, metadata: {...prev.metadata, description: e.target.value}}))}/>
 
-			<TagSelector tags={tags} setTags={setTags}/>
+			<TagSelector label="Tags" tags={tags} setTags={setTags}/>
 
 			<br />
 			<Button onClick={_ => rotateEditingImage(false)}>Rotate left</Button>

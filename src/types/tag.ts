@@ -1,6 +1,6 @@
 export interface UploadingTagMetadata {
-	name: string;
-	description?: string;	
+	tag_name: string;
+	tag_description?: string;	
 }
 
 export interface PhotoTagMetadata {

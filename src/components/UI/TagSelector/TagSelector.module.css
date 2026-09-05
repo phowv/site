@@ -4,10 +4,21 @@
 	border: 2px solid green;
 }
 
-.tagItem {
-	cursor: pointer;
+.tagsList {
+	max-height: 10vh;
+	overflow-y: auto;
 }
 
-.tagItem:hover {
+.tagAddItem {
+	cursor: pointer;
+}
+.tagAddItem:hover {
 	color: green;
+}
+
+.tagRemoveItem {
+	cursor: pointer;
+}
+.tagRemoveItem:hover {
+	color: red;
 }

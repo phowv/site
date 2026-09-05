@@ -1,4 +1,4 @@
-import type { PhotoTagMetadata } from "../types/tag";
+import type { PhotoTagMetadata, UploadingTagMetadata } from "../types/tag";
 import { api } from "./axios"
 
 export interface Photo {
@@ -115,5 +115,19 @@ export async function fetchTags(photo_uuid?: string): Promise<Array<Tag>> {
     const errorText = error.response?.data ?? error.message ?? '<unknown error>'
 
     throw new Error(`[api] Error loading tags ${errorText}`)
+  }
+}
+
+export async function uploadTag(metadata: UploadingTagMetadata) {
+  const formData = new FormData()
+  formData.append('metadata', JSON.stringify(metadata))
+
+  try {
+    const response = await api.post('/tags', formData)
+    return response.data
+  } catch (error: any) {
+    const errorText = error.response?.data ?? error.message ?? '<unknown error>'
+
+    throw new Error(`[api] Error uploading tag ${errorText}`)
   }
 }
