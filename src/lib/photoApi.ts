@@ -1,3 +1,4 @@
+import type { PhotoTagMetadata } from "../types/tag";
 import { api } from "./axios"
 
 export interface Photo {
@@ -5,15 +6,21 @@ export interface Photo {
   owner_login: string;
   title: string;
   description: string;
-  tags: string;
+  tags: PhotoTagMetadata[];
   created_at: Date;
   took_at: Date;
+}
+
+export interface Tag {
+  tag_uuid: string;
+  tag_name: string;
+  tag_description: string;
 }
 
 export interface PatchPhotoProps {
   title?: string;
   description?: string;
-  tags?: string;
+  tag_uuids?: string[];
 }
 
 export const PhotoSize = {
@@ -95,5 +102,18 @@ export async function patchPhoto(photo_uuid: string, patchPhotoProps: PatchPhoto
     const errorText = error.response?.data ?? error.message ?? '<unknown error>'
 
     throw new Error(`[api] Error patching photo ${errorText}`)
+  }
+}
+
+export async function fetchTags(photo_uuid?: string): Promise<Array<Tag>> {
+	try {
+  	const response = await api.get('/tags',
+      {params: photo_uuid ? {photo_uuid} : undefined }
+    )
+    return Array.isArray(response.data) ? response.data : []
+  } catch (error: any) {
+    const errorText = error.response?.data ?? error.message ?? '<unknown error>'
+
+    throw new Error(`[api] Error loading tags ${errorText}`)
   }
 }

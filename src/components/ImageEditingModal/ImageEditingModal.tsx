@@ -5,7 +5,7 @@ import FormModal from '../FormModal/FormModal';
 import cl from './ImageEditingModal.module.css'
 import Input from '../UI/Input/Input';
 import Button from '../UI/Button/Button';
-import TagsInput from '../UI/TagsInput/TagsInput';
+import TagSelector from '../UI/TagSelector/TagSelector';
 
 interface ImageEditingModalProps {
 	photoDesc: Photo;
@@ -16,7 +16,7 @@ interface ImageEditingModalProps {
 const ImageEditingModal = (props: ImageEditingModalProps) => {
 	const [title, setTitle] = useState(props.photoDesc.title)
 	const [description, setDescription] = useState(props.photoDesc.description)
-	const [tags, setTags] = useState(new Set(props.photoDesc.tags.split(";").filter(s => s !== "")))
+	const [tags, setTags] = useState<string[]>(props.photoDesc.tags.map(t => t.tag_uuid))
 
 	const doneEditingCallback = async () => {
 		let patchData: PatchPhotoProps = {};
@@ -29,10 +29,10 @@ const ImageEditingModal = (props: ImageEditingModalProps) => {
 			patchData.description = description;
 		}
 
-		const photoTags = props.photoDesc.tags.split(";").filter(s => s !== "")
-		if (tags.size !== photoTags.length || !photoTags.every(v => tags.has(v))) {
-			patchData.tags = [...tags].join(";");
-		}
+		// const photoTags = props.photoDesc.tags.filter(s => s.tag_name !== "")
+		// if (tags.size !== photoTags.length || !photoTags.every(v => tags.has(v))) {
+		// 	patchData.tags = [...tags].join(";");
+		// }
 
 		if (Object.keys(patchData).length !== 0) {
 			try {
@@ -47,12 +47,12 @@ const ImageEditingModal = (props: ImageEditingModalProps) => {
 	}
 
 	const cancelPhotoCallback = async () => {
-		const photoTags = props.photoDesc.tags.split(";").filter(s => s !== "")
+		const photoTags = props.photoDesc.tags.filter(s => s.tag_name !== "")
 
 		if (title != props.photoDesc.title
 			|| description != props.photoDesc.description
-			|| tags.size !== photoTags.length
-			|| !photoTags.every(v => tags.has(v))) {
+			|| tags.length !== photoTags.length
+			|| !photoTags.every(v => tags.includes(v.tag_uuid))) {
 			const ok = confirm("Are you sure?");
 			if (!ok) return;
 		}
@@ -84,7 +84,7 @@ const ImageEditingModal = (props: ImageEditingModalProps) => {
 			<p>Description:</p>
 			<Input value={description} onChange={(e) => setDescription(e.target.value)}/>
 	
-			<TagsInput tags={tags} setTags={setTags}/>	
+			<TagSelector tags={tags} setTags={setTags}/>	
 
 			<br />
 			<Button onClick={cancelPhotoCallback}>Cancel</Button>

@@ -1,7 +1,7 @@
 export interface UploadingFileMetadata {
 	title?: string;
 	description?: string;
-	tags?: string;
+	tag_uuids?: string[];
 }
 
 export interface UploadingFile {

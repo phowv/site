@@ -1,0 +1,13 @@
+.tagSelector {
+	padding: 12px;
+	margin: 12px;
+	border: 2px solid green;
+}
+
+.tagItem {
+	cursor: pointer;
+}
+
+.tagItem:hover {
+	color: green;
+}

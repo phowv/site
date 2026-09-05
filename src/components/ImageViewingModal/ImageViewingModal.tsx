@@ -21,8 +21,8 @@ const ImageViewingModal = ({ photoDesc, close }: ImageViewingModalProps) => {
 			{photoDesc.tags ? 
 			<div className={cl.imageTagsDiv}>
 				<p>Tags:</p>
-				{photoDesc.tags.split(";").map(tag =>
-				<p key={tag} className={cl.imageTagName}>{tag}</p>
+				{photoDesc.tags.map(tag =>
+				<p key={tag.tag_uuid} className={cl.imageTagName}>#{tag.tag_name}</p>
 				)}
 			</div>
 			: undefined}
