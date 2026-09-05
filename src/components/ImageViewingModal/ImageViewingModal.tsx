@@ -1,7 +1,7 @@
-import { API_BASE } from "../../lib/axios";
-import type { Photo } from "../../lib/photoApi";
+import { getPhotoPostfix, PhotoSize, type Photo } from "../../lib/photoApi";
 import FormModal from "../FormModal/FormModal";
 import Button from "../UI/Button/Button";
+import SecureImg from "../UI/SecureImg/SecureImg";
 import cl from "./ImageViewingModal.module.css"
 
 interface ImageViewingModalProps {
@@ -27,7 +27,7 @@ const ImageViewingModal = ({ photoDesc, close }: ImageViewingModalProps) => {
 			</div>
 			: undefined}
 
-			<img className={cl.viewingImage} src={`${API_BASE}/photo/${photoDesc.photo_uuid}`} alt="image" />
+			<SecureImg className={cl.viewingImage} alt="image" photoUuid={photoDesc.photo_uuid} postfix={getPhotoPostfix(PhotoSize.raw)}/>
 			<Button onClick={close}>done</Button>
 		</FormModal>
 	);

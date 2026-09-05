@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { fetchPhotos, getPhotoPostfix, toPhotoSize, type Photo } from "../../lib/photoApi"
-import Image from "../UI/Image/Image"
-import { API_BASE } from "../../lib/axios"
+import SecureImage from "../UI/SecureImage/SecureImage";
 
 interface ImageSectionProps {
 	owner_login?: string;
@@ -38,10 +37,11 @@ const ImageSection = (props: ImageSectionProps) => {
 			:
 			<section style={{margin: '10px', columnCount: localStorage.getItem("feedImageColumnsCount") ?? "5", columnGap: "5px"}}>
 				{photosList.map(photoDesc =>
-				<Image
+				<SecureImage
 					key={photoDesc.photo_uuid}
 					open={() => props.open_photo(photoDesc)}
-					src={`${API_BASE}/photo/${photoDesc.photo_uuid}${requirePhotoPostfix}`}
+					photoUuid={photoDesc.photo_uuid}
+					postfix={requirePhotoPostfix}
 				/>)}
 			</section>
 			}

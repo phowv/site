@@ -1,3 +1,4 @@
+import type { AccessModifier } from "../types/accessModifier";
 import type { PhotoTagMetadata, UploadingTagMetadata } from "../types/tag";
 import { api } from "./axios"
 
@@ -9,6 +10,7 @@ export interface Photo {
   tags: PhotoTagMetadata[];
   created_at: Date;
   took_at: Date;
+  access_level: AccessModifier;
 }
 
 export interface Tag {
@@ -21,6 +23,7 @@ export interface PatchPhotoProps {
   title?: string;
   description?: string;
   tag_uuids?: string[];
+  access_level: AccessModifier;
 }
 
 export const PhotoSize = {
@@ -50,6 +53,14 @@ export function getPhotoPostfix(photoSize: PhotoSize | undefined): string {
     default:
       return "";
   }
+}
+
+export async function getPhotoUrl(photo_uuid: string, postfix: string): Promise<string> {
+  const res = await api.get(`/photo/${photo_uuid}${postfix}`, {
+    responseType: "blob"
+  })
+  
+  return URL.createObjectURL(res.data);
 }
 
 export async function fetchPhotos(owner_login?: string): Promise<Array<Photo>> {
