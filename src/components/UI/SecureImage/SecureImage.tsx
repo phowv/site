@@ -3,12 +3,13 @@ import Image from "../Image/Image";
 
 interface SecureImageProps {
 	photoUuid: string;
-	postfix: string;
+	photoSize?: string;
+	accessKey: string;
 	open: () => void;
 }
 
-const SecureImage = ({ photoUuid, postfix, open }: SecureImageProps) => {
-	const url = useSecurePhoto(photoUuid, postfix)
+const SecureImage = ({ photoUuid, photoSize, accessKey, open }: SecureImageProps) => {
+	const url = useSecurePhoto(photoUuid, accessKey, photoSize)
 
 	return <Image open={open} src={url}/>;
 }

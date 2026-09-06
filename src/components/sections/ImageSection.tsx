@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { fetchPhotos, getPhotoPostfix, toPhotoSize, type Photo } from "../../lib/photoApi"
+import { fetchPhotos, toPhotoSize, type Photo } from "../../lib/photoApi"
 import SecureImage from "../UI/SecureImage/SecureImage";
 
 interface ImageSectionProps {
@@ -12,7 +12,7 @@ const ImageSection = (props: ImageSectionProps) => {
 	const [status, setStatus] = useState('empty')
 	const [photosList, setPhotosList] = useState<Array<Photo>>([])
 
-	const requirePhotoPostfix = getPhotoPostfix(toPhotoSize(localStorage.getItem("feedImageRequireSize") ?? ""))
+	const requirePhotoSize = toPhotoSize(localStorage.getItem("feedImageRequireSize") ?? "")
 
 	useEffect(() => {
 		setStatus('loading')
@@ -41,7 +41,8 @@ const ImageSection = (props: ImageSectionProps) => {
 					key={photoDesc.photo_uuid}
 					open={() => props.open_photo(photoDesc)}
 					photoUuid={photoDesc.photo_uuid}
-					postfix={requirePhotoPostfix}
+					photoSize={requirePhotoSize}
+					accessKey={photoDesc.access_key}
 				/>)}
 			</section>
 			}

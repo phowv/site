@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { deletePhoto, getPhotoPostfix, patchPhoto, PhotoSize, type PatchPhotoProps, type Photo } from '../../lib/photoApi';
+import { deletePhoto, patchPhoto, PhotoSize, type PatchPhotoProps, type Photo } from '../../lib/photoApi';
 import FormModal from '../FormModal/FormModal';
 import cl from './ImageEditingModal.module.css'
 import Input from '../UI/Input/Input';
@@ -84,7 +84,12 @@ const ImageEditingModal = (props: ImageEditingModalProps) => {
 
 	return (
 		<FormModal visible={true} close={cancelPhotoCallback}>
-			<SecureImg className={cl.viewingImage} alt="image" photoUuid={props.photoDesc.photo_uuid} postfix={getPhotoPostfix(PhotoSize.raw)}/>
+		<SecureImg
+				className={cl.viewingImage}
+				alt="image"
+				photoUuid={props.photoDesc.photo_uuid}
+				accessKey={props.photoDesc.access_key}				
+			/>
 
 			<p>Title:</p>
 			<Input value={title} onChange={(e) => setTitle(e.target.value)}/>

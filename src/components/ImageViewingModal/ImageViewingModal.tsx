@@ -1,4 +1,4 @@
-import { getPhotoPostfix, PhotoSize, type Photo } from "../../lib/photoApi";
+import { type Photo } from "../../lib/photoApi";
 import FormModal from "../FormModal/FormModal";
 import Button from "../UI/Button/Button";
 import SecureImg from "../UI/SecureImg/SecureImg";
@@ -27,7 +27,12 @@ const ImageViewingModal = ({ photoDesc, close }: ImageViewingModalProps) => {
 			</div>
 			: undefined}
 
-			<SecureImg className={cl.viewingImage} alt="image" photoUuid={photoDesc.photo_uuid} postfix={getPhotoPostfix(PhotoSize.raw)}/>
+			<SecureImg
+				className={cl.viewingImage}
+				alt="image"
+				photoUuid={photoDesc.photo_uuid}
+				accessKey={photoDesc.access_key}				
+			/>
 			<Button onClick={close}>done</Button>
 		</FormModal>
 	);

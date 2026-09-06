@@ -6,6 +6,7 @@ export interface Photo {
   photo_uuid: string;
   owner_login: string;
   title: string;
+  access_key: string;
   description: string;
   tags: PhotoTagMetadata[];
   created_at: Date;
@@ -41,23 +42,13 @@ export function toPhotoSize(s: string): PhotoSize | undefined {
   return undefined;
 }
 
-export function getPhotoPostfix(photoSize: PhotoSize | undefined): string {
-  switch (photoSize) {
-    case PhotoSize.small:
-      return "/small";
-
-    case PhotoSize.medium:
-      return "/medium";
-
-    case PhotoSize.raw:
-    default:
-      return "";
-  }
-}
-
-export async function getPhotoUrl(photo_uuid: string, postfix: string): Promise<string> {
-  const res = await api.get(`/photo/${photo_uuid}${postfix}`, {
-    responseType: "blob"
+export async function getPhotoUrl(photo_uuid: string, access_key: string, photo_size?: string): Promise<string> {
+  const res = await api.get(`/photo/${photo_uuid}/file`, {
+    responseType: "blob",
+    params: {
+      access_key: access_key,
+      photo_size: photo_size
+    }
   })
   
   return URL.createObjectURL(res.data);
