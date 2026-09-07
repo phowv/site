@@ -1,5 +1,5 @@
-import type { AccessModifier } from "../types/accessModifier";
-import type { PhotoTagMetadata, UploadingTagMetadata } from "../types/tag";
+import type { AccessModifier } from "../../types/accessModifier";
+import type { PhotoTagMetadata, UploadingTagMetadata } from "../../types/tag";
 import { api } from "./axios"
 
 export interface Photo {

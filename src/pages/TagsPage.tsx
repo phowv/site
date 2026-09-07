@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchTags, uploadTag, type Tag } from '../lib/photoApi';
+import { fetchTags, uploadTag, type Tag } from '../lib/api/photoApi';
 import TagsList from '../components/TagsList/TagsList';
 import TagInput from '../components/UI/TagInput/TagInput';
 import type { UploadingTagMetadata } from '../types/tag';

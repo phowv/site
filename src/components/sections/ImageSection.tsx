@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { fetchPhotos, toPhotoSize, type Photo } from "../../lib/photoApi"
+import { fetchPhotos, toPhotoSize, type Photo } from "../../lib/api/photoApi"
 import SecureImage from "../UI/SecureImage/SecureImage";
 
 interface ImageSectionProps {

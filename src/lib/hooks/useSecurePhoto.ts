@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react';
-import { getPhotoUrl } from '../photoApi';
+import { getPhotoUrl } from '../api/photoApi';
 
-const useSecurePhoto = (photo_uuid: string, postfix: string) => {
+const useSecurePhoto = (photo_uuid: string, access_key: string, photo_size?: string) => {
 	const [blobUrl, setBlobUrl] = useState<string>("");
-
-	console.log("use secure photo", photo_uuid, postfix)
 
 	useEffect(() => {
 		let isMounted = true;
 		let url = "";
 
-		getPhotoUrl(photo_uuid, postfix)
+		getPhotoUrl(photo_uuid, access_key, photo_size)
 			.then((objectUrl) => {
 				if (isMounted) {
 					setBlobUrl(objectUrl);
@@ -25,7 +23,7 @@ const useSecurePhoto = (photo_uuid: string, postfix: string) => {
 				URL.revokeObjectURL(url);
 			}
 		};
-	}, [photo_uuid, postfix]);
+	}, [photo_uuid, access_key, photo_size]);
 
 	return blobUrl
 }

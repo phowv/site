@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { deletePhoto, patchPhoto, PhotoSize, type PatchPhotoProps, type Photo } from '../../lib/photoApi';
+import { deletePhoto, patchPhoto, type PatchPhotoProps, type Photo } from '../../lib/api/photoApi';
 import FormModal from '../FormModal/FormModal';
 import cl from './ImageEditingModal.module.css'
 import Input from '../UI/Input/Input';

@@ -2,7 +2,7 @@ import { useState, type SyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Input from '../components/UI/Input/Input';
 import Button from '../components/UI/Button/Button';
-import { verifyUser } from '../lib/authApi';
+import { verifyUser } from '../lib/api/authApi';
 
 const VerificaticationPage = () => {
 	const [code, setCode] = useState("");

@@ -1,4 +1,4 @@
-import { type Photo } from "../../lib/photoApi";
+import { type Photo } from "../../lib/api/photoApi";
 import FormModal from "../FormModal/FormModal";
 import Button from "../UI/Button/Button";
 import SecureImg from "../UI/SecureImg/SecureImg";

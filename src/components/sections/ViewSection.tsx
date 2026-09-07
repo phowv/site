@@ -1,7 +1,7 @@
 import { useState } from "react"
 import ImageViewingModal from "../ImageViewingModal/ImageViewingModal"
 import ImageSection from "./ImageSection"
-import type { Photo } from "../../lib/photoApi"
+import type { Photo } from "../../lib/api/photoApi"
 
 interface ViewSectionProps {
 	owner_login?: string;

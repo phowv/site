@@ -1,5 +1,5 @@
 import cl from './TagsList.module.css';
-import type { Tag } from '../../lib/photoApi';
+import type { Tag } from '../../lib/api/photoApi';
 
 interface TagsListProps {
 	tags: Tag[];
