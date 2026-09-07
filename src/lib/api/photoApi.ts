@@ -67,6 +67,19 @@ export async function fetchPhotos(owner_login?: string): Promise<Array<Photo>> {
   }
 }
 
+export async function fetchPhoto(photo_uuid: string, access_key?: string): Promise<Photo> {
+	try {
+  	const response = await api.get(`/photo/${photo_uuid}`, 
+      {params: access_key ? {access_key} : undefined }
+    )
+    return response.data
+  } catch (error: any) {
+    const errorText = error.response?.data ?? error.message ?? '<unknown error>'
+
+    throw new Error(`[api] Error loading photo ${errorText}`)
+  }
+}
+
 export async function uploadPhoto(metadata: string, photo: File) {
   const formData = new FormData()
   formData.append('metadata', metadata)

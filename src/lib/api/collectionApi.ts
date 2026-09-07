@@ -9,8 +9,13 @@ export interface SimpleCollection {
 	access_level: AccessModifier
 }
 
+export interface SmallPhotoInfo {
+	photo_uuid: string
+	access_key: string
+}
+
 export interface Collection extends SimpleCollection {
-	photo_uuids: string[];
+	photos: SmallPhotoInfo[];
 }
 
 export async function fetchCollections(owner_login?: string): Promise<Array<SimpleCollection>> {
@@ -28,7 +33,7 @@ export async function fetchCollections(owner_login?: string): Promise<Array<Simp
 
 export async function fetchCollection(collection_uuid: string): Promise<Collection> {
 	try {
-		return await api.get(`/collection/${collection_uuid}`)
+		return (await api.get(`/collection/${collection_uuid}`)).data
 
 	}	catch (error: any) {
 

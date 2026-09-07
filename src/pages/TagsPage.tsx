@@ -8,7 +8,7 @@ const TagsPage = () => {
 	const [status, setStatus] = useState('empty');
 	const [tagsList, setTagsList] = useState<Tag[]>([]);
 
-	const loadTags = async () => {
+	const loadTags = () => {
 		setStatus('loading')
 		fetchTags()
 			.then(loaded_tags => {
@@ -28,7 +28,7 @@ const TagsPage = () => {
 	const handleUpload = async (tag: UploadingTagMetadata) => {
 		try {
 			await uploadTag(tag);
-			await loadTags();
+			loadTags();
 		
 		} catch(err) {
 			console.error(err);

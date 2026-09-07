@@ -5,6 +5,7 @@ import UploadImageList from '../components/UploadImageList/UploadImageList';
 import Button from '../components/UI/Button/Button';
 import ImageEditingModal from '../components/UploadingImageEditingModal/UploadingImageEditingModal';
 import TagSelector from '../components/UI/TagSelector/TagSelector';
+import { AccessModifier } from '../types/accessModifier';
 
 const CreatePage = () => {
 	const [isDragging, setIsDragging] = useState(false)
@@ -23,7 +24,7 @@ const CreatePage = () => {
 			const incoming = Array.from(e.dataTransfer.files ?? [])
 			.filter((file) => file.type == 'image/jpeg')
 			.filter((file) => prev.findIndex(f => f.file.name === file.name) === -1)
-			.map((file) => ({file, isUploaded: false, metadata: {title: undefined, description: undefined, tag_uuids: tags}}))
+			.map((file) => ({file, isUploaded: false, metadata: {title: undefined, description: undefined, tag_uuids: tags, access_level: AccessModifier.private}}))
 			return [...prev, ...incoming]
 		})
 	}
