@@ -58,6 +58,18 @@ export async function uploadCollection(metadata: string) {
   }
 }
 
+export async function deleteCollection(collection_uuid: string) {
+	try {
+    const response = await api.delete(`/collection/${collection_uuid}`)
+    return response.data
+
+  } catch (error: any) {
+    const errorText = error.response?.data ?? error.message ?? '<unknown error>'
+
+    throw new Error(`[api] Error removing collection ${errorText}`)
+  }	
+}
+
 export async function addPhotoToCollection(collection_uuid: string, photo_uuid: string) {	
   const formData = new FormData()
   formData.append('photo_uuid', photo_uuid)

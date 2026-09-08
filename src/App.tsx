@@ -15,6 +15,7 @@ import TagsPage from "./pages/TagsPage"
 import CollectionPage from "./pages/CollectionPage"
 import CollectionsPage from "./pages/CollectionsPage"
 import CollectionEditPage from "./pages/CollectionEditPage"
+import CollectionCreatePage from "./pages/CollectionCreatePage"
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route path="profile" element={<SelfProfilePage />} />
           <Route path="create" element={<CreatePage />} />
           <Route path="tags" element={<TagsPage />} />
+          <Route path="collection/create" element={<CollectionCreatePage />} />
         </Route>
 
         <Route path="profile/:user" element={<ProfilePage />} />

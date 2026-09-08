@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchCollections, type SimpleCollection } from '../../lib/api/collectionApi';
+import { deleteCollection, fetchCollections, type SimpleCollection } from '../../lib/api/collectionApi';
 import CollectionPreview from '../UI/CollectionPreview/CollectionPreview';
 import { useNavigate } from 'react-router-dom';
 
@@ -26,6 +26,11 @@ const CollectionSection = ({ owner_login }: CollectionSectionProps) => {
 			})
 	}, [])
 
+	const handleRemoveCollection = (collection_uuid: string) => {
+		deleteCollection(collection_uuid)
+			.catch(err => console.error("Error delete collection: ", err))
+	}
+
 	return (
 		<>			
 			{status == 'loading' && <p>Loading...</p>}
@@ -41,6 +46,7 @@ const CollectionSection = ({ owner_login }: CollectionSectionProps) => {
 						collection={collection}
 						open={collection_uuid => {navigate(`/collection/${collection_uuid}`)}}
 						edit={collection_uuid => {navigate(`/collection/${collection_uuid}/edit`)}}
+						remove={handleRemoveCollection}
 						/>	
 				)}
 			</section>
