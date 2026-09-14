@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getMe, loginUser, registerUser, type LoginRequest, type RegisterRequest } from "../lib/authApi";
+import { getMe, loginUser, registerUser, type LoginRequest, type RegisterRequest } from "../lib/api/authApi";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { subscribeToLogout, triggerLogout } from "../lib/utils/authUtils";

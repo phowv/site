@@ -1,5 +1,5 @@
+import { triggerLogout } from "../utils/authUtils";
 import { api } from "./axios";
-import { triggerLogout } from "./utils/authUtils";
 
 export interface LoginRequest {
   login: string;

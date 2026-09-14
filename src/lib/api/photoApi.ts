@@ -1,19 +1,30 @@
+import type { AccessModifier } from "../../types/accessModifier";
+import type { PhotoTagMetadata, UploadingTagMetadata } from "../../types/tag";
 import { api } from "./axios"
 
 export interface Photo {
   photo_uuid: string;
   owner_login: string;
   title: string;
+  access_key: string;
   description: string;
-  tags: string;
+  tags: PhotoTagMetadata[];
   created_at: Date;
   took_at: Date;
+  access_level: AccessModifier;
+}
+
+export interface Tag {
+  tag_uuid: string;
+  tag_name: string;
+  tag_description: string;
 }
 
 export interface PatchPhotoProps {
   title?: string;
   description?: string;
-  tags?: string;
+  tag_uuids?: string[];
+  access_level: AccessModifier;
 }
 
 export const PhotoSize = {
@@ -31,18 +42,16 @@ export function toPhotoSize(s: string): PhotoSize | undefined {
   return undefined;
 }
 
-export function getPhotoPostfix(photoSize: PhotoSize | undefined): string {
-  switch (photoSize) {
-    case PhotoSize.small:
-      return "/small";
-
-    case PhotoSize.medium:
-      return "/medium";
-
-    case PhotoSize.raw:
-    default:
-      return "";
-  }
+export async function getPhotoUrl(photo_uuid: string, access_key: string, photo_size?: string): Promise<string> {
+  const res = await api.get(`/photo/${photo_uuid}/file`, {
+    responseType: "blob",
+    params: {
+      access_key: access_key,
+      photo_size: photo_size
+    }
+  })
+  
+  return URL.createObjectURL(res.data);
 }
 
 export async function fetchPhotos(owner_login?: string): Promise<Array<Photo>> {
@@ -55,6 +64,19 @@ export async function fetchPhotos(owner_login?: string): Promise<Array<Photo>> {
     const errorText = error.response?.data ?? error.message ?? '<unknown error>'
 
     throw new Error(`[api] Error loading photos ${errorText}`)
+  }
+}
+
+export async function fetchPhoto(photo_uuid: string, access_key?: string): Promise<Photo> {
+	try {
+  	const response = await api.get(`/photo/${photo_uuid}`, 
+      {params: access_key ? {access_key} : undefined }
+    )
+    return response.data
+  } catch (error: any) {
+    const errorText = error.response?.data ?? error.message ?? '<unknown error>'
+
+    throw new Error(`[api] Error loading photo ${errorText}`)
   }
 }
 
@@ -95,5 +117,32 @@ export async function patchPhoto(photo_uuid: string, patchPhotoProps: PatchPhoto
     const errorText = error.response?.data ?? error.message ?? '<unknown error>'
 
     throw new Error(`[api] Error patching photo ${errorText}`)
+  }
+}
+
+export async function fetchTags(photo_uuid?: string): Promise<Array<Tag>> {
+	try {
+  	const response = await api.get('/tags',
+      {params: photo_uuid ? {photo_uuid} : undefined }
+    )
+    return Array.isArray(response.data) ? response.data : []
+  } catch (error: any) {
+    const errorText = error.response?.data ?? error.message ?? '<unknown error>'
+
+    throw new Error(`[api] Error loading tags ${errorText}`)
+  }
+}
+
+export async function uploadTag(metadata: UploadingTagMetadata) {
+  const formData = new FormData()
+  formData.append('metadata', JSON.stringify(metadata))
+
+  try {
+    const response = await api.post('/tags', formData)
+    return response.data
+  } catch (error: any) {
+    const errorText = error.response?.data ?? error.message ?? '<unknown error>'
+
+    throw new Error(`[api] Error uploading tag ${errorText}`)
   }
 }

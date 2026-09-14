@@ -14,6 +14,8 @@ export default function MainLayout() {
           <NavLink to="/settings">Settings</NavLink>
           <NavLink to="/profile">Profile</NavLink>
           <NavLink to="/create">Create</NavLink>
+          <NavLink to="/tags">Tags</NavLink>
+          <NavLink to="/collections">Collections</NavLink>
 
           {isAuth ? (
             <>

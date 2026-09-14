@@ -1,20 +1,15 @@
-import { useAuth } from "../auth/authContext";
-import EditSection from "../components/sections/EditSection";
+import { useParams } from "react-router-dom";
+import ViewSection from "../components/sections/ViewSection";
 
 const ProfilePage = () => {
-	const {user} = useAuth()
+	const { user } = useParams()
 
 	return (
 		<div>
 			{user ?
 				<>
-					<h1>User info</h1>
-					<p>Login: {user.login}</p>
-					<p>Email: {user.email}</p>
-					<p>Description: {user.description}</p>
-
-					<h2>{user.login}'s photos</h2>
-					<EditSection owner_login={user.login}/>
+					<h1>{user}'s photos</h1>
+					<ViewSection owner_login={user}/>
 				</>
 				:
 				<p>Empty user</p>

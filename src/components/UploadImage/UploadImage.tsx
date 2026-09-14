@@ -1,4 +1,3 @@
-import React from 'react';
 import classes from './UploadImage.module.css';
 import type { UploadingFile } from '../../types/files';
 

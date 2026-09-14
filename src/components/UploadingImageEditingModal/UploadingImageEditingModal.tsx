@@ -4,7 +4,8 @@ import Input from '../UI/Input/Input';
 import Button from '../UI/Button/Button';
 import type { UploadingFile } from '../../types/files';
 import { rotateFile90 } from '../../lib/utils/imageUtils';
-import TagsInput from '../UI/TagsInput/TagsInput';
+import TagSelector from '../UI/TagSelector/TagSelector';
+import { AccessModifier } from '../../types/accessModifier';
 
 interface UploadingImageEditingModalProps {
 	visible: boolean;
@@ -15,7 +16,8 @@ interface UploadingImageEditingModalProps {
 const UploadingImageEditingModal = ({ visible, inputFile, doneEditingImage }: UploadingImageEditingModalProps) => {
 	const [editingFile, setEditingFile] = useState<UploadingFile>(inputFile);
 	const [editingFileSrc, setEditingFileSrc] = useState<string | null>(null)
-	const [tags, setTags] = useState<Set<string>>(new Set(inputFile.metadata.tags?.split(";").filter(tag => tag !== "")))
+	const [tags, setTags] = useState<string[]>(inputFile.metadata.tag_uuids ?? [])
+	const [accessLevel, setAccessLevel] = useState<AccessModifier>(AccessModifier.private)
 
 	useEffect(() => {
 		if (!editingFile) {
@@ -43,9 +45,9 @@ const UploadingImageEditingModal = ({ visible, inputFile, doneEditingImage }: Up
 			return;
 		}
 
-		const nextMetadata = tags.size !== 0 ? { ...editingFile.metadata, tags: [...tags].join(";") } : editingFile.metadata;
+		const nextMetadata = tags.length !== 0 ? { ...editingFile.metadata, tag_uuids: tags } : editingFile.metadata;
 
-		const next = {...editingFile, metadata: nextMetadata};		
+		const next = {...editingFile, metadata: {...nextMetadata, access_level: accessLevel}};
 
 		setEditingFile(next);
 
@@ -57,14 +59,23 @@ const UploadingImageEditingModal = ({ visible, inputFile, doneEditingImage }: Up
 			{editingFileSrc ? <img src={editingFileSrc} width="400px" height="auto"/> : <p>Editing image</p>}
 			<p>File name: {editingFile.file.name}</p>
 			<p>File size: {Math.round(editingFile.file.size / 1024)} KB</p>
+
 			<p>Type image title: </p>
-			<Input value={editingFile.metadata.title ?? ""} onChange={e =>
+			<Input placeholder="Image title (optional)..." value={editingFile.metadata.title ?? ""} onChange={e =>
 				setEditingFile(prev => ({...prev, metadata: {...prev.metadata, title: e.target.value}}))}/>
-			<p>Type image description: </p>
-			<Input value={editingFile.metadata.description ?? ""} onChange={e =>
+
+			<p>Type image description:</p>
+			<Input placeholder="Image description (optional)..." value={editingFile.metadata.description ?? ""} onChange={e =>
 				setEditingFile(prev => ({...prev, metadata: {...prev.metadata, description: e.target.value}}))}/>
 
-			<TagsInput tags={tags} setTags={setTags}/>
+			<p>Access level:</p>
+			<select value={accessLevel} onChange={e => setAccessLevel(e.target.value as AccessModifier)}>
+				<option value={AccessModifier.private}>Private</option>			
+				<option value={AccessModifier.protected}>Protected</option>			
+				<option value={AccessModifier.public}>Public</option>			
+			</select>	
+			
+			<TagSelector label="Tags" tags={tags} setTags={setTags}/>
 
 			<br />
 			<Button onClick={_ => rotateEditingImage(false)}>Rotate left</Button>

@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import type { UploadingFile } from '../types/files';
-import { uploadPhoto } from '../lib/photoApi';
+import { uploadPhoto } from '../lib/api/photoApi';
 import UploadImageList from '../components/UploadImageList/UploadImageList';
 import Button from '../components/UI/Button/Button';
 import ImageEditingModal from '../components/UploadingImageEditingModal/UploadingImageEditingModal';
-import TagsInput from '../components/UI/TagsInput/TagsInput';
+import TagSelector from '../components/UI/TagSelector/TagSelector';
+import { AccessModifier } from '../types/accessModifier';
 
 const CreatePage = () => {
 	const [isDragging, setIsDragging] = useState(false)
@@ -12,7 +13,7 @@ const CreatePage = () => {
 
 	const [imageEditing, setImageEditing] = useState({visible: false, fileName: ""})
 
-	const [tags, setTags] = useState<Set<string>>(new Set())
+	const [tags, setTags] = useState<string[]>([])
 
 	const editingFile = files.find(f => f.file.name === imageEditing.fileName)
 
@@ -23,7 +24,7 @@ const CreatePage = () => {
 			const incoming = Array.from(e.dataTransfer.files ?? [])
 			.filter((file) => file.type == 'image/jpeg')
 			.filter((file) => prev.findIndex(f => f.file.name === file.name) === -1)
-			.map((file) => ({file, isUploaded: false, metadata: {title: undefined, description: undefined, tags: [...tags].join(";")}}))
+			.map((file) => ({file, isUploaded: false, metadata: {title: undefined, description: undefined, tag_uuids: tags, access_level: AccessModifier.private}}))
 			return [...prev, ...incoming]
 		})
 	}
@@ -43,7 +44,7 @@ const CreatePage = () => {
 		const toUpload = [...files.filter(f => f.status != "uploading" && f.status != "uploaded")]
 
 		setFiles(prev => prev.map(f =>
-				toUpload.some(x => x.file.name === f.file.name) ? {...f, isUploaded: false, status: "uploading"} : f
+			toUpload.some(x => x.file.name === f.file.name) ? {...f, isUploaded: false, status: "uploading"} : f
 		));
 
 		const results = await Promise.allSettled(
@@ -75,18 +76,37 @@ const CreatePage = () => {
 		setImageEditing(prev => ({...prev, visible: false, fileName: ""}));
 	}
 
-	const setFilesTags = (f: (prev: Set<string>) => Set<string>) => {
-		const newTags = f(tags);
+	const setFilesTags = (updateFn: (prev: string[]) => string[]) => {
+    setTags(prevTags => {
+      const nextTags = updateFn(prevTags);
 
-		files.forEach(f => {
-			const newTagsSet = new Set(newTags);
-			if (f.metadata.tags) {
-				f.metadata.tags.split(";").forEach(t => newTagsSet.add(t));
-			}
-			f.metadata.tags = [...newTagsSet].join(";");
-		});
-		setTags(newTags);
-	}
+      const added = nextTags.filter(t => !prevTags.includes(t));
+			const removed = prevTags.filter(t => !nextTags.includes(t));
+
+			setFiles(prevFiles => prevFiles.map(file => {
+				let fileTags = file.metadata.tag_uuids || [];
+
+				if (removed.length > 0) {
+					fileTags = fileTags.filter(t => !removed.includes(t));
+				}
+
+				if (added.length > 0) {
+					const uniqueAdded = added.filter(t => !fileTags.includes(t));
+					fileTags = [...fileTags, ...uniqueAdded];
+				}
+
+				return {
+					...file,
+					metadata: {
+							...file.metadata,
+							tag_uuids: fileTags
+					}
+				};
+			}));
+
+			return nextTags;
+    });
+}
 
 	return (
 		<section>
@@ -112,7 +132,7 @@ const CreatePage = () => {
 			<Button isActive={files.length != 0} onClick={_ => uploadSelectedPhotos()}>Upload</Button>
 			<Button isActive={files.length != 0} onClick={_ => {if (confirm("Are you sure?")) setFiles([])}}>Clear</Button>
 
-			<TagsInput label="New tag for all images:" tags={tags} setTags={setFilesTags}/>
+			<TagSelector label='Tags selector' tags={tags} setTags={setFilesTags}/>
 		</section>
 	);
 }
