@@ -1,0 +1,24 @@
+.tagSelector {
+	padding: 12px;
+	margin: 12px;
+	border: 2px solid green;
+}
+
+.tagsList {
+	max-height: 10vh;
+	overflow-y: auto;
+}
+
+.tagAddItem {
+	cursor: pointer;
+}
+.tagAddItem:hover {
+	color: green;
+}
+
+.tagRemoveItem {
+	cursor: pointer;
+}
+.tagRemoveItem:hover {
+	color: red;
+}

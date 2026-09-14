@@ -1,5 +1,5 @@
 import ImageSection from './ImageSection';
-import type { Photo } from '../../lib/photoApi';
+import type { Photo } from '../../lib/api/photoApi';
 import { useState } from 'react';
 import ImageEditingModal from '../ImageEditingModal/ImageEditingModal';
 

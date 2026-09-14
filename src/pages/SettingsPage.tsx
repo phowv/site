@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { PhotoSize } from '../lib/photoApi';
+import { PhotoSize } from '../lib/api/photoApi';
 
 const upperBoundSmallPhotosUse = 6
 const upperBoundMediumPhotosUse = 3

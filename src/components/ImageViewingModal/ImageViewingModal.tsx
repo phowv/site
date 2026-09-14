@@ -1,7 +1,7 @@
-import { API_BASE } from "../../lib/axios";
-import type { Photo } from "../../lib/photoApi";
+import { type Photo } from "../../lib/api/photoApi";
 import FormModal from "../FormModal/FormModal";
 import Button from "../UI/Button/Button";
+import SecureImg from "../UI/SecureImg/SecureImg";
 import cl from "./ImageViewingModal.module.css"
 
 interface ImageViewingModalProps {
@@ -18,16 +18,21 @@ const ImageViewingModal = ({ photoDesc, close }: ImageViewingModalProps) => {
 			</div>
 			<p>{photoDesc.description}</p>
 
-			{photoDesc.tags ? 
+			{photoDesc.tags.length !== 0 ? 
 			<div className={cl.imageTagsDiv}>
 				<p>Tags:</p>
-				{photoDesc.tags.split(";").map(tag =>
-				<p key={tag} className={cl.imageTagName}>{tag}</p>
+				{photoDesc.tags.map(tag =>
+				<p key={tag.tag_uuid} className={cl.imageTagName}>#{tag.tag_name}</p>
 				)}
 			</div>
 			: undefined}
 
-			<img className={cl.viewingImage} src={`${API_BASE}/photo/${photoDesc.photo_uuid}`} alt="image" />
+			<SecureImg
+				className={cl.viewingImage}
+				alt="image"
+				photoUuid={photoDesc.photo_uuid}
+				accessKey={photoDesc.access_key}				
+			/>
 			<Button onClick={close}>done</Button>
 		</FormModal>
 	);

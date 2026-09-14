@@ -1,0 +1,26 @@
+.viewingImage {
+  max-width: 100%;
+  max-height: 80vh;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.imageDescription {
+  display: flex;
+  justify-content: space-between;
+}
+
+.imageTagsDiv {
+  display: flex;
+  overflow: hidden;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 4px;
+  width: 100%;
+}
+
+.imageTagName {
+  font-weight: bold;
+}

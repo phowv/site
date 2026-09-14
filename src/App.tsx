@@ -11,6 +11,11 @@ import CreatePage from "./pages/CreatePage"
 import SettingsPage from "./pages/SettingsPage"
 import VerificaticationPage from "./pages/VerificaticationPage"
 import SelfProfilePage from "./pages/SelfProfilePage"
+import TagsPage from "./pages/TagsPage"
+import CollectionPage from "./pages/CollectionPage"
+import CollectionsPage from "./pages/CollectionsPage"
+import CollectionEditPage from "./pages/CollectionEditPage"
+import CollectionCreatePage from "./pages/CollectionCreatePage"
 
 function App() {
   return (
@@ -27,9 +32,14 @@ function App() {
         <Route element={<ProtectedRoute />}>
           <Route path="profile" element={<SelfProfilePage />} />
           <Route path="create" element={<CreatePage />} />
+          <Route path="tags" element={<TagsPage />} />
+          <Route path="collection/create" element={<CollectionCreatePage />} />
         </Route>
 
         <Route path="profile/:user" element={<ProfilePage />} />
+        <Route path="collections" element={<CollectionsPage />} />
+        <Route path="collection/:collection_uuid" element={<CollectionPage />} />
+        <Route path="collection/:collection_uuid/edit" element={<CollectionEditPage />} />
 
         <Route path="settings" element={<SettingsPage />} />
         <Route path="*" element={<NotFoundPage />}/>

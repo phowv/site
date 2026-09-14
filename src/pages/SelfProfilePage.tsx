@@ -13,7 +13,7 @@ const SelfProfilePage = () => {
 					<p>Email: {user.email}</p>
 					<p>Description: {user.description}</p>
 
-					<h2>{user.login}'s photos</h2>
+					<h2>Your photos</h2>
 					<EditSection owner_login={user.login}/>
 				</>
 				:
