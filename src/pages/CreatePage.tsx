@@ -14,6 +14,7 @@ const CreatePage = () => {
 	const [imageEditing, setImageEditing] = useState({visible: false, fileName: ""})
 
 	const [tags, setTags] = useState<string[]>([])
+	const [accessLevel, setAccessLevel] = useState<AccessModifier>(AccessModifier.private)
 
 	const editingFile = files.find(f => f.file.name === imageEditing.fileName)
 
@@ -24,7 +25,7 @@ const CreatePage = () => {
 			const incoming = Array.from(e.dataTransfer.files ?? [])
 			.filter((file) => file.type == 'image/jpeg')
 			.filter((file) => prev.findIndex(f => f.file.name === file.name) === -1)
-			.map((file) => ({file, isUploaded: false, metadata: {title: undefined, description: undefined, tag_uuids: tags, access_level: AccessModifier.private}}))
+			.map((file) => ({file, isUploaded: false, metadata: {title: undefined, description: undefined, tag_uuids: tags, access_level: accessLevel}}))
 			return [...prev, ...incoming]
 		})
 	}
@@ -74,6 +75,12 @@ const CreatePage = () => {
 			return prev.map(p => (p === editingFile ? f : p));
 		});
 		setImageEditing(prev => ({...prev, visible: false, fileName: ""}));
+	}
+
+	const setAccessLevelForAll = (newLevel: AccessModifier) => {
+		setFiles(prev => prev.map(file => ({...file, metadata: { ...file.metadata, access_level: newLevel }})))
+
+		setAccessLevel(newLevel);
 	}
 
 	const setFilesTags = (updateFn: (prev: string[]) => string[]) => {
@@ -131,6 +138,13 @@ const CreatePage = () => {
 
 			<Button isActive={files.length != 0} onClick={_ => uploadSelectedPhotos()}>Upload</Button>
 			<Button isActive={files.length != 0} onClick={_ => {if (confirm("Are you sure?")) setFiles([])}}>Clear</Button>
+
+			<p>Access level for all photos apply:</p>
+			<select value={accessLevel} onChange={e => setAccessLevelForAll(e.target.value as AccessModifier)}>
+				<option value={AccessModifier.private}>Private</option>			
+				<option value={AccessModifier.protected}>Protected</option>			
+				<option value={AccessModifier.public}>Public</option>			
+			</select>	
 
 			<TagSelector label='Tags selector' tags={tags} setTags={setFilesTags}/>
 		</section>
