@@ -1,4 +1,5 @@
 import type { AccessModifier } from "../../types/accessModifier";
+import type { UploadingCollectionMetadata } from "../../types/collection";
 import { api } from "./axios";
 
 export interface SimpleCollection {
@@ -43,12 +44,9 @@ export async function fetchCollection(collection_uuid: string): Promise<Collecti
 	}
 }
 
-export async function uploadCollection(metadata: string) {
-  const formData = new FormData()
-  formData.append('metadata', metadata)
-
+export async function uploadCollection(metadata: UploadingCollectionMetadata) {
   try {
-    const response = await api.post('/collections', formData)
+    const response = await api.post('/collections', metadata)
     return response.data
 
   } catch (error: any) {
