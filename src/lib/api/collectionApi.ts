@@ -19,6 +19,10 @@ export interface Collection extends SimpleCollection {
 	photos: SmallPhotoInfo[];
 }
 
+interface AddPhotoToCollectionRequest {
+  photo_uuid: string;
+}
+
 export async function fetchCollections(owner_login?: string): Promise<Array<SimpleCollection>> {
 	try {
   	const response = await api.get('/collections',
@@ -69,11 +73,10 @@ export async function deleteCollection(collection_uuid: string) {
 }
 
 export async function addPhotoToCollection(collection_uuid: string, photo_uuid: string) {	
-  const formData = new FormData()
-  formData.append('photo_uuid', photo_uuid)
+  const data: AddPhotoToCollectionRequest = {photo_uuid}
 
   try {
-    const response = await api.post(`/collection/${collection_uuid}/photos`, formData)
+    const response = await api.post(`/collection/${collection_uuid}/photos`, data)
     return response.data
 
   } catch (error: any) {

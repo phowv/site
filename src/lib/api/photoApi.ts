@@ -24,7 +24,16 @@ export interface PatchPhotoProps {
   title?: string;
   description?: string;
   tag_uuids?: string[];
-  access_level: AccessModifier;
+  access_level?: AccessModifier;
+}
+
+export interface GeneratePhotoAccessSecretProps {
+  expires_duration: number; // seconds
+}
+
+export interface GeneratePhotoAccessSecretResponse {
+  photo_uuid: string;
+  access_secret: string;
 }
 
 export const PhotoSize = {
@@ -67,10 +76,10 @@ export async function fetchPhotos(owner_login?: string): Promise<Array<Photo>> {
   }
 }
 
-export async function fetchPhoto(photo_uuid: string, access_key?: string): Promise<Photo> {
+export async function fetchPhoto(photo_uuid: string, access_secret?: string): Promise<Photo> {
 	try {
   	const response = await api.get(`/photo/${photo_uuid}`, 
-      {params: access_key ? {access_key} : undefined }
+      {params: access_secret ? { photo_access_secret: access_secret } : undefined, }
     )
     return response.data
   } catch (error: any) {
@@ -106,17 +115,37 @@ export async function deletePhoto(photo_uuid: string) {
   }
 }
 
-export async function patchPhoto(photo_uuid: string, patchPhotoProps: PatchPhotoProps) {
-  const formData = new FormData()
-  formData.append('metadata', JSON.stringify(patchPhotoProps)) 
-  
+export async function patchPhoto(photo_uuid: string, patchPhotoProps: PatchPhotoProps) { 
   try {
-    const response = await api.patch(`/photo/${photo_uuid}`, formData)
+    const response = await api.patch(`/photo/${photo_uuid}`, patchPhotoProps)
     return response.data
   } catch (error: any) {
     const errorText = error.response?.data ?? error.message ?? '<unknown error>'
 
     throw new Error(`[api] Error patching photo ${errorText}`)
+  }
+}
+
+export async function generatePhotoAccessSecret(photo_uuid: string, props: GeneratePhotoAccessSecretProps): Promise<GeneratePhotoAccessSecretResponse> {
+  try {
+    const reqestProps: GeneratePhotoAccessSecretProps = { ...props, expires_duration: props.expires_duration * 1e9};
+    const response = await api.post(`/photo/${photo_uuid}/secret`, reqestProps);
+    return response.data
+  } catch (error: any) {
+    const errorText = error.response?.data ?? error.message ?? '<unknown error>'
+
+    throw new Error(`[api] Error generate photo access secret ${errorText}`)
+  }
+}
+
+export async function deletePhotoAccessSecret(photo_uuid: string) {
+ try {
+    const response = await api.delete(`/photo/${photo_uuid}/secret`);
+    return response.data
+  } catch (error: any) {
+    const errorText = error.response?.data ?? error.message ?? '<unknown error>'
+
+    throw new Error(`[api] Error delete photo access secret ${errorText}`)
   }
 }
 
@@ -134,11 +163,8 @@ export async function fetchTags(photo_uuid?: string): Promise<Array<Tag>> {
 }
 
 export async function uploadTag(metadata: UploadingTagMetadata) {
-  const formData = new FormData()
-  formData.append('metadata', JSON.stringify(metadata))
-
   try {
-    const response = await api.post('/tags', formData)
+    const response = await api.post('/tags', metadata)
     return response.data
   } catch (error: any) {
     const errorText = error.response?.data ?? error.message ?? '<unknown error>'

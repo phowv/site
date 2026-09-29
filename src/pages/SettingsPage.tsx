@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { PhotoSize } from '../lib/api/photoApi';
 
-const upperBoundSmallPhotosUse = 6
-const upperBoundMediumPhotosUse = 3
-
 const SettingsPage = () => {
 	const [feedImageColumnsCount, setFeedImageColumnsCount] = useState(localStorage.getItem("feedImageColumnsCount") ?? "5");
 
@@ -18,16 +15,7 @@ const SettingsPage = () => {
 					const value = e.target.value;
 					setFeedImageColumnsCount(value);
 					localStorage.setItem("feedImageColumnsCount", value);
-
-					const count = parseInt(value) ?? 0;
-
-					if (count >= upperBoundSmallPhotosUse) {
-						localStorage.setItem("feedImageRequireSize", PhotoSize.small);
-					} else if (count >= upperBoundMediumPhotosUse) {
-						localStorage.setItem("feedImageRequireSize", PhotoSize.medium)
-					} else {					
-						localStorage.setItem("feedImageRequireSize", PhotoSize.raw);
-					}
+					localStorage.setItem("feedImageRequireSize", PhotoSize.small);
 				}}
 				value={feedImageColumnsCount}
 				/>
