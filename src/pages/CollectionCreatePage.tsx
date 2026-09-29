@@ -6,7 +6,7 @@ import type { UploadingCollectionMetadata } from "../types/collection";
 
 const CollectionCreatePage = () => {
 	const handleUpload = (collection: UploadingCollectionMetadata) => {
-		uploadCollection(JSON.stringify(collection))
+		uploadCollection(collection)
 			.catch(err => {
 				console.error("Error upload collection: ", err);	
 			})

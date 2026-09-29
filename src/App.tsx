@@ -16,6 +16,7 @@ import CollectionPage from "./pages/CollectionPage"
 import CollectionsPage from "./pages/CollectionsPage"
 import CollectionEditPage from "./pages/CollectionEditPage"
 import CollectionCreatePage from "./pages/CollectionCreatePage"
+import SinglePhotoViewPage from "./pages/SinglePhotoViewPage"
 
 function App() {
   return (
@@ -36,12 +37,14 @@ function App() {
           <Route path="collection/create" element={<CollectionCreatePage />} />
         </Route>
 
+        <Route path="photo/:photo_uuid" element={<SinglePhotoViewPage />} />
         <Route path="profile/:user" element={<ProfilePage />} />
         <Route path="collections" element={<CollectionsPage />} />
         <Route path="collection/:collection_uuid" element={<CollectionPage />} />
         <Route path="collection/:collection_uuid/edit" element={<CollectionEditPage />} />
 
         <Route path="settings" element={<SettingsPage />} />
+        <Route path="notfound" element={<NotFoundPage />}/>
         <Route path="*" element={<NotFoundPage />}/>
       </Route>
     </Routes>

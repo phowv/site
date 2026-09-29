@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { deletePhoto, patchPhoto, type PatchPhotoProps, type Photo } from '../../lib/api/photoApi';
+import { deletePhoto, deletePhotoAccessSecret, generatePhotoAccessSecret, patchPhoto, PhotoSize, type PatchPhotoProps, type Photo } from '../../lib/api/photoApi';
 import FormModal from '../FormModal/FormModal';
 import cl from './ImageEditingModal.module.css'
 import Input from '../UI/Input/Input';
@@ -19,6 +19,9 @@ const ImageEditingModal = (props: ImageEditingModalProps) => {
 	const [description, setDescription] = useState(props.photoDesc.description)
 	const [tags, setTags] = useState<string[]>(props.photoDesc.tags.map(t => t.tag_uuid))
 	const [accessLevel, setAccessLevel] = useState<AccessModifier>(props.photoDesc.access_level)
+
+	const [accessLink, setAccessLink] = useState<string>("");
+	const [expiresDuration, setExpiresDuration] = useState(60); // default 1 hour
 
 	const doneEditingCallback = async () => {
 		let patchData: PatchPhotoProps = {
@@ -82,6 +85,27 @@ const ImageEditingModal = (props: ImageEditingModalProps) => {
 		props.close();
 	}
 
+	const generateAccessLinkHandler = () => {
+		generatePhotoAccessSecret(props.photoDesc.photo_uuid, { expires_duration: expiresDuration * 60 })
+			.then(accessSecret => {
+				setAccessLink(`${window.location.origin}/photo/${accessSecret.photo_uuid}?access_secret=${accessSecret.access_secret}`);
+			})
+			.catch(err => {
+					console.log('Error generate photo access link: ', err);
+			})
+	}
+
+	const deleteAccessLinkHandler = () => {
+		deletePhotoAccessSecret(props.photoDesc.photo_uuid)
+			.then(() => {
+				setAccessLink("");
+			})
+			.catch(err => {
+					console.log('Error delete photo access link: ', err);
+			})
+	}
+
+
 	return (
 		<FormModal visible={true} close={cancelPhotoCallback}>
 		<SecureImg
@@ -89,6 +113,7 @@ const ImageEditingModal = (props: ImageEditingModalProps) => {
 				alt="image"
 				photoUuid={props.photoDesc.photo_uuid}
 				accessKey={props.photoDesc.access_key}				
+				photoSize={PhotoSize.medium}
 			/>
 
 			<p>Title:</p>
@@ -110,6 +135,12 @@ const ImageEditingModal = (props: ImageEditingModalProps) => {
 			<Button onClick={cancelPhotoCallback}>Cancel</Button>
 			<Button onClick={deletePhotoCallback}>Delete</Button>
 			<Button onClick={doneEditingCallback}>Done</Button>
+
+			<Input value={expiresDuration} onChange={e => setExpiresDuration(Number(e.target.value))} type='number' min={1}/>
+			<Button onClick={generateAccessLinkHandler}>Generate access link</Button>
+			<Button onClick={deleteAccessLinkHandler}>Delete access link</Button>
+
+			{accessLink !== "" && <a href={accessLink}>Access link</a>}
 		</FormModal>
 	);
 }

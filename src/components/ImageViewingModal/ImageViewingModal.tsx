@@ -1,4 +1,4 @@
-import { type Photo } from "../../lib/api/photoApi";
+import { PhotoSize, type Photo } from "../../lib/api/photoApi";
 import FormModal from "../FormModal/FormModal";
 import Button from "../UI/Button/Button";
 import SecureImg from "../UI/SecureImg/SecureImg";
@@ -31,7 +31,8 @@ const ImageViewingModal = ({ photoDesc, close }: ImageViewingModalProps) => {
 				className={cl.viewingImage}
 				alt="image"
 				photoUuid={photoDesc.photo_uuid}
-				accessKey={photoDesc.access_key}				
+				accessKey={photoDesc.access_key}
+				photoSize={PhotoSize.medium}
 			/>
 			<Button onClick={close}>done</Button>
 		</FormModal>
