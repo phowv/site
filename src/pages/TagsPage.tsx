@@ -1,52 +1,51 @@
-import { useEffect, useState } from 'react';
-import { fetchTags, uploadTag, type Tag } from '../lib/api/photoApi';
-import TagsList from '../components/TagsList/TagsList';
-import TagInput from '../components/UI/TagInput/TagInput';
-import type { UploadingTagMetadata } from '../types/tag';
+import { useEffect, useState } from "react";
+import { fetchTags, uploadTag, type Tag } from "../lib/api/photoApi";
+import TagsList from "../components/TagsList/TagsList";
+import TagInput from "../components/UI/TagInput/TagInput";
+import type { UploadingTagMetadata } from "../types/tag";
 
 const TagsPage = () => {
-	const [status, setStatus] = useState('empty');
+	const [status, setStatus] = useState("empty");
 	const [tagsList, setTagsList] = useState<Tag[]>([]);
 
 	const loadTags = () => {
-		setStatus('loading')
+		setStatus("loading");
 		fetchTags()
-			.then(loaded_tags => {
-				setTagsList(loaded_tags);				
-				setStatus('loaded');
+			.then((loaded_tags) => {
+				setTagsList(loaded_tags);
+				setStatus("loaded");
 			})
-			.catch(err => {
-				console.log('Error fetch tags: ', err);
-				setStatus('error');
-			})
-	}
-	
+			.catch((err) => {
+				console.log("Error fetch tags: ", err);
+				setStatus("error");
+			});
+	};
+
 	useEffect(() => {
 		loadTags();
-	}, [])
+	}, []);
 
 	const handleUpload = async (tag: UploadingTagMetadata) => {
 		try {
 			await uploadTag(tag);
 			loadTags();
-		
-		} catch(err) {
+		} catch (err) {
 			console.error(err);
 		}
-	}
+	};
 
 	return (
 		<section>
-			{status == 'loading' && <p>Loading tags...</p>}
-			{status == 'error' && <p>Failed to load tags</p>}
-			{status == 'loaded' &&
+			{status == "loading" && <p>Loading tags...</p>}
+			{status == "error" && <p>Failed to load tags</p>}
+			{status == "loaded" && (
 				<>
-					<TagInput upload={handleUpload}/>
-					<TagsList tags={tagsList}/>
+					<TagInput upload={handleUpload} />
+					<TagsList tags={tagsList} />
 				</>
-			}
+			)}
 		</section>
 	);
-}
+};
 
 export default TagsPage;

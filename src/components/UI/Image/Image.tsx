@@ -1,16 +1,16 @@
-import cl from "./Image.module.css"
+import cl from "./Image.module.css";
 
-interface ImageProps  {
+interface ImageProps {
 	src: string;
-	open: () => void; 
+	open: () => void;
 }
 
 const Image = ({ src, open }: ImageProps) => {
 	return (
 		<div className={cl.imageCard} onClick={open}>
-			<img src={src}/>
+			<img src={src} />
 		</div>
 	);
-}
+};
 
 export default Image;

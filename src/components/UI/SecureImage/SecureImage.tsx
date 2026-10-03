@@ -9,13 +9,13 @@ interface SecureImageProps {
 }
 
 const SecureImage = ({ photoUuid, photoSize, accessKey, open }: SecureImageProps) => {
-	const url = useSecurePhoto(photoUuid, accessKey, photoSize)
+	const url = useSecurePhoto(photoUuid, accessKey, photoSize);
 
 	if (url === "") {
-		return <p>Image is not loaded</p>
+		return <p>Image is not loaded</p>;
 	}
-	
-	return <Image open={open} src={url}/>;
-}
+
+	return <Image open={open} src={url} />;
+};
 
 export default SecureImage;

@@ -1,13 +1,13 @@
 .viewingImage {
-  max-width: 100%;
-  max-height: 80vh;
-  width: auto;
-  height: auto;
-  object-fit: contain;
-  display: block;
+	max-width: 100%;
+	max-height: 80vh;
+	width: auto;
+	height: auto;
+	object-fit: contain;
+	display: block;
 }
 
 .viewingModal {
 	max-height: 80vh;
-	overflow: auto; 
+	overflow: auto;
 }

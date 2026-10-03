@@ -2,30 +2,37 @@ import { PhotoSize, type Photo } from "../../lib/api/photoApi";
 import FormModal from "../FormModal/FormModal";
 import Button from "../UI/Button/Button";
 import SecureImg from "../UI/SecureImg/SecureImg";
-import cl from "./ImageViewingModal.module.css"
+import cl from "./ImageViewingModal.module.css";
 
 interface ImageViewingModalProps {
 	photoDesc: Photo;
 	close: () => void;
 }
 
-const ImageViewingModal = ({ photoDesc, close }: ImageViewingModalProps) => {	
+const ImageViewingModal = ({ photoDesc, close }: ImageViewingModalProps) => {
 	return (
 		<FormModal visible={true} close={close}>
 			<div className={cl.imageDescription}>
 				<h1>{photoDesc.title}</h1>
-				<p>Owner: <a href={`${window.location.origin}/profile/${photoDesc.owner_login}`}>{photoDesc.owner_login}</a></p>
+				<p>
+					Owner:{" "}
+					<a href={`${window.location.origin}/profile/${photoDesc.owner_login}`}>
+						{photoDesc.owner_login}
+					</a>
+				</p>
 			</div>
 			<p>{photoDesc.description}</p>
 
-			{photoDesc.tags.length !== 0 ? 
-			<div className={cl.imageTagsDiv}>
-				<p>Tags:</p>
-				{photoDesc.tags.map(tag =>
-				<p key={tag.tag_uuid} className={cl.imageTagName}>#{tag.tag_name}</p>
-				)}
-			</div>
-			: undefined}
+			{photoDesc.tags.length !== 0 ? (
+				<div className={cl.imageTagsDiv}>
+					<p>Tags:</p>
+					{photoDesc.tags.map((tag) => (
+						<p key={tag.tag_uuid} className={cl.imageTagName}>
+							#{tag.tag_name}
+						</p>
+					))}
+				</div>
+			) : undefined}
 
 			<SecureImg
 				className={cl.viewingImage}
@@ -37,6 +44,6 @@ const ImageViewingModal = ({ photoDesc, close }: ImageViewingModalProps) => {
 			<Button onClick={close}>done</Button>
 		</FormModal>
 	);
-}
+};
 
 export default ImageViewingModal;

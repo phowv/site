@@ -1,11 +1,13 @@
-import { useState } from 'react';
-import { PhotoSize } from '../lib/api/photoApi';
+import { useState } from "react";
+import { PhotoSize } from "../lib/api/photoApi";
 
 const SettingsPage = () => {
-	const [feedImageColumnsCount, setFeedImageColumnsCount] = useState(localStorage.getItem("feedImageColumnsCount") ?? "5");
+	const [feedImageColumnsCount, setFeedImageColumnsCount] = useState(
+		localStorage.getItem("feedImageColumnsCount") ?? "5",
+	);
 
 	return (
-		<section style={{padding: "10px"}}>
+		<section style={{ padding: "10px" }}>
 			<p>Feed image columns count: {feedImageColumnsCount}</p>
 			<input
 				type="range"
@@ -18,9 +20,9 @@ const SettingsPage = () => {
 					localStorage.setItem("feedImageRequireSize", PhotoSize.small);
 				}}
 				value={feedImageColumnsCount}
-				/>
+			/>
 		</section>
 	);
-}
+};
 
 export default SettingsPage;

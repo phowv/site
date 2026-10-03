@@ -1,5 +1,5 @@
-import React from 'react';
-import cl from './FormModal.module.css'
+import React from "react";
+import cl from "./FormModal.module.css";
 
 interface FormModalProps {
 	children: React.ReactNode;
@@ -8,18 +8,18 @@ interface FormModalProps {
 }
 
 const FormModal = ({ children, visible, close }: FormModalProps) => {
-  const rootClasses = [cl.formModal]
-  if (visible) {
-    rootClasses.push(cl.active)
-  }  
+	const rootClasses = [cl.formModal];
+	if (visible) {
+		rootClasses.push(cl.active);
+	}
 
-  return (
-    <div className={rootClasses.join(' ')} onClick={() => close()}>
-      <div className={cl.formModalContent} onClick={e => e.stopPropagation()}>
-        {children}
-      </div>
-    </div>
-  );
-}
+	return (
+		<div className={rootClasses.join(" ")} onClick={() => close()}>
+			<div className={cl.formModalContent} onClick={(e) => e.stopPropagation()}>
+				{children}
+			</div>
+		</div>
+	);
+};
 
 export default FormModal;

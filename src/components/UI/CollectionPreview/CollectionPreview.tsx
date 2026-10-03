@@ -1,15 +1,15 @@
-import type { SimpleCollection } from '../../../lib/api/collectionApi';
-import Button from '../Button/Button';
-import cl from './CollectionPreview.module.css'
+import type { SimpleCollection } from "../../../lib/api/collectionApi";
+import Button from "../Button/Button";
+import cl from "./CollectionPreview.module.css";
 
 interface CollectionPreviewProps {
-	collection: SimpleCollection
-	open: (collection_uuid: string) => void
-	edit: (collection_uuid: string) => void
-	remove: (collection_uuid: string) => void
+	collection: SimpleCollection;
+	open: (collection_uuid: string) => void;
+	edit: (collection_uuid: string) => void;
+	remove: (collection_uuid: string) => void;
 }
 
-const CollectionPreview = ({collection, open, edit, remove}: CollectionPreviewProps) => {
+const CollectionPreview = ({ collection, open, edit, remove }: CollectionPreviewProps) => {
 	return (
 		<div className={cl.collectionPreview}>
 			<h2>{collection.title}</h2>
@@ -19,6 +19,6 @@ const CollectionPreview = ({collection, open, edit, remove}: CollectionPreviewPr
 			<Button onClick={() => remove(collection.collection_uuid)}>Remove</Button>
 		</div>
 	);
-}
+};
 
 export default CollectionPreview;

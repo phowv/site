@@ -1,7 +1,7 @@
-import ImageSection from './ImageSection';
-import type { Photo } from '../../lib/api/photoApi';
-import { useState } from 'react';
-import ImageEditingModal from '../ImageEditingModal/ImageEditingModal';
+import ImageSection from "./ImageSection";
+import type { Photo } from "../../lib/api/photoApi";
+import { useState } from "react";
+import ImageEditingModal from "../ImageEditingModal/ImageEditingModal";
 
 interface EditSectionProps {
 	owner_login: string;
@@ -13,15 +13,20 @@ const EditSection = (props: EditSectionProps) => {
 
 	return (
 		<>
-			{editingPhoto ?
-			<ImageEditingModal
-				photoDesc={editingPhoto}
-				close={() => setEditingPhoto(null)}
-				onChangePhoto={() => setVersion(v => v + 1)}
-			/> : undefined}
-			<ImageSection owner_login={props.owner_login} open_photo={setEditingPhoto} version={version}/>
+			{editingPhoto ? (
+				<ImageEditingModal
+					photoDesc={editingPhoto}
+					close={() => setEditingPhoto(null)}
+					onChangePhoto={() => setVersion((v) => v + 1)}
+				/>
+			) : undefined}
+			<ImageSection
+				owner_login={props.owner_login}
+				open_photo={setEditingPhoto}
+				version={version}
+			/>
 		</>
 	);
-}
+};
 
 export default EditSection;

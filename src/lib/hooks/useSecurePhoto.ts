@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import { getPhotoUrl } from '../api/photoApi';
+import { useEffect, useState } from "react";
+import { getPhotoUrl } from "../api/photoApi";
 
 const useSecurePhoto = (photo_uuid: string, access_key: string, photo_size?: string) => {
 	const [blobUrl, setBlobUrl] = useState<string>("");
@@ -25,7 +25,7 @@ const useSecurePhoto = (photo_uuid: string, access_key: string, photo_size?: str
 		};
 	}, [photo_uuid, access_key, photo_size]);
 
-	return blobUrl
-}
+	return blobUrl;
+};
 
 export default useSecurePhoto;

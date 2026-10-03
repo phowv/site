@@ -1,12 +1,20 @@
-import { useState } from 'react';
-import { deletePhoto, deletePhotoAccessSecret, generatePhotoAccessSecret, patchPhoto, PhotoSize, type PatchPhotoProps, type Photo } from '../../lib/api/photoApi';
-import FormModal from '../FormModal/FormModal';
-import cl from './ImageEditingModal.module.css'
-import Input from '../UI/Input/Input';
-import Button from '../UI/Button/Button';
-import TagSelector from '../UI/TagSelector/TagSelector';
-import { AccessModifier } from '../../types/accessModifier';
-import SecureImg from '../UI/SecureImg/SecureImg';
+import { useState } from "react";
+import {
+	deletePhoto,
+	deletePhotoAccessSecret,
+	generatePhotoAccessSecret,
+	patchPhoto,
+	PhotoSize,
+	type PatchPhotoProps,
+	type Photo,
+} from "../../lib/api/photoApi";
+import FormModal from "../FormModal/FormModal";
+import cl from "./ImageEditingModal.module.css";
+import Input from "../UI/Input/Input";
+import Button from "../UI/Button/Button";
+import TagSelector from "../UI/TagSelector/TagSelector";
+import { AccessModifier } from "../../types/accessModifier";
+import SecureImg from "../UI/SecureImg/SecureImg";
 
 interface ImageEditingModalProps {
 	photoDesc: Photo;
@@ -15,17 +23,17 @@ interface ImageEditingModalProps {
 }
 
 const ImageEditingModal = (props: ImageEditingModalProps) => {
-	const [title, setTitle] = useState(props.photoDesc.title)
-	const [description, setDescription] = useState(props.photoDesc.description)
-	const [tags, setTags] = useState<string[]>(props.photoDesc.tags.map(t => t.tag_uuid))
-	const [accessLevel, setAccessLevel] = useState<AccessModifier>(props.photoDesc.access_level)
+	const [title, setTitle] = useState(props.photoDesc.title);
+	const [description, setDescription] = useState(props.photoDesc.description);
+	const [tags, setTags] = useState<string[]>(props.photoDesc.tags.map((t) => t.tag_uuid));
+	const [accessLevel, setAccessLevel] = useState<AccessModifier>(props.photoDesc.access_level);
 
 	const [accessLink, setAccessLink] = useState<string>("");
 	const [expiresDuration, setExpiresDuration] = useState(60); // default 1 hour
 
 	const doneEditingCallback = async () => {
 		let patchData: PatchPhotoProps = {
-			access_level: props.photoDesc.access_level
+			access_level: props.photoDesc.access_level,
 		};
 
 		if (title !== props.photoDesc.title) {
@@ -55,21 +63,23 @@ const ImageEditingModal = (props: ImageEditingModalProps) => {
 		}
 
 		props.close();
-	}
+	};
 
 	const cancelPhotoCallback = async () => {
-		const photoTags = props.photoDesc.tags.filter(s => s.tag_name !== "")
+		const photoTags = props.photoDesc.tags.filter((s) => s.tag_name !== "");
 
-		if (title != props.photoDesc.title
-			|| description != props.photoDesc.description
-			|| tags.length !== photoTags.length
-			|| !photoTags.every(v => tags.includes(v.tag_uuid))) {
+		if (
+			title != props.photoDesc.title ||
+			description != props.photoDesc.description ||
+			tags.length !== photoTags.length ||
+			!photoTags.every((v) => tags.includes(v.tag_uuid))
+		) {
 			const ok = confirm("Are you sure?");
 			if (!ok) return;
 		}
 
 		props.close();
-	}
+	};
 
 	const deletePhotoCallback = async () => {
 		const ok = confirm("Are you sure?");
@@ -83,66 +93,77 @@ const ImageEditingModal = (props: ImageEditingModalProps) => {
 		}
 
 		props.close();
-	}
+	};
 
 	const generateAccessLinkHandler = () => {
-		generatePhotoAccessSecret(props.photoDesc.photo_uuid, { expires_duration: expiresDuration * 60 })
-			.then(accessSecret => {
-				setAccessLink(`${window.location.origin}/photo/${accessSecret.photo_uuid}?access_secret=${accessSecret.access_secret}`);
+		generatePhotoAccessSecret(props.photoDesc.photo_uuid, {
+			expires_duration: expiresDuration * 60,
+		})
+			.then((accessSecret) => {
+				setAccessLink(
+					`${window.location.origin}/photo/${accessSecret.photo_uuid}?access_secret=${accessSecret.access_secret}`,
+				);
 			})
-			.catch(err => {
-					console.log('Error generate photo access link: ', err);
-			})
-	}
+			.catch((err) => {
+				console.log("Error generate photo access link: ", err);
+			});
+	};
 
 	const deleteAccessLinkHandler = () => {
 		deletePhotoAccessSecret(props.photoDesc.photo_uuid)
 			.then(() => {
 				setAccessLink("");
 			})
-			.catch(err => {
-					console.log('Error delete photo access link: ', err);
-			})
-	}
-
+			.catch((err) => {
+				console.log("Error delete photo access link: ", err);
+			});
+	};
 
 	return (
 		<FormModal visible={true} close={cancelPhotoCallback}>
-		<SecureImg
+			<SecureImg
 				className={cl.viewingImage}
 				alt="image"
 				photoUuid={props.photoDesc.photo_uuid}
-				accessKey={props.photoDesc.access_key}				
+				accessKey={props.photoDesc.access_key}
 				photoSize={PhotoSize.medium}
 			/>
 
 			<p>Title:</p>
-			<Input value={title} onChange={(e) => setTitle(e.target.value)}/>
+			<Input value={title} onChange={(e) => setTitle(e.target.value)} />
 
 			<p>Description:</p>
-			<Input value={description} onChange={(e) => setDescription(e.target.value)}/>
+			<Input value={description} onChange={(e) => setDescription(e.target.value)} />
 
 			<p>Access level:</p>
-			<select value={accessLevel} onChange={e => setAccessLevel(e.target.value as AccessModifier)}>
-				<option value={AccessModifier.private}>Private</option>			
-				<option value={AccessModifier.protected}>Protected</option>			
-				<option value={AccessModifier.public}>Public</option>			
-			</select>	
+			<select
+				value={accessLevel}
+				onChange={(e) => setAccessLevel(e.target.value as AccessModifier)}
+			>
+				<option value={AccessModifier.private}>Private</option>
+				<option value={AccessModifier.protected}>Protected</option>
+				<option value={AccessModifier.public}>Public</option>
+			</select>
 
-			<TagSelector tags={tags} setTags={setTags}/>	
+			<TagSelector tags={tags} setTags={setTags} />
 
 			<br />
 			<Button onClick={cancelPhotoCallback}>Cancel</Button>
 			<Button onClick={deletePhotoCallback}>Delete</Button>
 			<Button onClick={doneEditingCallback}>Done</Button>
 
-			<Input value={expiresDuration} onChange={e => setExpiresDuration(Number(e.target.value))} type='number' min={1}/>
+			<Input
+				value={expiresDuration}
+				onChange={(e) => setExpiresDuration(Number(e.target.value))}
+				type="number"
+				min={1}
+			/>
 			<Button onClick={generateAccessLinkHandler}>Generate access link</Button>
 			<Button onClick={deleteAccessLinkHandler}>Delete access link</Button>
 
 			{accessLink !== "" && <a href={accessLink}>Access link</a>}
 		</FormModal>
 	);
-}
+};
 
 export default ImageEditingModal;
