@@ -2,6 +2,7 @@
 	display: flex;
 	gap: 2rem;
 	justify-content: space-between;
+	align-items: center;
 }
 
 .header__nav_link {
@@ -13,4 +14,9 @@
 
 .header__nav_link:hover {
 	background-color: var(--light-color);
+}
+
+.header__home_icon {
+	aspect-ratio: 1 / 1;
+	width: var(--default-icon-size);
 }

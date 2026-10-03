@@ -4,6 +4,7 @@ import { useAuth } from "../auth/authContext";
 import Button from "../components/UI/Button/Button";
 import cl from "./MainLayout.module.css"
 
+
 export default function MainLayout() {
 	const { isAuth, user, logout } = useAuth();
 
@@ -11,7 +12,9 @@ export default function MainLayout() {
 		<div>
 			<Header>
 				<nav className={cl.header__nav_list}>
-					<NavLink className={cl.header__nav_link} to="/">Home</NavLink>
+					<NavLink to="/">
+						<img className={cl.header__home_icon} src="/ico.svg" alt="Home"/>
+					</NavLink>
 					<NavLink className={cl.header__nav_link} to="/settings">Settings</NavLink>
 					{/* <NavLink className={cl.header__nav_link} to="/profile">Profile</NavLink> */}
 					{/* <NavLink className={cl.header__nav_link} to="/create">Create</NavLink> */}

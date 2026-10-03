@@ -4,9 +4,14 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./auth/authContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
-	<BrowserRouter>
-		<AuthProvider>
-			<App />
-		</AuthProvider>
-	</BrowserRouter>,
+	<>
+		<head>
+			<link rel="icon" type="image/svg" href="/ico.svg" />
+		</head>
+		<BrowserRouter>
+			<AuthProvider>
+				<App />
+			</AuthProvider>
+		</BrowserRouter>
+	</>,
 );

@@ -2,7 +2,9 @@
 	--main-text-color: black;
 	--accent: rgba(51, 131, 110, 1);
 	--muted: rgb(132, 131, 131);
+
 	--button-border-radius: 10px;
+	--default-icon-size: 36px;
 }
 
 * {
