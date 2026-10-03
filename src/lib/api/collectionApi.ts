@@ -1,6 +1,5 @@
-import type { AccessModifier } from "../../types/accessModifier";
-import type { UploadingCollectionMetadata } from "../../types/collection";
 import { api } from "./axios";
+import type { AccessModifier } from "./types/accessModifier";
 
 export interface SimpleCollection {
 	collection_uuid: string;
@@ -17,6 +16,12 @@ export interface SmallPhotoInfo {
 
 export interface Collection extends SimpleCollection {
 	photos: SmallPhotoInfo[];
+}
+
+export interface UploadingCollectionMetadata {
+	title: string;
+	description?: string;
+	access_level: AccessModifier;
 }
 
 interface AddPhotoToCollectionRequest {

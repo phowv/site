@@ -1,5 +1,5 @@
+import type { UploadingFile } from "../../lib/api/photoApi";
 import classes from "./UploadImage.module.css";
-import type { UploadingFile } from "../../types/files";
 
 interface UploadImageProps {
 	file: UploadingFile;

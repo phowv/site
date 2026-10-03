@@ -2,8 +2,8 @@ import { useState } from "react";
 import cl from "./CollectionInput.module.css";
 import Input from "../Input/Input";
 import Button from "../Button/Button";
-import type { UploadingCollectionMetadata } from "../../../types/collection";
-import { AccessModifier } from "../../../types/accessModifier";
+import type { UploadingCollectionMetadata } from "../../../lib/api/collectionApi";
+import { AccessModifier } from "../../../lib/api/types/accessModifier";
 
 interface CollectionInputProps {
 	upload: (tag: UploadingCollectionMetadata) => void;

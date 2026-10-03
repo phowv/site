@@ -1,7 +1,6 @@
 import { NavLink } from "react-router-dom";
 import CollectionInput from "../components/UI/CollectionInput/CollectionInput";
-import { uploadCollection } from "../lib/api/collectionApi";
-import type { UploadingCollectionMetadata } from "../types/collection";
+import { uploadCollection, type UploadingCollectionMetadata } from "../lib/api/collectionApi";
 
 const CollectionCreatePage = () => {
 	const handleUpload = (collection: UploadingCollectionMetadata) => {

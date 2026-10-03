@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { fetchTags, uploadTag, type Tag } from "../lib/api/photoApi";
+import { fetchTags, uploadTag, type Tag, type UploadingTagMetadata } from "../lib/api/photoApi";
 import TagsList from "../components/TagsList/TagsList";
 import TagInput from "../components/UI/TagInput/TagInput";
-import type { UploadingTagMetadata } from "../types/tag";
 
 const TagsPage = () => {
 	const [status, setStatus] = useState("empty");

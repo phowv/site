@@ -2,7 +2,6 @@ import { createContext, useContext, useEffect, useState } from "react";
 import {
 	getMe,
 	loginUser,
-	logoutUser,
 	registerUser,
 	type LoginRequest,
 	type RegisterRequest,

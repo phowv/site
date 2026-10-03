@@ -13,8 +13,8 @@ import cl from "./ImageEditingModal.module.css";
 import Input from "../UI/Input/Input";
 import Button from "../UI/Button/Button";
 import TagSelector from "../UI/TagSelector/TagSelector";
-import { AccessModifier } from "../../types/accessModifier";
 import SecureImg from "../UI/SecureImg/SecureImg";
+import { AccessModifier } from "../../lib/api/types/accessModifier";
 
 interface ImageEditingModalProps {
 	photoDesc: Photo;

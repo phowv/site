@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import type { PhotoTagMetadata } from "../../../types/tag";
-import { fetchTags } from "../../../lib/api/photoApi";
+import { fetchTags, type PhotoTagMetadata } from "../../../lib/api/photoApi";
 import cl from "./TagSelector.module.css";
 import Input from "../Input/Input";
 

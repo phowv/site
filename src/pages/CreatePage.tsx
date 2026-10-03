@@ -1,11 +1,10 @@
 import { useState } from "react";
-import type { UploadingFile } from "../types/files";
-import { uploadPhoto } from "../lib/api/photoApi";
+import { uploadPhoto, type UploadingFile } from "../lib/api/photoApi";
 import UploadImageList from "../components/UploadImageList/UploadImageList";
 import Button from "../components/UI/Button/Button";
 import ImageEditingModal from "../components/UploadingImageEditingModal/UploadingImageEditingModal";
 import TagSelector from "../components/UI/TagSelector/TagSelector";
-import { AccessModifier } from "../types/accessModifier";
+import { AccessModifier } from "../lib/api/types/accessModifier";
 
 const CreatePage = () => {
 	const [isDragging, setIsDragging] = useState(false);

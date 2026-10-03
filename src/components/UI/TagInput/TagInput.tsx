@@ -1,8 +1,8 @@
 import { useState } from "react";
 import cl from "./TagInput.module.css";
-import type { UploadingTagMetadata } from "../../../types/tag";
 import Input from "../Input/Input";
 import Button from "../Button/Button";
+import type { UploadingTagMetadata } from "../../../lib/api/photoApi";
 
 interface TagInputProps {
 	upload: (tag: UploadingTagMetadata) => Promise<void>;

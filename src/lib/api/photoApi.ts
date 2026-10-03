@@ -1,6 +1,5 @@
-import type { AccessModifier } from "../../types/accessModifier";
-import type { PhotoTagMetadata, UploadingTagMetadata } from "../../types/tag";
 import { api } from "./axios";
+import type { AccessModifier } from "./types/accessModifier";
 
 export interface Photo {
 	photo_uuid: string;
@@ -18,6 +17,16 @@ export interface Tag {
 	tag_uuid: string;
 	tag_name: string;
 	tag_description: string;
+}
+
+export interface UploadingTagMetadata {
+	tag_name: string;
+	tag_description?: string;
+}
+
+export interface PhotoTagMetadata {
+	tag_uuid: string;
+	tag_name: string;
 }
 
 export interface PatchPhotoProps {
@@ -41,6 +50,20 @@ export const PhotoSize = {
 	medium: "medium",
 	raw: "raw",
 } as const;
+
+export interface UploadingFileMetadata {
+	title?: string;
+	description?: string;
+	tag_uuids?: string[];
+	access_level: AccessModifier;
+}
+
+export interface UploadingFile {
+	file: File;
+	metadata: UploadingFileMetadata;
+	isUploaded: boolean;
+	status?: "uploading" | "uploaded" | "error";
+}
 
 export type PhotoSize = (typeof PhotoSize)[keyof typeof PhotoSize];
 

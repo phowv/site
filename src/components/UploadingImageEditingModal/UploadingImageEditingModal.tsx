@@ -2,10 +2,10 @@ import { useEffect, useState } from "react";
 import FormModal from "../FormModal/FormModal";
 import Input from "../UI/Input/Input";
 import Button from "../UI/Button/Button";
-import type { UploadingFile } from "../../types/files";
 import { rotateFile90 } from "../../lib/utils/imageUtils";
 import TagSelector from "../UI/TagSelector/TagSelector";
-import { AccessModifier } from "../../types/accessModifier";
+import { AccessModifier } from "../../lib/api/types/accessModifier";
+import type { UploadingFile } from "../../lib/api/photoApi";
 
 interface UploadingImageEditingModalProps {
 	visible: boolean;
