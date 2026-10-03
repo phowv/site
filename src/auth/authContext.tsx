@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getMe, loginUser, registerUser, type LoginRequest, type RegisterRequest } from "../lib/api/authApi";
+import { getMe, loginUser, logoutUser, registerUser, type LoginRequest, type RegisterRequest } from "../lib/api/authApi";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { subscribeToLogout, triggerLogout } from "../lib/utils/authUtils";
@@ -56,7 +56,7 @@ export function AuthProvider({ children }: Props) {
     
     getMe()
       .then((userData) => {
-        setUser({login: userData.user_login, email: userData.user_email, description: userData.user_description});
+        setUser({login: userData.user_login, email: userData.user_email, description: "not loaded"});
       })
       .catch(() => {
         localStorage.removeItem("access_token");
@@ -72,7 +72,7 @@ export function AuthProvider({ children }: Props) {
       localStorage.setItem("access_token", response.access_token);
 
       const userData = await getMe();
-      setUser({login: userData.user_login, email: userData.user_email, description: userData.user_description});
+      setUser({login: userData.user_login, email: userData.user_email, description: "not loaded"});
       console.debug("fetched user data", userData);
 
     } catch (error: any) {
@@ -100,7 +100,12 @@ export function AuthProvider({ children }: Props) {
   };
 
   const logout = () => {
-    triggerLogout()
+    try {
+      logoutUser();
+      triggerLogout();
+    } catch {
+      console.error("failed to logout");    
+    }
   };
 
   return (

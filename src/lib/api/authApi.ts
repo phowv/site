@@ -30,11 +30,16 @@ export interface DefaultResponse {
 export interface GetMeResponse {
   user_login: string;
 	user_email: string;
-	user_description: string;
+  user_role: string;
 }
 
 export async function loginUser(data: LoginRequest): Promise<AuthResponse> {
   const response = await api.post<AuthResponse>("/auth/login", data);
+  return response.data;
+}
+
+export async function logoutUser(): Promise<DefaultResponse> {
+  const response = await api.post("/auth/logout");
   return response.data;
 }
 
