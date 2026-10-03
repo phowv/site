@@ -1,0 +1,16 @@
+.header__nav_list {
+	display: flex;
+	gap: 2rem;
+	justify-content: space-between;
+}
+
+.header__nav_link {
+	padding: 0.5rem 0.8rem 0.5rem 0.8rem;
+	background-color: var(--accent);
+	border-radius: var(--button-border-radius);
+	border: var(--accent) solid 2px;
+}
+
+.header__nav_link:hover {
+	background-color: var(--light-color);
+}

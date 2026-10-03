@@ -1,7 +1,23 @@
+:root {
+	--main-text-color: black;
+	--accent: rgba(51, 131, 110, 1);
+	--muted: rgb(132, 131, 131);
+	--button-border-radius: 10px;
+}
+
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+}
+
+a {
+	text-decoration: none;
+	color: var(--main-text-color);
+}
+
+a:hover, button:hover, input:hover, textarea:hover {
+	color: var(--accent);
 }
 
 .centered {

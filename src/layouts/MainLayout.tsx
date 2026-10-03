@@ -2,6 +2,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import Header from "../components/Header/Header";
 import { useAuth } from "../auth/authContext";
 import Button from "../components/UI/Button/Button";
+import cl from "./MainLayout.module.css"
 
 export default function MainLayout() {
 	const { isAuth, user, logout } = useAuth();
@@ -9,13 +10,13 @@ export default function MainLayout() {
 	return (
 		<div>
 			<Header>
-				<nav style={{ display: "flex", gap: "16px" }}>
-					<NavLink to="/">Home</NavLink>
-					<NavLink to="/settings">Settings</NavLink>
-					<NavLink to="/profile">Profile</NavLink>
-					<NavLink to="/create">Create</NavLink>
-					<NavLink to="/tags">Tags</NavLink>
-					<NavLink to="/collections">Collections</NavLink>
+				<nav className={cl.header__nav_list}>
+					<NavLink className={cl.header__nav_link} to="/">Home</NavLink>
+					<NavLink className={cl.header__nav_link} to="/settings">Settings</NavLink>
+					{/* <NavLink className={cl.header__nav_link} to="/profile">Profile</NavLink> */}
+					{/* <NavLink className={cl.header__nav_link} to="/create">Create</NavLink> */}
+					{/* <NavLink className={cl.header__nav_link} to="/tags">Tags</NavLink> */}
+					{/* <NavLink className={cl.header__nav_link} to="/collections">Collections</NavLink> */}
 
 					{isAuth ? (
 						<>
@@ -24,14 +25,14 @@ export default function MainLayout() {
 						</>
 					) : (
 						<>
-							<NavLink to="/login">Login</NavLink>
-							<NavLink to="/register">Register</NavLink>
+							<NavLink className={cl.header__nav_link} to="/login">Login</NavLink>
+							<NavLink className={cl.header__nav_link} to="/register">Register</NavLink>
 						</>
 					)}
 				</nav>
 			</Header>
 
-			<main style={{ padding: "20px 0" }}>
+			<main>
 				<Outlet />
 			</main>
 		</div>
