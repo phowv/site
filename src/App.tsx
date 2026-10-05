@@ -8,7 +8,7 @@ import RegisterPage from "./pages/RegisterPage";
 import AnonymousRoute from "./auth/AnonymousRoute";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import CreatePage from "./pages/CreatePage";
-import SettingsPage from "./pages/SettingsPage";
+import SettingsPage from "./pages/SettingsPage/SettingsPage";
 import VerificaticationPage from "./pages/VerificaticationPage";
 import SelfProfilePage from "./pages/SelfProfilePage";
 import TagsPage from "./pages/TagsPage";
@@ -17,8 +17,14 @@ import CollectionsPage from "./pages/CollectionsPage";
 import CollectionEditPage from "./pages/CollectionEditPage";
 import CollectionCreatePage from "./pages/CollectionCreatePage";
 import SinglePhotoViewPage from "./pages/SinglePhotoViewPage";
+import { useEffect } from "react";
 
 function App() {
+	useEffect(() => {
+		const theme = localStorage.getItem("theme") || "light";
+		document.documentElement.setAttribute("data-theme", theme);
+	}, []);
+
 	return (
 		<Routes>
 			<Route path="/" element={<MainLayout />}>

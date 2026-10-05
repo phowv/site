@@ -4,8 +4,12 @@
 	min-height: 2rem;
 	display: block;
 	position: sticky;
-	background-color: whitesmoke;
+	background-color: var(--light-bg);
 	padding: 0.7rem;
+}
+
+.header * {
+	background-color: var(--light-bg);
 }
 
 .header__container {

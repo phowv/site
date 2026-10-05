@@ -1,5 +1,7 @@
 :root {
 	--main-text-color: black;
+	--bg: white;
+	--light-bg: whitesmoke;
 	--accent: rgba(51, 131, 110, 1);
 	--muted: rgb(132, 131, 131);
 
@@ -7,10 +9,22 @@
 	--default-icon-size: 36px;
 }
 
+[data-theme="dark"] {
+	--main-text-color: rgb(199, 198, 198);
+	--bg: rgb(105, 105, 105);
+	--light-bg: rgb(89, 89, 89);
+	--accent: rgba(51, 131, 110, 1);
+	--muted: rgb(176, 176, 176);
+}
+
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	background-color: var(--bg);
+	color: var(--main-text-color);
+
+	font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
 
 a {

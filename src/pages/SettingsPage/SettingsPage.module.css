@@ -1,0 +1,20 @@
+.container {
+	margin: 2rem;
+	display: grid;
+	gap: 2rem;
+}
+
+.settings_line {
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+}
+
+.settings_line > p {
+	font-size: 2rem;
+}
+
+.settings_checkbox {
+	height: 2rem;
+	width: 2rem;
+}
