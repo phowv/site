@@ -17,22 +17,24 @@ const EditSection = (props: EditSectionProps) => {
 	const nextPhoto = () => {
 		if (currentIndex === null) return;
 
-		setCurrentIndex((prev) => prev === null ? null : (prev + 1) % photosList.length);
+		setCurrentIndex((prev) => (prev === null ? null : (prev + 1) % photosList.length));
 	};
 	const prevPhoto = () => {
 		if (currentIndex === null) return;
-		setCurrentIndex((prev) => prev === null ? null : (prev - 1 + photosList.length) % photosList.length);
+		setCurrentIndex((prev) =>
+			prev === null ? null : (prev - 1 + photosList.length) % photosList.length,
+		);
 	};
 
 	return (
 		<>
-			{currentIndex !== null &&
+			{currentIndex !== null && (
 				<ImageEditingModal
 					photoDesc={photosList[currentIndex]}
 					close={closePhoto}
 					onChangePhoto={() => setVersion((v) => v + 1)}
 				/>
-			}
+			)}
 			<ImageSection
 				owner_login={props.owner_login}
 				version={version}

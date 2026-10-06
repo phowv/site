@@ -16,29 +16,31 @@ const ViewSection = ({ owner_login }: ViewSectionProps) => {
 	const nextPhoto = () => {
 		if (currentIndex === null) return;
 
-		setCurrentIndex((prev) => prev === null ? null : (prev + 1) % photosList.length);
+		setCurrentIndex((prev) => (prev === null ? null : (prev + 1) % photosList.length));
 	};
 	const prevPhoto = () => {
 		if (currentIndex === null) return;
-		setCurrentIndex((prev) => prev === null ? null : (prev - 1 + photosList.length) % photosList.length);
+		setCurrentIndex((prev) =>
+			prev === null ? null : (prev - 1 + photosList.length) % photosList.length,
+		);
 	};
 
 	return (
 		<>
-			{currentIndex !== null &&
+			{currentIndex !== null && (
 				<ImageViewingModal
 					photoDesc={photosList[currentIndex]}
 					close={closePhoto}
 					next={nextPhoto}
 					prev={prevPhoto}
 				/>
-			}
-				<ImageSection
-					photosList={photosList}
-					setPhotosList={setPhotosList}
-					openPhoto={openPhoto}
-					owner_login={owner_login}
-				/>
+			)}
+			<ImageSection
+				photosList={photosList}
+				setPhotosList={setPhotosList}
+				openPhoto={openPhoto}
+				owner_login={owner_login}
+			/>
 		</>
 	);
 };

@@ -16,11 +16,13 @@ const ImageSection = (props: ImageSectionProps) => {
 
 	const masonryRef = useRef<MasonryGridHandle>(null);
 
-	const requirePhotoSize = toPhotoSize(localStorage.getItem("feedImageRequireSize") ?? PhotoSize.small);
+	const requirePhotoSize = toPhotoSize(
+		localStorage.getItem("feedImageRequireSize") ?? PhotoSize.small,
+	);
 
 	const onLoadImage = () => {
 		masonryRef.current?.reflow();
-	}
+	};
 
 	useEffect(() => {
 		setStatus("loading");
@@ -45,18 +47,20 @@ const ImageSection = (props: ImageSectionProps) => {
 				<MasonryGrid
 					ref={masonryRef}
 					gap={4}
-					columns={Number(localStorage.getItem("feedImageColumnsCount") ?? "5")}>
+					columns={Number(localStorage.getItem("feedImageColumnsCount") ?? "5")}
+				>
 					{props.photosList.map((photoDesc, idx) => {
-					 return (
-						<SecureImage
-							key={photoDesc.photo_uuid}
-							open={() => props.openPhoto(idx)}
-							photoUuid={photoDesc.photo_uuid}
-							photoSize={requirePhotoSize}
-							accessKey={photoDesc.access_key}
-							onLoad={onLoadImage}
-						/>
-					) }) }
+						return (
+							<SecureImage
+								key={photoDesc.photo_uuid}
+								open={() => props.openPhoto(idx)}
+								photoUuid={photoDesc.photo_uuid}
+								photoSize={requirePhotoSize}
+								accessKey={photoDesc.access_key}
+								onLoad={onLoadImage}
+							/>
+						);
+					})}
 				</MasonryGrid>
 			)}
 		</>

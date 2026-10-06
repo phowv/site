@@ -16,7 +16,7 @@ const SecureImage = ({ photoUuid, photoSize, accessKey, open, onLoad }: SecureIm
 		return <p>Image is not loaded</p>;
 	}
 
-	return <Image open={open} src={url} onLoad={onLoad}/>;
+	return <Image open={open} src={url} onLoad={onLoad} />;
 };
 
 export default SecureImage;

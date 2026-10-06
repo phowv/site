@@ -6,5 +6,5 @@ export const photoCache = new LRUCache<string, string>({
 });
 
 export function toKey(photoUuid: string, photoSize?: string): string {
-	return `${photoUuid}:${photoSize ?? "raw"}`
+	return `${photoUuid}:${photoSize ?? "raw"}`;
 }

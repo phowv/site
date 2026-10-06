@@ -14,18 +14,18 @@ interface ImageViewingModalProps {
 
 const ImageViewingModal = ({ photoDesc, close, next, prev }: ImageViewingModalProps) => {
 	useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key === "Escape") {
 				e.preventDefault();
 				e.stopPropagation();
 				close();
-			}	else if (e.key === "ArrowLeft") {
+			} else if (e.key === "ArrowLeft") {
 				prev();
 			} else if (e.key === "ArrowRight") {
 				next();
 			}
 		};
-    window.addEventListener("keydown", handleKeyDown);
+		window.addEventListener("keydown", handleKeyDown);
 		return () => window.removeEventListener("keydown", handleKeyDown);
 	}, []);
 	return (

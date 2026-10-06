@@ -24,7 +24,7 @@
 	background-color: var(--bg);
 	color: var(--main-text-color);
 
-	font-family:Verdana, Geneva, Tahoma, sans-serif;
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
 a {
@@ -32,7 +32,10 @@ a {
 	color: var(--main-text-color);
 }
 
-a:hover, button:hover, input:hover, textarea:hover {
+a:hover,
+button:hover,
+input:hover,
+textarea:hover {
 	color: var(--accent);
 }
 

@@ -9,7 +9,7 @@ interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 const Image = ({ src, open, ...props }: ImageProps) => {
 	return (
 		<div className={cl.imageCard} onClick={open}>
-			<img src={src} {...props}/>
+			<img src={src} {...props} />
 		</div>
 	);
 };

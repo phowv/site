@@ -1,14 +1,12 @@
 import { useEffect, useState } from "react";
 import { PhotoSize } from "../../lib/api/photoApi";
-import cl from "./SettingsPage.module.css"
+import cl from "./SettingsPage.module.css";
 
 const SettingsPage = () => {
-	const [feedImageColumnsCount, setFeedImageColumnsCount] = useState(() =>
-		localStorage.getItem("feedImageColumnsCount") ?? "5"
+	const [feedImageColumnsCount, setFeedImageColumnsCount] = useState(
+		() => localStorage.getItem("feedImageColumnsCount") ?? "5",
 	);
-	const [theme, setTheme] = useState(() =>
-		localStorage.getItem("theme") || "light"
-	);
+	const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
 
 	useEffect(() => {
 		document.documentElement.setAttribute("data-theme", theme);
