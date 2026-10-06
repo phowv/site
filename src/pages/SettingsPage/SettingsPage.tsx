@@ -1,17 +1,26 @@
 import { useEffect, useState } from "react";
 import { PhotoSize } from "../../lib/api/photoApi";
 import cl from "./SettingsPage.module.css";
+import { applyTheme, type ThemeMode } from "../../lib/utils/themeUtils";
 
 const SettingsPage = () => {
 	const [feedImageColumnsCount, setFeedImageColumnsCount] = useState(
 		() => localStorage.getItem("feedImageColumnsCount") ?? "5",
 	);
-	const [theme, setTheme] = useState(() => localStorage.getItem("theme") || "light");
+	const [themeMode, setThemeMode] = useState<ThemeMode>(
+		(localStorage.getItem("theme-mode") || "system") as ThemeMode,
+	);
 
 	useEffect(() => {
-		document.documentElement.setAttribute("data-theme", theme);
-		localStorage.setItem("theme", theme);
-	}, [theme]);
+		const apply = () => applyTheme(themeMode);
+		apply();
+
+		if (themeMode === "system") {
+			const mq = window.matchMedia("(prefers-color-scheme: dark)");
+			mq.addEventListener("change", apply);
+			return () => mq.removeEventListener("change", apply);
+		}
+	}, [themeMode]);
 
 	return (
 		<section style={{ padding: "10px" }} className={cl.container}>
@@ -32,13 +41,18 @@ const SettingsPage = () => {
 			</label>
 
 			<label className={cl.settings_line}>
-				<p>Is dark theme</p>
-				<input
-					className={cl.settings_checkbox}
-					type="checkbox"
-					checked={theme === "dark"}
-					onChange={(e) => setTheme(e.target.checked ? "dark" : "light")}
-				/>
+				<p>Theme mode: </p>
+				<select
+					value={themeMode}
+					onChange={(e) => {
+						setThemeMode(e.target.value as ThemeMode);
+						localStorage.setItem("theme-mode", e.target.value);
+					}}
+				>
+					<option value="system">System</option>
+					<option value="light">Light</option>
+					<option value="dark">Dark</option>
+				</select>
 			</label>
 		</section>
 	);
