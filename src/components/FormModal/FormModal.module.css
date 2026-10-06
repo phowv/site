@@ -15,12 +15,33 @@
 .formModalContent {
 	margin: auto;
 	padding: 25px;
-	background: white;
 	border-radius: 16px;
 	min-width: 250px;
+	background: var(--bg);
+	color: var(--main-text-color);
 }
 
 .formModal.active {
 	display: flex;
 	justify-content: center;
+}
+
+.formModalArrowButton {
+	position: absolute;
+	top: 50%;
+	z-index: 10;
+	aspect-ratio: 1 / 1;
+	width: 4rem;
+	margin: 2rem;
+	border-radius: 50%;
+	border: 2px solid gray;
+	font-size: 1.5rem;
+	align-content: center;
+	justify-content: center;
+	transition: all 0.3s;
+}
+
+.formModalArrowButton:hover {
+	background-color: var(--light-bg);
+	opacity: 0.8;
 }

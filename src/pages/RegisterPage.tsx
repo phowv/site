@@ -5,7 +5,7 @@ import Input from "../components/UI/Input/Input";
 import Button from "../components/UI/Button/Button";
 
 const RegisterPage = () => {
-	const { register, isLoading } = useAuth();
+	const { register } = useAuth();
 	const navigate = useNavigate();
 
 	const [userLogin, setuserLogin] = useState("");
@@ -69,7 +69,10 @@ const RegisterPage = () => {
 					<Input value={userDescription} onChange={(e) => setUserDescription(e.target.value)} />
 				</div>
 
-				<Button isActive={!isLoading} disabled={isLoading} type="submit">
+				<Button
+					disabled={userLogin === "" || userEmail === "" || userPassword === ""}
+					type="submit"
+				>
 					Register
 				</Button>
 			</form>

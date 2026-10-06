@@ -1,28 +1,27 @@
 .button {
 	padding: 0.8rem 2rem;
 	border: none;
-	border-radius: 5px;
+	border-radius: var(--button-border-radius);
 	cursor: pointer;
 	transition: all 0.3s;
 	margin: 0.5rem;
+	background-color: var(--accent);
 }
 
 .button:hover {
-	opacity: 0.8;
+	opacity: 0.9;
+	color: var(--light-text-color);
 }
 
 .button:active {
-	background-color: #0a8;
-	color: #fff;
+	background-color: var(--light-accent);
 }
 
 .button:disabled {
-	background-color: #ccc;
-	color: #fff;
+	background-color: var(--muted);
 	cursor: not-allowed;
 }
 
 .button.active {
-	background-color: #05f;
-	color: #fff;
+	background-color: var(--light-bg);
 }

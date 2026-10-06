@@ -5,7 +5,7 @@ import Input from "../components/UI/Input/Input";
 import Button from "../components/UI/Button/Button";
 
 const LoginPage = () => {
-	const { login, isLoading } = useAuth();
+	const { login } = useAuth();
 	const navigate = useNavigate();
 
 	const [userLogin, setuserLogin] = useState("");
@@ -46,7 +46,7 @@ const LoginPage = () => {
 					/>
 				</div>
 
-				<Button isActive={!isLoading} disabled={isLoading} type="submit">
+				<Button disabled={userLogin === "" || userPassword === ""} type="submit">
 					Login
 				</Button>
 			</form>

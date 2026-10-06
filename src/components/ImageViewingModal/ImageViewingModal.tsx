@@ -29,8 +29,7 @@ const ImageViewingModal = ({ photoDesc, close, next, prev }: ImageViewingModalPr
 		return () => window.removeEventListener("keydown", handleKeyDown);
 	}, []);
 	return (
-		<FormModal visible={true} close={close}>
-			<button onClick={prev}>Prev</button>
+		<FormModal visible={true} close={close} next={next} prev={prev}>
 			<div className={cl.imageDescription}>
 				<h1>{photoDesc.title}</h1>
 				<p>
@@ -61,8 +60,6 @@ const ImageViewingModal = ({ photoDesc, close, next, prev }: ImageViewingModalPr
 				photoSize={PhotoSize.medium}
 			/>
 			<Button onClick={close}>done</Button>
-
-			<button onClick={next}>Next</button>
 		</FormModal>
 	);
 };

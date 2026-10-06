@@ -1,8 +1,10 @@
 :root {
-	--main-text-color: black;
+	--main-text-color: rgb(28, 28, 28);
+	--light-text-color: white;
 	--bg: white;
 	--light-bg: whitesmoke;
 	--accent: rgba(51, 131, 110, 1);
+	--light-accent: rgb(68, 144, 124);
 	--muted: rgb(132, 131, 131);
 
 	--button-border-radius: 10px;
@@ -11,10 +13,12 @@
 
 [data-theme="dark"] {
 	--main-text-color: rgb(199, 198, 198);
+	--light-text-color: whitesmoke;
 	--bg: rgb(105, 105, 105);
-	--light-bg: rgb(89, 89, 89);
+	--light-bg: rgb(99, 99, 99);
 	--accent: rgba(51, 131, 110, 1);
-	--muted: rgb(176, 176, 176);
+	--light-accent: rgb(68, 144, 124);
+	--muted: rgb(65, 65, 65);
 }
 
 * {
