@@ -48,6 +48,7 @@ const SettingsPage = () => {
 						setThemeMode(e.target.value as ThemeMode);
 						localStorage.setItem("theme-mode", e.target.value);
 					}}
+					className={cl.settings_droplist}
 				>
 					<option value="system">System</option>
 					<option value="light">Light</option>

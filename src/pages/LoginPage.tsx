@@ -1,8 +1,9 @@
-import { useState, type SyntheticEvent } from "react";
+import { useState } from "react";
 import { useAuth } from "../auth/authContext";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/UI/Input/Input";
 import Button from "../components/UI/Button/Button";
+import AuthForm from "../components/AuthForm/AuthForm";
 
 const LoginPage = () => {
 	const { login } = useAuth();
@@ -10,51 +11,50 @@ const LoginPage = () => {
 
 	const [userLogin, setuserLogin] = useState("");
 	const [userPassword, setUserPassword] = useState("");
-	const [error, setError] = useState("");
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
-	const handleSubmit = async (e: SyntheticEvent) => {
-		e.preventDefault();
-		setError("");
-
-		try {
-			await login({ login: userLogin, password: userPassword });
-			navigate("/");
-		} catch {
-			setError("Invalid login or password");
-		}
+	const handleSubmit = async () => {
+		await login({ login: userLogin, password: userPassword });
+		setIsLoading(false);
+		navigate("/");
 	};
 
 	return (
-		<div>
-			<h1>Login page</h1>
+		<AuthForm
+			title="Login page"
+			isLoading={isLoading}
+			setIsLoading={setIsLoading}
+			handler={handleSubmit}
+		>
+			<div>
+				<label>Login</label>
+				<Input
+					value={userLogin}
+					onChange={(e) => setuserLogin(e.target.value.trim())}
+					disabled={isLoading}
+					required
+				/>
+			</div>
 
-			{error && <p style={{ color: "red" }}>{error}</p>}
+			<div>
+				<label>Password</label>
+				<Input
+					type="password"
+					value={userPassword}
+					onChange={(e) => setUserPassword(e.target.value.trim())}
+					disabled={isLoading}
+					required
+				/>
+			</div>
 
-			<form onSubmit={handleSubmit}>
-				<div>
-					<label>Login</label>
-					<Input value={userLogin} onChange={(e) => setuserLogin(e.target.value.trim())} required />
-				</div>
-
-				<div>
-					<label>Password</label>
-					<Input
-						type="password"
-						value={userPassword}
-						onChange={(e) => setUserPassword(e.target.value.trim())}
-						required
-					/>
-				</div>
-
-				<Button disabled={userLogin === "" || userPassword === ""} type="submit">
-					Login
-				</Button>
-			</form>
+			<Button disabled={userLogin === "" || userPassword === "" || isLoading} type="submit">
+				Login
+			</Button>
 
 			<p>
 				No account? <Link to="/register">Register</Link>
 			</p>
-		</div>
+		</AuthForm>
 	);
 };
 

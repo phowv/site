@@ -19,13 +19,13 @@ export interface VerifyRequest {
 	code: string;
 }
 
-export interface AuthResponse {
-	access_token: string;
-}
-
 export interface DefaultResponse {
 	status: string;
 	error: string | undefined;
+}
+
+export interface AuthResponse {
+	access_token: string;
 }
 
 export interface GetMeResponse {
@@ -35,28 +35,68 @@ export interface GetMeResponse {
 }
 
 export async function loginUser(data: LoginRequest): Promise<AuthResponse> {
-	const response = await api.post<AuthResponse>("/auth/login", data);
-	return response.data;
+	try {
+		const response = await api.post<AuthResponse>("/auth/login", data);
+		return response.data;
+	} catch (e: any) {
+		if (axios.isAxiosError<DefaultResponse>(e)) {
+			throw new Error(e.response?.data.error || "Login failed");
+		}
+
+		throw new Error("Unexpected error");
+	}
 }
 
 export async function logoutUser(): Promise<DefaultResponse> {
-	const response = await api.post("/auth/logout");
-	return response.data;
+	try {
+		const response = await api.post<DefaultResponse>("/auth/logout");
+		return response.data;
+	} catch (e: any) {
+		if (axios.isAxiosError<DefaultResponse>(e)) {
+			throw new Error(e.response?.data.error || "Login failed");
+		}
+
+		throw new Error("Unexpected error");
+	}
 }
 
 export async function registerUser(data: RegisterRequest): Promise<DefaultResponse> {
-	const response = await api.post<DefaultResponse>("/auth/register", data);
-	return response.data;
+	try {
+		const response = await api.post<DefaultResponse>("/auth/register", data);
+		return response.data;
+	} catch (e: any) {
+		if (axios.isAxiosError<DefaultResponse>(e)) {
+			throw new Error(e.response?.data.error || "Login failed");
+		}
+
+		throw new Error("Unexpected error");
+	}
 }
 
 export async function verifyUser(data: VerifyRequest): Promise<DefaultResponse> {
-	const response = await api.post<DefaultResponse>("/auth/verify", data);
-	return response.data;
+	try {
+		const response = await api.post<DefaultResponse>("/auth/verify", data);
+		return response.data;
+	} catch (e: any) {
+		if (axios.isAxiosError<DefaultResponse>(e)) {
+			throw new Error(e.response?.data.error || "Login failed");
+		}
+
+		throw new Error("Unexpected error");
+	}
 }
 
 export async function getMe(): Promise<GetMeResponse> {
-	const response = await api.get<GetMeResponse>("/auth/me");
-	return response.data;
+	try {
+		const response = await api.get<GetMeResponse>("/auth/me");
+		return response.data;
+	} catch (e: any) {
+		if (axios.isAxiosError<DefaultResponse>(e)) {
+			throw new Error(e.response?.data.error || "Login failed");
+		}
+
+		throw new Error("Unexpected error");
+	}
 }
 
 let refreshPromise: Promise<AuthResponse> | null = null;
