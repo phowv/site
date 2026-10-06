@@ -8,22 +8,37 @@ interface EditSectionProps {
 }
 
 const EditSection = (props: EditSectionProps) => {
-	const [editingPhoto, setEditingPhoto] = useState<Photo | null>(null);
 	const [version, setVersion] = useState(0);
+	const [photosList, setPhotosList] = useState<Array<Photo>>([]);
+	const [currentIndex, setCurrentIndex] = useState<number | null>(null);
+
+	const openPhoto = (index: number) => setCurrentIndex(index);
+	const closePhoto = () => setCurrentIndex(null);
+	const nextPhoto = () => {
+		if (currentIndex === null) return;
+
+		setCurrentIndex((prev) => prev === null ? null : (prev + 1) % photosList.length);
+	};
+	const prevPhoto = () => {
+		if (currentIndex === null) return;
+		setCurrentIndex((prev) => prev === null ? null : (prev - 1 + photosList.length) % photosList.length);
+	};
 
 	return (
 		<>
-			{editingPhoto ? (
+			{currentIndex !== null &&
 				<ImageEditingModal
-					photoDesc={editingPhoto}
-					close={() => setEditingPhoto(null)}
+					photoDesc={photosList[currentIndex]}
+					close={closePhoto}
 					onChangePhoto={() => setVersion((v) => v + 1)}
 				/>
-			) : undefined}
+			}
 			<ImageSection
 				owner_login={props.owner_login}
-				open_photo={setEditingPhoto}
 				version={version}
+				openPhoto={openPhoto}
+				photosList={photosList}
+				setPhotosList={setPhotosList}
 			/>
 		</>
 	);

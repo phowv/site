@@ -21,7 +21,7 @@ const SettingsPage = () => {
 				<p>Feed image columns count: {feedImageColumnsCount}</p>
 				<input
 					type="range"
-					min="1"
+					min="2"
 					max="12"
 					onChange={(e) => {
 						const value = e.target.value;

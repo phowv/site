@@ -1,7 +1,6 @@
 import { NavLink, Outlet } from "react-router-dom";
 import Header from "../components/Header/Header";
 import { useAuth } from "../auth/authContext";
-import Button from "../components/UI/Button/Button";
 import cl from "./MainLayout.module.css"
 
 
@@ -24,7 +23,7 @@ export default function MainLayout() {
 					{isAuth ? (
 						<>
 							<p>Hello, {user?.login}</p>
-							<Button onClick={logout}>Logout</Button>
+							<a className={cl.header__nav_link} onClick={logout}>Logout</a>
 						</>
 					) : (
 						<>

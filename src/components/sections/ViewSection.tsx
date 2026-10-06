@@ -8,14 +8,37 @@ interface ViewSectionProps {
 }
 
 const ViewSection = ({ owner_login }: ViewSectionProps) => {
-	const [viewingPhoto, setViewingPhoto] = useState<Photo | null>(null);
+	const [currentIndex, setCurrentIndex] = useState<number | null>(null);
+	const [photosList, setPhotosList] = useState<Array<Photo>>([]);
+
+	const openPhoto = (index: number) => setCurrentIndex(index);
+	const closePhoto = () => setCurrentIndex(null);
+	const nextPhoto = () => {
+		if (currentIndex === null) return;
+
+		setCurrentIndex((prev) => prev === null ? null : (prev + 1) % photosList.length);
+	};
+	const prevPhoto = () => {
+		if (currentIndex === null) return;
+		setCurrentIndex((prev) => prev === null ? null : (prev - 1 + photosList.length) % photosList.length);
+	};
 
 	return (
 		<>
-			{viewingPhoto ? (
-				<ImageViewingModal photoDesc={viewingPhoto} close={() => setViewingPhoto(null)} />
-			) : undefined}
-			<ImageSection open_photo={setViewingPhoto} owner_login={owner_login} />
+			{currentIndex !== null &&
+				<ImageViewingModal
+					photoDesc={photosList[currentIndex]}
+					close={closePhoto}
+					next={nextPhoto}
+					prev={prevPhoto}
+				/>
+			}
+				<ImageSection
+					photosList={photosList}
+					setPhotosList={setPhotosList}
+					openPhoto={openPhoto}
+					owner_login={owner_login}
+				/>
 		</>
 	);
 };

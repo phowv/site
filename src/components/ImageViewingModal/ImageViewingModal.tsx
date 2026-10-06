@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { PhotoSize, type Photo } from "../../lib/api/photoApi";
 import FormModal from "../FormModal/FormModal";
 import Button from "../UI/Button/Button";
@@ -7,11 +8,29 @@ import cl from "./ImageViewingModal.module.css";
 interface ImageViewingModalProps {
 	photoDesc: Photo;
 	close: () => void;
+	next: () => void;
+	prev: () => void;
 }
 
-const ImageViewingModal = ({ photoDesc, close }: ImageViewingModalProps) => {
+const ImageViewingModal = ({ photoDesc, close, next, prev }: ImageViewingModalProps) => {
+	useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "Escape") {
+				e.preventDefault();
+				e.stopPropagation();
+				close();
+			}	else if (e.key === "ArrowLeft") {
+				prev();
+			} else if (e.key === "ArrowRight") {
+				next();
+			}
+		};
+    window.addEventListener("keydown", handleKeyDown);
+		return () => window.removeEventListener("keydown", handleKeyDown);
+	}, []);
 	return (
 		<FormModal visible={true} close={close}>
+			<button onClick={prev}>Prev</button>
 			<div className={cl.imageDescription}>
 				<h1>{photoDesc.title}</h1>
 				<p>
@@ -42,6 +61,8 @@ const ImageViewingModal = ({ photoDesc, close }: ImageViewingModalProps) => {
 				photoSize={PhotoSize.medium}
 			/>
 			<Button onClick={close}>done</Button>
+
+			<button onClick={next}>Next</button>
 		</FormModal>
 	);
 };

@@ -10,6 +10,7 @@
 	background-color: var(--accent);
 	border-radius: var(--button-border-radius);
 	border: var(--accent) solid 2px;
+	cursor: pointer;
 }
 
 .header__nav_link:hover {

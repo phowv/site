@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getPhotoUrl } from "../api/photoApi";
 import { photoCache, toKey } from "../cache/photoCache";
 
-const useSecurePhoto = (photoUuid: string, accessKey: string, photoSize?: string) => {
+const useSecurePhoto = (photoUuid: string, accessKey: string, photoSize?: string): string => {
 	const [blobUrl, setBlobUrl] = useState<string>("");
 
 	useEffect(() => {
