@@ -1,0 +1,28 @@
+.container {
+	display: flex;
+	gap: 2rem;
+	max-width: 75vw;
+}
+
+.image {
+	max-width: 50vw;
+	max-height: 70vh;
+	width: auto;
+	height: auto;
+	object-fit: contain;
+}
+
+.options {
+	margin-top: 1rem;
+	display: grid;
+	gap: 1rem;
+	justify-content: space-between;
+}
+
+.options > * {
+	flex: 1;
+}
+
+.options_text {
+	font-size: 1.5rem;
+}

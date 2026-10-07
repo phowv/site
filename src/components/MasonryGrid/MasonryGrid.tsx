@@ -1,17 +1,17 @@
 import React, { forwardRef, useImperativeHandle, useLayoutEffect, useRef } from "react";
 
-type MasonryProps = {
+interface MasonryProps extends React.BaseHTMLAttributes<HTMLDivElement> {
 	columns: number;
 	gap?: number;
 	children: React.ReactNode;
-};
+}
 
 export type MasonryGridHandle = {
 	reflow: () => void;
 };
 
 export const MasonryGrid = forwardRef<MasonryGridHandle, MasonryProps>(
-	({ columns, gap = 8, children }, ref) => {
+	({ columns, gap = 8, children, ...props }, ref) => {
 		const gridRef = useRef<HTMLDivElement>(null);
 
 		const reflow = () => {
@@ -55,6 +55,7 @@ export const MasonryGrid = forwardRef<MasonryGridHandle, MasonryProps>(
 					gridAutoRows: "10px",
 					gap: `${gap}px`,
 				}}
+				{...props}
 			>
 				{children}
 			</div>

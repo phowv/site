@@ -29,7 +29,7 @@ const AuthForm = (props: AuthFormProps) => {
 		<div className={cl.container}>
 			<h1>{props.title}</h1>
 
-			{error && <p style={{ color: "red" }}>{error}</p>}
+			{error && <p style={{ color: "var(--warning)" }}>{error}</p>}
 			{props.isLoading && <p>Loadind...</p>}
 
 			<form onSubmit={handleSubmit}>{props.children}</form>

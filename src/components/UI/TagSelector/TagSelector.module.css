@@ -1,7 +1,7 @@
 .tagSelector {
 	padding: 12px;
 	margin: 12px;
-	border: 2px solid green;
+	border: 2px solid var(--accent);
 }
 
 .tagsList {
@@ -13,12 +13,12 @@
 	cursor: pointer;
 }
 .tagAddItem:hover {
-	color: green;
+	color: var(--accent);
 }
 
 .tagRemoveItem {
 	cursor: pointer;
 }
 .tagRemoveItem:hover {
-	color: red;
+	color: var(--warning);
 }

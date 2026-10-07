@@ -6,9 +6,11 @@
 	--accent: rgb(101, 185, 164);
 	--light-accent: rgb(68, 144, 124);
 	--muted: rgb(132, 131, 131);
+	--warning: red;
 
 	--button-border-radius: 10px;
 	--default-icon-size: 36px;
+	--transition-time: 0.3s;
 }
 
 [data-theme="dark"] {
@@ -18,7 +20,8 @@
 	--light-bg: rgb(99, 99, 99);
 	--accent: rgba(51, 131, 110, 1);
 	--light-accent: rgb(68, 144, 124);
-	--muted: rgb(65, 65, 65);
+	--muted: rgba(55, 44, 44, 0.636);
+	--warning: red;
 }
 
 * {

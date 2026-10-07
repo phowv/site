@@ -3,7 +3,7 @@
 	border: none;
 	border-radius: var(--button-border-radius);
 	cursor: pointer;
-	transition: all 0.3s;
+	transition: all var(--transition-time);
 	margin: 0.5rem;
 	background-color: var(--accent);
 }

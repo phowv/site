@@ -36,11 +36,7 @@ const TagSelector = ({ tags, setTags, label }: TagSelectorProps) => {
 	useEffect(() => {
 		setAvilableTagsList(
 			tagsList
-				.filter(
-					(tag) =>
-						!selectedTagsList.includes(tag) &&
-						(tag.tag_name.includes(tagFilter) || tagFilter === ""),
-				)
+				.filter((tag) => !selectedTagsList.includes(tag) && !tags.includes(tag.tag_uuid))
 				.map((tag) => (
 					<p
 						key={tag.tag_uuid}

@@ -6,40 +6,48 @@ import { rotateFile90 } from "../../lib/utils/imageUtils";
 import TagSelector from "../UI/TagSelector/TagSelector";
 import { AccessModifier } from "../../lib/api/types/accessModifier";
 import type { UploadingFile } from "../../lib/api/photoApi";
+import cl from "./UploadingImageEditingModal.module.css";
+import useBlobUrl from "../../lib/hooks/useBlobUrl";
 
 interface UploadingImageEditingModalProps {
 	visible: boolean;
 	inputFile: UploadingFile;
-	doneEditingImage: (f: UploadingFile | null) => void;
+	updateFile: (updater: (file: UploadingFile) => UploadingFile) => void;
+	close: (remove?: boolean) => void;
+	next?: () => void;
+	prev?: () => void;
 }
 
 const UploadingImageEditingModal = ({
 	visible,
 	inputFile,
-	doneEditingImage,
+	updateFile,
+	close,
+	next,
+	prev,
 }: UploadingImageEditingModalProps) => {
-	const [editingFile, setEditingFile] = useState<UploadingFile>(inputFile);
-	const [editingFileSrc, setEditingFileSrc] = useState<string | null>(null);
-	const [tags, setTags] = useState<string[]>(inputFile.metadata.tag_uuids ?? []);
-	const [accessLevel, setAccessLevel] = useState<AccessModifier>(AccessModifier.private);
+	const editingFileSrc = useBlobUrl(inputFile.file);
 
 	useEffect(() => {
-		if (!editingFile) {
-			setEditingFileSrc(null);
-			return;
-		}
-
-		const url = URL.createObjectURL(editingFile.file);
-		setEditingFileSrc(url);
-		return () => {
-			URL.revokeObjectURL(url);
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "Escape") {
+				e.preventDefault();
+				e.stopPropagation();
+				close();
+			} else if (e.key === "ArrowLeft") {
+				prev?.();
+			} else if (e.key === "ArrowRight") {
+				next?.();
+			}
 		};
-	}, [editingFile]);
+		window.addEventListener("keydown", handleKeyDown);
+		return () => window.removeEventListener("keydown", handleKeyDown);
+	}, []);
 
 	const rotateEditingImage = async (isRight: boolean) => {
-		if (!editingFile) return;
-		const rotated = await rotateFile90(editingFile.file, isRight);
-		setEditingFile((prev) => ({ ...prev, file: rotated }));
+		if (!inputFile) return;
+		const rotated = await rotateFile90(inputFile.file, isRight);
+		updateFile((prev) => ({ ...prev, file: rotated }));
 	};
 
 	const doneEditing = (isRemove: boolean = false) => {
@@ -47,72 +55,92 @@ const UploadingImageEditingModal = ({
 			const ok = confirm("Are you sure?");
 			if (!ok) return;
 
-			doneEditingImage(null);
+			close(true);
 			return;
 		}
 
-		const nextMetadata =
-			tags.length !== 0 ? { ...editingFile.metadata, tag_uuids: tags } : editingFile.metadata;
-
-		const next = { ...editingFile, metadata: { ...nextMetadata, access_level: accessLevel } };
-
-		setEditingFile(next);
-
-		doneEditingImage(next);
+		close();
 	};
 
 	return (
-		<FormModal visible={visible} close={doneEditing}>
-			{editingFileSrc ? (
-				<img src={editingFileSrc} width="400px" height="auto" />
-			) : (
-				<p>Editing image</p>
-			)}
-			<p>File name: {editingFile.file.name}</p>
-			<p>File size: {Math.round(editingFile.file.size / 1024)} KB</p>
+		<FormModal visible={visible} close={doneEditing} next={next} prev={prev}>
+			<div className={cl.container}>
+				{editingFileSrc ? <img src={editingFileSrc} className={cl.image} /> : <p>Editing image</p>}
 
-			<p>Type image title: </p>
-			<Input
-				placeholder="Image title (optional)..."
-				value={editingFile.metadata.title ?? ""}
-				onChange={(e) =>
-					setEditingFile((prev) => ({
-						...prev,
-						metadata: { ...prev.metadata, title: e.target.value },
-					}))
-				}
-			/>
+				<div>
+					<p>File name: {inputFile.file.name}</p>
+					<p>File size: {Math.round(inputFile.file.size / 1024)} KB</p>
 
-			<p>Type image description:</p>
-			<Input
-				placeholder="Image description (optional)..."
-				value={editingFile.metadata.description ?? ""}
-				onChange={(e) =>
-					setEditingFile((prev) => ({
-						...prev,
-						metadata: { ...prev.metadata, description: e.target.value },
-					}))
-				}
-			/>
+					<div className={cl.options}>
+						<label>
+							Type image title:
+							<Input
+								placeholder="Image title (optional)..."
+								value={inputFile.metadata.title ?? ""}
+								onChange={(e) =>
+									updateFile((prev) => ({
+										...prev,
+										metadata: { ...prev.metadata, title: e.target.value },
+									}))
+								}
+							/>
+						</label>
 
-			<p>Access level:</p>
-			<select
-				value={accessLevel}
-				onChange={(e) => setAccessLevel(e.target.value as AccessModifier)}
-			>
-				<option value={AccessModifier.private}>Private</option>
-				<option value={AccessModifier.protected}>Protected</option>
-				<option value={AccessModifier.public}>Public</option>
-			</select>
+						<label>
+							Type image description:
+							<Input
+								placeholder="Image description (optional)..."
+								value={inputFile.metadata.description ?? ""}
+								onChange={(e) =>
+									updateFile((prev) => ({
+										...prev,
+										metadata: { ...prev.metadata, description: e.target.value },
+									}))
+								}
+							/>
+						</label>
 
-			<TagSelector label="Tags" tags={tags} setTags={setTags} />
+						<label className={cl.options_text}>
+							Access level:
+							<select
+								className={cl.options_text}
+								value={inputFile.metadata.access_level}
+								onChange={(e) =>
+									updateFile((prev) => ({
+										...prev,
+										metadata: { ...prev.metadata, access_level: e.target.value as AccessModifier },
+									}))
+								}
+							>
+								<option value="private">private</option>
+								<option value="protected">protected</option>
+								<option value="public">public</option>
+							</select>
+						</label>
+					</div>
 
-			<br />
-			<Button onClick={(_) => rotateEditingImage(false)}>Rotate left</Button>
-			<Button onClick={(_) => rotateEditingImage(true)}>Rotate right</Button>
-			<br />
-			<Button onClick={(_) => doneEditing(true)}>Remove</Button>
-			<Button onClick={(_) => doneEditing()}>Done</Button>
+					<TagSelector
+						label="Tags"
+						tags={inputFile.metadata.tag_uuids ?? []}
+						setTags={(tagsModify) =>
+							updateFile((prev) => ({
+								...prev,
+								metadata: {
+									...prev.metadata,
+									tag_uuids: tagsModify(prev.metadata.tag_uuids ?? []),
+								},
+							}))
+						}
+					/>
+
+					<br />
+					<Button onClick={() => rotateEditingImage(false)}>Rotate left</Button>
+					<Button onClick={() => rotateEditingImage(true)}>Rotate right</Button>
+					<br />
+					<Button onClick={() => doneEditing(true)}>Remove</Button>
+					<Button onClick={() => doneEditing()}>Done</Button>
+				</div>
+			</div>
 		</FormModal>
 	);
 };

@@ -17,7 +17,9 @@ export default function MainLayout() {
 						Settings
 					</NavLink>
 					{/* <NavLink className={cl.header__nav_link} to="/profile">Profile</NavLink> */}
-					{/* <NavLink className={cl.header__nav_link} to="/create">Create</NavLink> */}
+					<NavLink className={cl.header__nav_link} to="/create">
+						Create
+					</NavLink>
 					{/* <NavLink className={cl.header__nav_link} to="/tags">Tags</NavLink> */}
 					{/* <NavLink className={cl.header__nav_link} to="/collections">Collections</NavLink> */}
 

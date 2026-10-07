@@ -51,18 +51,21 @@ export const PhotoSize = {
 	raw: "raw",
 } as const;
 
-export interface UploadingFileMetadata {
+export interface UploadingFileUniversalMetadata {
+	tag_uuids?: string[];
+	access_level?: AccessModifier;
+}
+
+export interface UploadingFileMetadata extends UploadingFileUniversalMetadata {
 	title?: string;
 	description?: string;
-	tag_uuids?: string[];
-	access_level: AccessModifier;
 }
 
 export interface UploadingFile {
 	file: File;
 	metadata: UploadingFileMetadata;
 	isUploaded: boolean;
-	status?: "uploading" | "uploaded" | "error";
+	status?: "pending" | "uploading" | "uploaded" | "error";
 }
 
 export type PhotoSize = (typeof PhotoSize)[keyof typeof PhotoSize];
@@ -116,9 +119,9 @@ export async function fetchPhoto(photo_uuid: string, access_secret?: string): Pr
 	}
 }
 
-export async function uploadPhoto(metadata: string, photo: File) {
+export async function uploadPhoto(metadata: UploadingFileMetadata, photo: File) {
 	const formData = new FormData();
-	formData.append("metadata", metadata);
+	formData.append("metadata", JSON.stringify(metadata));
 	formData.append("photo", photo);
 
 	try {
