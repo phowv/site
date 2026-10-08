@@ -4,6 +4,7 @@ import FormModal from "../FormModal/FormModal";
 import Button from "../UI/Button/Button";
 import SecureImg from "../UI/SecureImg/SecureImg";
 import cl from "./ImageViewingModal.module.css";
+import { useNavigate } from "react-router-dom";
 
 interface ImageViewingModalProps {
 	photoDesc: Photo;
@@ -13,6 +14,8 @@ interface ImageViewingModalProps {
 }
 
 const ImageViewingModal = ({ photoDesc, close, next, prev }: ImageViewingModalProps) => {
+	const navigate = useNavigate();
+
 	useEffect(() => {
 		const handleKeyDown = (e: KeyboardEvent) => {
 			if (e.key === "Escape") {
@@ -60,6 +63,7 @@ const ImageViewingModal = ({ photoDesc, close, next, prev }: ImageViewingModalPr
 				photoSize={PhotoSize.medium}
 			/>
 			<Button onClick={close}>done</Button>
+			<Button onClick={() => navigate(`/photo/${photoDesc.photo_uuid}`)}>Open full</Button>
 		</FormModal>
 	);
 };

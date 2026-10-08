@@ -7,7 +7,7 @@ export default function MainLayout() {
 	const { isAuth, user, logout } = useAuth();
 
 	return (
-		<div>
+		<div className={cl.page}>
 			<Header>
 				<nav className={cl.header__nav_list}>
 					<NavLink to="/">
@@ -43,7 +43,7 @@ export default function MainLayout() {
 				</nav>
 			</Header>
 
-			<main>
+			<main className={cl.content}>
 				<Outlet />
 			</main>
 		</div>

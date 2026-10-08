@@ -6,12 +6,9 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 	children: React.ReactNode;
 }
 
-const Button = ({ children, isActive, ...props }: ButtonProps) => {
+const Button = ({ children, isActive, className, ...props }: ButtonProps) => {
 	return (
-		<button
-			{...props}
-			className={isActive ? `${classes.button} ${classes.active}` : classes.button}
-		>
+		<button {...props} className={`${classes.button} ${className}`}>
 			{children}
 		</button>
 	);

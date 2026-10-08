@@ -25,8 +25,7 @@ export const router = createBrowserRouter(
 			path="/"
 			element={
 				<AuthProvider>
-					{" "}
-					<App />{" "}
+					<App />
 				</AuthProvider>
 			}
 		>

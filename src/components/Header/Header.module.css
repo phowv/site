@@ -2,10 +2,12 @@
 	width: 100%;
 	top: 0;
 	min-height: 2rem;
+	max-height: var(--max-header-height);
 	display: block;
 	position: sticky;
 	background-color: var(--light-bg);
 	padding: 0.7rem;
+	flex: 0 0 auto;
 }
 
 .header * {

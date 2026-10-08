@@ -1,7 +1,5 @@
-import { Navigate, useParams, useSearchParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { fetchPhoto, PhotoSize, type Photo } from "../lib/api/photoApi";
-import SecureImg from "../components/UI/SecureImg/SecureImg";
+import { useParams, useSearchParams } from "react-router-dom";
+import SinglePhotoSection from "../components/sections/SinglePhotoSection/SinglePhotoSection";
 
 const SinglePhotoViewPage = () => {
 	const { photo_uuid } = useParams<{
@@ -10,35 +8,10 @@ const SinglePhotoViewPage = () => {
 
 	const [searchParams] = useSearchParams();
 
-	const access_secret = searchParams.get("access_secret");
-
-	if (!photo_uuid || !access_secret) {
-		return <Navigate to="/notfound" replace />;
-	}
-
-	const [photo, setPhoto] = useState<Photo | undefined>(undefined);
-
-	useEffect(() => {
-		fetchPhoto(photo_uuid, access_secret)
-			.then((p) => setPhoto(p))
-			.catch((err) => {
-				console.log("Error fetch photos: ", err);
-			});
-	}, []);
+	const accessSecret = searchParams.get("access_secret");
 
 	return (
-		<>
-			{photo && (
-				<SecureImg
-					alt="image"
-					photoUuid={photo.photo_uuid}
-					accessKey={photo.access_key}
-					photoSize={PhotoSize.medium}
-				/>
-			)}
-
-			{photo == undefined && <p>Image loading...</p>}
-		</>
+		<SinglePhotoSection photoUuid={photo_uuid ?? ""} accessSecret={accessSecret ?? undefined} />
 	);
 };
 

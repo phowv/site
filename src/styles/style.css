@@ -11,6 +11,7 @@
 	--button-border-radius: 10px;
 	--default-icon-size: 36px;
 	--transition-time: 0.3s;
+	--max-header-height: 5rem;
 }
 
 [data-theme="dark"] {
@@ -32,6 +33,14 @@
 	color: var(--main-text-color);
 
 	font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+html,
+body,
+#root {
+	width: 100%;
+	height: 100%;
+	margin: 0;
 }
 
 a {
