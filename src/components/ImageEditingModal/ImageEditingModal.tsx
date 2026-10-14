@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactEventHandler } from "react";
+import { useEffect, useState } from "react";
 import {
 	deletePhoto,
 	deletePhotoAccessSecret,
