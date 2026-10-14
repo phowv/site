@@ -6,7 +6,7 @@ import SecureImg from "../UI/SecureImg/SecureImg";
 import cl from "./ImageViewingModal.module.css";
 import { useNavigate } from "react-router-dom";
 
-interface ImageViewingModalProps {
+export interface ImageViewingModalProps {
 	photoDesc: Photo;
 	close: () => void;
 	next: () => void;

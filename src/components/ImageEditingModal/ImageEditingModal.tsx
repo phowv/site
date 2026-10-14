@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState, type ReactEventHandler } from "react";
 import {
 	deletePhoto,
 	deletePhotoAccessSecret,
@@ -6,7 +6,6 @@ import {
 	patchPhoto,
 	PhotoSize,
 	type PatchPhotoProps,
-	type Photo,
 } from "../../lib/api/photoApi";
 import FormModal from "../FormModal/FormModal";
 import cl from "./ImageEditingModal.module.css";
@@ -15,10 +14,9 @@ import Button from "../UI/Button/Button";
 import TagSelector from "../UI/TagSelector/TagSelector";
 import SecureImg from "../UI/SecureImg/SecureImg";
 import { AccessModifier } from "../../lib/api/types/accessModifier";
+import type { ImageViewingModalProps } from "../ImageViewingModal/ImageViewingModal";
 
-interface ImageEditingModalProps {
-	photoDesc: Photo;
-	close: () => void;
+interface ImageEditingModalProps extends ImageViewingModalProps {
 	onChangePhoto: () => void;
 }
 
@@ -27,9 +25,27 @@ const ImageEditingModal = (props: ImageEditingModalProps) => {
 	const [description, setDescription] = useState(props.photoDesc.description);
 	const [tags, setTags] = useState<string[]>(props.photoDesc.tags.map((t) => t.tag_uuid));
 	const [accessLevel, setAccessLevel] = useState<AccessModifier>(props.photoDesc.access_level);
+	const [copied, setCopied] = useState(false);
+	const [error, setError] = useState<string | undefined>(undefined);
 
 	const [accessLink, setAccessLink] = useState<string>("");
 	const [expiresDuration, setExpiresDuration] = useState(60); // default 1 hour
+
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "Escape") {
+				e.preventDefault();
+				e.stopPropagation();
+				close();
+			} else if (e.key === "ArrowLeft") {
+				props.prev();
+			} else if (e.key === "ArrowRight") {
+				props.next();
+			}
+		};
+		window.addEventListener("keydown", handleKeyDown);
+		return () => window.removeEventListener("keydown", handleKeyDown);
+	}, []);
 
 	const doneEditingCallback = async () => {
 		let patchData: PatchPhotoProps = {
@@ -105,7 +121,10 @@ const ImageEditingModal = (props: ImageEditingModalProps) => {
 				);
 			})
 			.catch((err) => {
-				console.log("Error generate photo access link: ", err);
+				const message = err instanceof Error ? err.message : String(err);
+
+				console.log("Error generate photo access link: ", message);
+				setError(message);
 			});
 	};
 
@@ -116,52 +135,78 @@ const ImageEditingModal = (props: ImageEditingModalProps) => {
 			})
 			.catch((err) => {
 				console.log("Error delete photo access link: ", err);
-			});
+			})
+			.finally(() => setError(undefined));
+	};
+
+	const copyAccessLink = () => {
+		navigator.clipboard.writeText(accessLink);
+		setCopied(true);
 	};
 
 	return (
-		<FormModal visible={true} close={cancelPhotoCallback}>
-			<SecureImg
-				className={cl.viewingImage}
-				alt="image"
-				photoUuid={props.photoDesc.photo_uuid}
-				accessKey={props.photoDesc.access_key}
-				photoSize={PhotoSize.medium}
-			/>
+		<FormModal visible={true} close={cancelPhotoCallback} next={props.next} prev={props.prev}>
+			<div className={cl.viewingContainer}>
+				<SecureImg
+					className={cl.viewingImage}
+					alt="image"
+					photoUuid={props.photoDesc.photo_uuid}
+					accessKey={props.photoDesc.access_key}
+					photoSize={PhotoSize.medium}
+				/>
 
-			<p>Title:</p>
-			<Input value={title} onChange={(e) => setTitle(e.target.value)} />
+				<div className={cl.options}>
+					<label>
+						<p>Title:</p>
+						<Input value={title} onChange={(e) => setTitle(e.target.value)} />
+					</label>
 
-			<p>Description:</p>
-			<Input value={description} onChange={(e) => setDescription(e.target.value)} />
+					<label>
+						<p>Description:</p>
+						<Input value={description} onChange={(e) => setDescription(e.target.value)} />
+					</label>
 
-			<p>Access level:</p>
-			<select
-				value={accessLevel}
-				onChange={(e) => setAccessLevel(e.target.value as AccessModifier)}
-			>
-				<option value={AccessModifier.private}>Private</option>
-				<option value={AccessModifier.protected}>Protected</option>
-				<option value={AccessModifier.public}>Public</option>
-			</select>
+					<label className={cl.options_text}>
+						Access level:
+						<select
+							className={cl.options_text}
+							value={accessLevel}
+							onChange={(e) => setAccessLevel(e.target.value as AccessModifier)}
+						>
+							<option value={AccessModifier.private}>private</option>
+							<option value={AccessModifier.protected}>protected</option>
+							<option value={AccessModifier.public}>public</option>
+						</select>
+					</label>
 
-			<TagSelector tags={tags} setTags={setTags} />
+					<TagSelector tags={tags} setTags={setTags} />
 
-			<br />
-			<Button onClick={cancelPhotoCallback}>Cancel</Button>
-			<Button onClick={deletePhotoCallback}>Delete</Button>
-			<Button onClick={doneEditingCallback}>Done</Button>
+					<div>
+						<Button onClick={cancelPhotoCallback}>Cancel</Button>
+						<Button onClick={deletePhotoCallback}>Delete</Button>
+						<Button onClick={doneEditingCallback}>Done</Button>
+					</div>
 
-			<Input
-				value={expiresDuration}
-				onChange={(e) => setExpiresDuration(Number(e.target.value))}
-				type="number"
-				min={1}
-			/>
-			<Button onClick={generateAccessLinkHandler}>Generate access link</Button>
-			<Button onClick={deleteAccessLinkHandler}>Delete access link</Button>
+					<label>
+						<p>Link access duration (minutes):</p>
+						<Input
+							value={expiresDuration}
+							onChange={(e) => setExpiresDuration(Number(e.target.value))}
+							type="number"
+							min={1}
+						/>
+					</label>
+					<div className={cl.line}>
+						<Button onClick={generateAccessLinkHandler}>Generate access link</Button>
+						<Button onClick={deleteAccessLinkHandler}>Delete access link</Button>
+					</div>
 
-			{accessLink !== "" && <a href={accessLink}>Access link</a>}
+					{accessLink !== "" && (
+						<Button onClick={copyAccessLink}>{copied ? "Copied" : "Copy access link"}</Button>
+					)}
+					{error && <p className={cl.error}>{error}</p>}
+				</div>
+			</div>
 		</FormModal>
 	);
 };

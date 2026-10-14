@@ -1,7 +1,7 @@
-import ImageSection from "./ImageSection";
-import type { Photo } from "../../lib/api/photoApi";
+import ImageSection from "../ImageSection";
+import type { Photo } from "../../../lib/api/photoApi";
 import { useState } from "react";
-import ImageEditingModal from "../ImageEditingModal/ImageEditingModal";
+import ImageEditingModal from "../../ImageEditingModal/ImageEditingModal";
 
 interface EditSectionProps {
 	owner_login: string;
@@ -33,6 +33,8 @@ const EditSection = (props: EditSectionProps) => {
 					photoDesc={photosList[currentIndex]}
 					close={closePhoto}
 					onChangePhoto={() => setVersion((v) => v + 1)}
+					next={nextPhoto}
+					prev={prevPhoto}
 				/>
 			)}
 			<ImageSection

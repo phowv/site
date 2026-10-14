@@ -112,9 +112,9 @@ const UploadingImageEditingModal = ({
 									}))
 								}
 							>
-								<option value="private">private</option>
-								<option value="protected">protected</option>
-								<option value="public">public</option>
+								<option value={AccessModifier.private}>private</option>
+								<option value={AccessModifier.protected}>protected</option>
+								<option value={AccessModifier.public}>public</option>
 							</select>
 						</label>
 					</div>

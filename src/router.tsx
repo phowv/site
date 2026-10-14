@@ -8,7 +8,7 @@ import ProtectedRoute from "./auth/ProtectedRoute";
 import CreatePage from "./pages/CreatePage";
 import SettingsPage from "./pages/SettingsPage/SettingsPage";
 import VerificaticationPage from "./pages/VerificaticationPage";
-import SelfProfilePage from "./pages/SelfProfilePage";
+import SelfProfilePage from "./pages/SelfProfilePage/SelfProfilePage";
 import TagsPage from "./pages/TagsPage";
 import CollectionPage from "./pages/CollectionPage";
 import CollectionsPage from "./pages/CollectionsPage";

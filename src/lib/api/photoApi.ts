@@ -100,9 +100,10 @@ export async function fetchPhotos(owner_login?: string): Promise<Array<Photo>> {
 		});
 		return Array.isArray(response.data) ? response.data : [];
 	} catch (error: any) {
-		const errorText = error.response?.data ?? error.message ?? "<unknown error>";
+		const errorText = error.response?.data.error ?? error.message ?? "<unknown error>";
 
-		throw new Error(`[api] Error loading photos ${errorText}`);
+		console.error(`[api] Error loading photos  ${errorText}`);
+		throw new Error(errorText);
 	}
 }
 
@@ -113,9 +114,10 @@ export async function fetchPhoto(photo_uuid: string, access_secret?: string): Pr
 		});
 		return response.data;
 	} catch (error: any) {
-		const errorText = error.response?.data ?? error.message ?? "<unknown error>";
+		const errorText = error.response?.data.error ?? error.message ?? "<unknown error>";
 
-		throw new Error(`[api] Error loading photo ${errorText}`);
+		console.error(`[api] Error loading photo ${errorText}`);
+		throw new Error(errorText);
 	}
 }
 
@@ -128,9 +130,10 @@ export async function uploadPhoto(metadata: UploadingFileMetadata, photo: File) 
 		const response = await api.post("/photos", formData);
 		return response.data;
 	} catch (error: any) {
-		const errorText = error.response?.data ?? error.message ?? "<unknown error>";
+		const errorText = error.response?.data.error ?? error.message ?? "<unknown error>";
 
-		throw new Error(`[api] Error uploading photo ${errorText}`);
+		console.error(`[api] Error uploading photo ${errorText}`);
+		throw new Error(errorText);
 	}
 }
 
@@ -139,9 +142,10 @@ export async function deletePhoto(photo_uuid: string) {
 		const response = await api.delete(`/photo/${photo_uuid}`);
 		return response.data;
 	} catch (error: any) {
-		const errorText = error.response?.data ?? error.message ?? "<unknown error>";
+		const errorText = error.response?.data.error ?? error.message ?? "<unknown error>";
 
-		throw new Error(`[api] Error deleting photo ${errorText}`);
+		console.error(`[api] Error deleting photo ${errorText}`);
+		throw new Error(errorText);
 	}
 }
 
@@ -150,9 +154,10 @@ export async function patchPhoto(photo_uuid: string, patchPhotoProps: PatchPhoto
 		const response = await api.patch(`/photo/${photo_uuid}`, patchPhotoProps);
 		return response.data;
 	} catch (error: any) {
-		const errorText = error.response?.data ?? error.message ?? "<unknown error>";
+		const errorText = error.response?.data.error ?? error.message ?? "<unknown error>";
 
-		throw new Error(`[api] Error patching photo ${errorText}`);
+		console.error(`[api] Error patching photo ${errorText}`);
+		throw new Error(errorText);
 	}
 }
 
@@ -168,9 +173,10 @@ export async function generatePhotoAccessSecret(
 		const response = await api.post(`/photo/${photo_uuid}/secret`, reqestProps);
 		return response.data;
 	} catch (error: any) {
-		const errorText = error.response?.data ?? error.message ?? "<unknown error>";
+		const errorText = error.response?.data.error ?? error.message ?? "<unknown error>";
 
-		throw new Error(`[api] Error generate photo access secret ${errorText}`);
+		console.error(`[api] Error generate photo access secret ${errorText}`);
+		throw new Error(errorText);
 	}
 }
 
@@ -179,9 +185,10 @@ export async function deletePhotoAccessSecret(photo_uuid: string) {
 		const response = await api.delete(`/photo/${photo_uuid}/secret`);
 		return response.data;
 	} catch (error: any) {
-		const errorText = error.response?.data ?? error.message ?? "<unknown error>";
+		const errorText = error.response?.data.error ?? error.message ?? "<unknown error>";
 
-		throw new Error(`[api] Error delete photo access secret ${errorText}`);
+		console.error(`[api] Error delete photo access secret ${errorText}`);
+		throw new Error(errorText);
 	}
 }
 
@@ -190,9 +197,10 @@ export async function fetchTags(photo_uuid?: string): Promise<Array<Tag>> {
 		const response = await api.get("/tags", { params: photo_uuid ? { photo_uuid } : undefined });
 		return Array.isArray(response.data) ? response.data : [];
 	} catch (error: any) {
-		const errorText = error.response?.data ?? error.message ?? "<unknown error>";
+		const errorText = error.response?.data.error ?? error.message ?? "<unknown error>";
 
-		throw new Error(`[api] Error loading tags ${errorText}`);
+		console.error(`[api] Error loading tags ${errorText}`);
+		throw new Error(errorText);
 	}
 }
 
@@ -201,8 +209,9 @@ export async function uploadTag(metadata: UploadingTagMetadata) {
 		const response = await api.post("/tags", metadata);
 		return response.data;
 	} catch (error: any) {
-		const errorText = error.response?.data ?? error.message ?? "<unknown error>";
+		const errorText = error.response?.data.error ?? error.message ?? "<unknown error>";
 
-		throw new Error(`[api] Error uploading tag ${errorText}`);
+		console.error(`[api] Error uploading tag ${errorText}`);
+		throw new Error(errorText);
 	}
 }
