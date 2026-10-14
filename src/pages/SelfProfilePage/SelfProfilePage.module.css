@@ -1,0 +1,9 @@
+.profilePage {
+	margin: var(--default-space);
+	display: grid;
+	gap: var(--default-space);
+}
+
+.profileLink {
+	text-decoration: underline;
+}

@@ -1,99 +1,98 @@
-import type { AccessModifier } from "../../types/accessModifier";
-import type { UploadingCollectionMetadata } from "../../types/collection";
 import { api } from "./axios";
+import type { AccessModifier } from "./types/accessModifier";
 
 export interface SimpleCollection {
 	collection_uuid: string;
 	owner_login: string;
 	title: string;
 	description: string;
-	access_level: AccessModifier
+	access_level: AccessModifier;
 }
 
 export interface SmallPhotoInfo {
-	photo_uuid: string
-	access_key: string
+	photo_uuid: string;
+	access_key: string;
 }
 
 export interface Collection extends SimpleCollection {
 	photos: SmallPhotoInfo[];
 }
 
+export interface UploadingCollectionMetadata {
+	title: string;
+	description?: string;
+	access_level: AccessModifier;
+}
+
 interface AddPhotoToCollectionRequest {
-  photo_uuid: string;
+	photo_uuid: string;
 }
 
 export async function fetchCollections(owner_login?: string): Promise<Array<SimpleCollection>> {
 	try {
-  	const response = await api.get('/collections',
-      {params: owner_login ? {owner_login} : undefined }
-    )
-    return Array.isArray(response.data) ? response.data : []
-  } catch (error: any) {
-    const errorText = error.response?.data ?? error.message ?? '<unknown error>'
+		const response = await api.get("/collections", {
+			params: owner_login ? { owner_login } : undefined,
+		});
+		return Array.isArray(response.data) ? response.data : [];
+	} catch (error: any) {
+		const errorText = error.response?.data ?? error.message ?? "<unknown error>";
 
-    throw new Error(`[api] Error loading collections ${errorText}`)
-  }
+		throw new Error(`[api] Error loading collections ${errorText}`);
+	}
 }
 
 export async function fetchCollection(collection_uuid: string): Promise<Collection> {
 	try {
-		return (await api.get(`/collection/${collection_uuid}`)).data
+		return (await api.get(`/collection/${collection_uuid}`)).data;
+	} catch (error: any) {
+		const errorText = error.response?.data ?? error.message ?? "<unknown error>";
 
-	}	catch (error: any) {
-
-    const errorText = error.response?.data ?? error.message ?? '<unknown error>'
-
-    throw new Error(`[api] Error loading collection ${errorText}`)
+		throw new Error(`[api] Error loading collection ${errorText}`);
 	}
 }
 
 export async function uploadCollection(metadata: UploadingCollectionMetadata) {
-  try {
-    const response = await api.post('/collections', metadata)
-    return response.data
+	try {
+		const response = await api.post("/collections", metadata);
+		return response.data;
+	} catch (error: any) {
+		const errorText = error.response?.data ?? error.message ?? "<unknown error>";
 
-  } catch (error: any) {
-    const errorText = error.response?.data ?? error.message ?? '<unknown error>'
-
-    throw new Error(`[api] Error uploading collection ${errorText}`)
-  }
+		throw new Error(`[api] Error uploading collection ${errorText}`);
+	}
 }
 
 export async function deleteCollection(collection_uuid: string) {
 	try {
-    const response = await api.delete(`/collection/${collection_uuid}`)
-    return response.data
+		const response = await api.delete(`/collection/${collection_uuid}`);
+		return response.data;
+	} catch (error: any) {
+		const errorText = error.response?.data ?? error.message ?? "<unknown error>";
 
-  } catch (error: any) {
-    const errorText = error.response?.data ?? error.message ?? '<unknown error>'
-
-    throw new Error(`[api] Error removing collection ${errorText}`)
-  }	
+		throw new Error(`[api] Error removing collection ${errorText}`);
+	}
 }
 
-export async function addPhotoToCollection(collection_uuid: string, photo_uuid: string) {	
-  const data: AddPhotoToCollectionRequest = {photo_uuid}
+export async function addPhotoToCollection(collection_uuid: string, photo_uuid: string) {
+	const data: AddPhotoToCollectionRequest = { photo_uuid };
 
-  try {
-    const response = await api.post(`/collection/${collection_uuid}/photos`, data)
-    return response.data
+	try {
+		const response = await api.post(`/collection/${collection_uuid}/photos`, data);
+		return response.data;
+	} catch (error: any) {
+		const errorText = error.response?.data ?? error.message ?? "<unknown error>";
 
-  } catch (error: any) {
-    const errorText = error.response?.data ?? error.message ?? '<unknown error>'
-
-    throw new Error(`[api] Error adding photo to collection ${errorText}`)
-  }
+		throw new Error(`[api] Error adding photo to collection ${errorText}`);
+	}
 }
 
-export async function removePhotoFromCollection(collection_uuid: string, photo_uuid: string) {	
-  try {
-    const response = await api.delete(`/collection/${collection_uuid}/photo/${photo_uuid}`)
-    return response.data
+export async function removePhotoFromCollection(collection_uuid: string, photo_uuid: string) {
+	try {
+		const response = await api.delete(`/collection/${collection_uuid}/photo/${photo_uuid}`);
+		return response.data;
+	} catch (error: any) {
+		const errorText = error.response?.data ?? error.message ?? "<unknown error>";
 
-  } catch (error: any) {
-    const errorText = error.response?.data ?? error.message ?? '<unknown error>'
-
-    throw new Error(`[api] Error removing photo from collection ${errorText}`)
-  }
+		throw new Error(`[api] Error removing photo from collection ${errorText}`);
+	}
 }

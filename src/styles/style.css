@@ -1,7 +1,60 @@
+:root {
+	--main-text-color: rgb(28, 28, 28);
+	--light-text-color: white;
+	--bg: white;
+	--light-bg: whitesmoke;
+	--accent: rgb(101, 185, 164);
+	--light-accent: rgb(68, 144, 124);
+	--muted: rgb(132, 131, 131);
+	--warning: red;
+
+	--button-border-radius: 10px;
+	--default-icon-size: 36px;
+	--transition-time: 0.3s;
+	--max-header-height: 5rem;
+
+	--default-space: 2rem;
+}
+
+[data-theme="dark"] {
+	--main-text-color: rgb(199, 198, 198);
+	--light-text-color: whitesmoke;
+	--bg: rgb(105, 105, 105);
+	--light-bg: rgb(99, 99, 99);
+	--accent: rgba(51, 131, 110, 1);
+	--light-accent: rgb(68, 144, 124);
+	--muted: rgba(55, 44, 44, 0.636);
+	--warning: red;
+}
+
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	background-color: var(--bg);
+	color: var(--main-text-color);
+
+	font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+html,
+body,
+#root {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+}
+
+a {
+	text-decoration: none;
+	color: var(--main-text-color);
+}
+
+a:hover,
+button:hover,
+input:hover,
+textarea:hover {
+	color: var(--accent);
 }
 
 .centered {
@@ -9,9 +62,9 @@
 }
 
 .control {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 0.5rem 1rem;
-  width: 100%;
-  margin-bottom: 1rem;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	padding: 0.5rem 1rem;
+	width: 100%;
+	margin-bottom: 1rem;
 }

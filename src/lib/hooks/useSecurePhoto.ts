@@ -1,31 +1,33 @@
-import { useEffect, useState } from 'react';
-import { getPhotoUrl } from '../api/photoApi';
+import { useEffect, useState } from "react";
+import { getPhotoUrl } from "../api/photoApi";
+import { photoCache, toKey } from "../cache/photoCache";
 
-const useSecurePhoto = (photo_uuid: string, access_key: string, photo_size?: string) => {
+const useSecurePhoto = (photoUuid: string, accessKey: string, photoSize?: string): string => {
 	const [blobUrl, setBlobUrl] = useState<string>("");
 
 	useEffect(() => {
+		const cached = photoCache.get(toKey(photoUuid, photoSize));
+
+		if (cached) {
+			setBlobUrl(cached);
+			return;
+		}
+
 		let isMounted = true;
 		let url = "";
 
-		getPhotoUrl(photo_uuid, access_key, photo_size)
+		getPhotoUrl(photoUuid, accessKey, photoSize)
 			.then((objectUrl) => {
 				if (isMounted) {
 					setBlobUrl(objectUrl);
+					photoCache.set(toKey(photoUuid, photoSize), objectUrl);
 				}
 				url = objectUrl;
 			})
 			.catch((err) => console.error("Error loading image secure src:", err));
+	}, [photoUuid, accessKey, photoSize]);
 
-		return () => {
-			isMounted = false;
-			if (url) {
-				URL.revokeObjectURL(url);
-			}
-		};
-	}, [photo_uuid, access_key, photo_size]);
-
-	return blobUrl
-}
+	return blobUrl;
+};
 
 export default useSecurePhoto;

@@ -1,39 +1,53 @@
 import { NavLink, Outlet } from "react-router-dom";
 import Header from "../components/Header/Header";
 import { useAuth } from "../auth/authContext";
-import Button from "../components/UI/Button/Button";
+import cl from "./MainLayout.module.css";
 
 export default function MainLayout() {
-  const {isAuth, user, logout} = useAuth()
+	const { isAuth, user, logout } = useAuth();
 
-  return (
-    <div>
-      <Header>
-        <nav style={{ display: "flex", gap: "16px" }}>
-          <NavLink to="/">Home</NavLink>
-          <NavLink to="/settings">Settings</NavLink>
-          <NavLink to="/profile">Profile</NavLink>
-          <NavLink to="/create">Create</NavLink>
-          <NavLink to="/tags">Tags</NavLink>
-          <NavLink to="/collections">Collections</NavLink>
+	return (
+		<div className={cl.page}>
+			<Header>
+				<nav className={cl.header__nav_list}>
+					<NavLink to="/">
+						<img className={cl.header__home_icon} src="/ico.svg" alt="Home" />
+					</NavLink>
+					<NavLink className={cl.header__nav_link} to="/settings">
+						Settings
+					</NavLink>
+					<NavLink className={cl.header__nav_link} to="/profile">
+						Profile
+					</NavLink>
+					<NavLink className={cl.header__nav_link} to="/create">
+						Create
+					</NavLink>
+					{/* <NavLink className={cl.header__nav_link} to="/tags">Tags</NavLink> */}
+					{/* <NavLink className={cl.header__nav_link} to="/collections">Collections</NavLink> */}
 
-          {isAuth ? (
-            <>
-              <p>Hello, {user?.login}</p>
-              <Button onClick={logout}>Logout</Button>
-            </>
-          ) : (
-            <>
-              <NavLink to="/login">Login</NavLink>
-              <NavLink to="/register">Register</NavLink>
-            </>
-          )}
-        </nav>
-      </Header>
+					{isAuth ? (
+						<>
+							<p>Hello, {user?.login}</p>
+							<a className={cl.header__nav_link} onClick={logout}>
+								Logout
+							</a>
+						</>
+					) : (
+						<>
+							<NavLink className={cl.header__nav_link} to="/login">
+								Login
+							</NavLink>
+							<NavLink className={cl.header__nav_link} to="/register">
+								Register
+							</NavLink>
+						</>
+					)}
+				</nav>
+			</Header>
 
-      <main style={{ padding: "20px 0" }}>
-        <Outlet />
-      </main>
-    </div>
-  );
+			<main className={cl.content}>
+				<Outlet />
+			</main>
+		</div>
+	);
 }

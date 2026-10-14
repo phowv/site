@@ -1,5 +1,5 @@
-import { NavLink } from 'react-router-dom';
-import CollectionSection from '../components/sections/CollectionSection';
+import { NavLink } from "react-router-dom";
+import CollectionSection from "../components/sections/CollectionSection";
 
 const CollectionsPage = () => {
 	return (
@@ -9,6 +9,6 @@ const CollectionsPage = () => {
 			<CollectionSection />
 		</>
 	);
-}
+};
 
 export default CollectionsPage;

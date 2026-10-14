@@ -1,31 +1,59 @@
+import { useEffect } from "react";
 import { PhotoSize, type Photo } from "../../lib/api/photoApi";
 import FormModal from "../FormModal/FormModal";
 import Button from "../UI/Button/Button";
 import SecureImg from "../UI/SecureImg/SecureImg";
-import cl from "./ImageViewingModal.module.css"
+import cl from "./ImageViewingModal.module.css";
+import { useNavigate } from "react-router-dom";
 
-interface ImageViewingModalProps {
+export interface ImageViewingModalProps {
 	photoDesc: Photo;
 	close: () => void;
+	next: () => void;
+	prev: () => void;
 }
 
-const ImageViewingModal = ({ photoDesc, close }: ImageViewingModalProps) => {	
+const ImageViewingModal = ({ photoDesc, close, next, prev }: ImageViewingModalProps) => {
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "Escape") {
+				e.preventDefault();
+				e.stopPropagation();
+				close();
+			} else if (e.key === "ArrowLeft") {
+				prev();
+			} else if (e.key === "ArrowRight") {
+				next();
+			}
+		};
+		window.addEventListener("keydown", handleKeyDown);
+		return () => window.removeEventListener("keydown", handleKeyDown);
+	}, []);
 	return (
-		<FormModal visible={true} close={close}>
+		<FormModal visible={true} close={close} next={next} prev={prev}>
 			<div className={cl.imageDescription}>
 				<h1>{photoDesc.title}</h1>
-				<p>Owner: <a href={`${window.location.origin}/profile/${photoDesc.owner_login}`}>{photoDesc.owner_login}</a></p>
+				<p>
+					Owner:{" "}
+					<a href={`${window.location.origin}/profile/${photoDesc.owner_login}`}>
+						{photoDesc.owner_login}
+					</a>
+				</p>
 			</div>
 			<p>{photoDesc.description}</p>
 
-			{photoDesc.tags.length !== 0 ? 
-			<div className={cl.imageTagsDiv}>
-				<p>Tags:</p>
-				{photoDesc.tags.map(tag =>
-				<p key={tag.tag_uuid} className={cl.imageTagName}>#{tag.tag_name}</p>
-				)}
-			</div>
-			: undefined}
+			{photoDesc.tags.length !== 0 ? (
+				<div className={cl.imageTagsDiv}>
+					<p>Tags:</p>
+					{photoDesc.tags.map((tag) => (
+						<p key={tag.tag_uuid} className={cl.imageTagName}>
+							#{tag.tag_name}
+						</p>
+					))}
+				</div>
+			) : undefined}
 
 			<SecureImg
 				className={cl.viewingImage}
@@ -35,8 +63,9 @@ const ImageViewingModal = ({ photoDesc, close }: ImageViewingModalProps) => {
 				photoSize={PhotoSize.medium}
 			/>
 			<Button onClick={close}>done</Button>
+			<Button onClick={() => navigate(`/photo/${photoDesc.photo_uuid}`)}>Open full</Button>
 		</FormModal>
 	);
-}
+};
 
 export default ImageViewingModal;

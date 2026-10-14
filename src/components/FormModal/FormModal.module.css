@@ -1,26 +1,47 @@
 .formModal {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-  display: none;
-  background: rgba(0, 0, 0, 0.5);
-  width: 100%;
-  justify-content: center;
-  overflow: scroll;
-  z-index: 100;
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	display: none;
+	background: rgba(0, 0, 0, 0.5);
+	width: 100%;
+	justify-content: center;
+	overflow: scroll;
+	z-index: 100;
 }
 
 .formModalContent {
-  margin: auto;
-  padding: 25px;
-  background: white;
-  border-radius: 16px;
-  min-width: 250px;
+	margin: auto;
+	padding: 25px;
+	border-radius: 16px;
+	min-width: 250px;
+	background: var(--bg);
+	color: var(--main-text-color);
 }
 
 .formModal.active {
-  display: flex;
-  justify-content: center;
+	display: flex;
+	justify-content: center;
+}
+
+.formModalArrowButton {
+	position: absolute;
+	top: 50%;
+	z-index: 10;
+	aspect-ratio: 1 / 1;
+	width: 4rem;
+	margin: 2rem;
+	border-radius: 50%;
+	border: 2px solid gray;
+	font-size: 1.5rem;
+	align-content: center;
+	justify-content: center;
+	transition: all 0.3s;
+}
+
+.formModalArrowButton:hover {
+	background-color: var(--light-bg);
+	opacity: 0.8;
 }

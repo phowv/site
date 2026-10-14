@@ -1,8 +1,21 @@
 .header {
-  justify-content: space-between;
-  align-items: center;
-  padding: 1px;
-  border-bottom: 1px solid #000;
-	display: flex;
-	margin: 5px 5px 10px 5px;
+	width: 100%;
+	top: 0;
+	min-height: 2rem;
+	max-height: var(--max-header-height);
+	display: block;
+	position: sticky;
+	background-color: var(--light-bg);
+	padding: 0.7rem;
+	flex: 0 0 auto;
+}
+
+.header * {
+	background-color: var(--light-bg);
+}
+
+.header__container {
+	width: 80%;
+	transform: translateX(10%);
+	display: block;
 }

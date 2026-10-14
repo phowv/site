@@ -1,0 +1,12 @@
+.dropzone {
+	border: 2px dashed var(--accent);
+	padding: 1rem;
+	cursor: pointer;
+	text-align: center;
+	align-items: center;
+	transition: all var(--transition-time);
+}
+
+.dropzone:hover {
+	border-color: var(--light-accent);
+}

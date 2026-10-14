@@ -1,0 +1,38 @@
+.header__nav_list {
+	display: flex;
+	gap: 2rem;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.header__nav_link {
+	padding: 0.5rem 0.8rem 0.5rem 0.8rem;
+	background-color: var(--accent);
+	border-radius: var(--button-border-radius);
+	border: var(--accent) solid 2px;
+	cursor: pointer;
+	transition: all var(--transition-time);
+}
+
+.header__nav_link:hover {
+	background-color: var(--light-color);
+}
+
+.header__home_icon {
+	aspect-ratio: 1 / 1;
+	width: var(--default-icon-size);
+}
+
+.page {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.content {
+	flex: 1 1 auto;
+	min-height: 0;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+}
