@@ -14,7 +14,6 @@ const useSecurePhoto = (photoUuid: string, accessKey: string, photoSize?: string
 		}
 
 		let isMounted = true;
-		let url = "";
 
 		getPhotoUrl(photoUuid, accessKey, photoSize)
 			.then((objectUrl) => {
@@ -22,7 +21,6 @@ const useSecurePhoto = (photoUuid: string, accessKey: string, photoSize?: string
 					setBlobUrl(objectUrl);
 					photoCache.set(toKey(photoUuid, photoSize), objectUrl);
 				}
-				url = objectUrl;
 			})
 			.catch((err) => console.error("Error loading image secure src:", err));
 	}, [photoUuid, accessKey, photoSize]);
