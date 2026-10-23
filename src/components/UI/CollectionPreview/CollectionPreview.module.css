@@ -1,7 +1,55 @@
 .collectionPreview {
 	border: 2px solid gray;
-	margin: 10px;
-	padding: 5px;
+	position: relative;
+	overflow: hidden;
+	line-height: 0;
+	cursor: pointer;
+	min-height: 3rem;
+	min-width: 5rem;
+}
+
+.previewPhoto {
+	width: 100%;
+	height: auto;
+	display: block;
+	object-fit: cover;
+}
+
+.descriptionContainer {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: 0;
+	background: none;
 	display: flex;
-	gap: 10px;
+	flex-direction: column;
+	box-sizing: border-box;
+}
+
+.title {
+	background: color-mix(in srgb, var(--bg) 50%, transparent);
+	color: var(--main-text-color);
+	padding-left: 4px;
+	align-content: center;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+
+	display: block;
+	font-size: 1.5rem;
+	height: 2.1rem;
+	word-break: break-word;
+}
+
+.noPreview.collectionPreview {
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+}
+
+.noPreview .descriptionContainer {
+	background: none;
+	width: 100%;
+	margin: 8px;
 }

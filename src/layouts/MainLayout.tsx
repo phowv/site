@@ -13,6 +13,9 @@ export default function MainLayout() {
 					<NavLink to="/">
 						<img className={cl.header__home_icon} src="/ico.svg" alt="Home" />
 					</NavLink>
+					<NavLink className={cl.header__nav_link} to="/collections">
+						Collections
+					</NavLink>
 					<NavLink className={cl.header__nav_link} to="/settings">
 						Settings
 					</NavLink>
@@ -23,7 +26,6 @@ export default function MainLayout() {
 						Create
 					</NavLink>
 					{/* <NavLink className={cl.header__nav_link} to="/tags">Tags</NavLink> */}
-					{/* <NavLink className={cl.header__nav_link} to="/collections">Collections</NavLink> */}
 
 					{isAuth ? (
 						<>

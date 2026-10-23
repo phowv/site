@@ -5,6 +5,7 @@
 	margin: 0 0 5px;
 	border: 2px solid gray;
 	break-inside: avoid;
+	cursor: pointer;
 }
 
 .imageCard img {

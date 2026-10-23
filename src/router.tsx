@@ -11,7 +11,7 @@ import VerificaticationPage from "./pages/VerificaticationPage";
 import SelfProfilePage from "./pages/SelfProfilePage/SelfProfilePage";
 import TagsPage from "./pages/TagsPage";
 import CollectionPage from "./pages/CollectionPage";
-import CollectionsPage from "./pages/CollectionsPage";
+import CollectionsPage from "./pages/CollectionsPage/CollectionsPage";
 import CollectionEditPage from "./pages/CollectionEditPage";
 import CollectionCreatePage from "./pages/CollectionCreatePage";
 import SinglePhotoViewPage from "./pages/SinglePhotoViewPage";

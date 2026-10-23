@@ -49,6 +49,7 @@ export function AuthProvider({ children }: Props) {
 	useEffect(() => {
 		subscribeToLogout(() => {
 			localStorage.removeItem("access_token");
+			localStorage.removeItem("current_user_login");
 			setUser(null);
 		});
 
@@ -71,6 +72,7 @@ export function AuthProvider({ children }: Props) {
 			})
 			.catch(() => {
 				localStorage.removeItem("access_token");
+				localStorage.removeItem("current_user_login");
 			})
 			.finally(() => {
 				setIsLoading(false);
@@ -88,9 +90,13 @@ export function AuthProvider({ children }: Props) {
 				email: userData.user_email,
 				description: "not loaded",
 			});
+
+			localStorage.setItem("current_user_login", userData.user_login);
+
 			console.debug("fetched user data", userData);
 		} catch (error: any) {
 			localStorage.removeItem("access_token");
+			localStorage.removeItem("current_user_login");
 			setUser(null);
 			throw error;
 		}
