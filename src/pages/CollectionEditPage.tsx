@@ -10,7 +10,7 @@ import {
 } from "../lib/api/collectionApi";
 import SecureImage from "../components/UI/SecureImage/SecureImage";
 import Button from "../components/UI/Button/Button";
-import { useAuth } from "../auth/authContext";
+import useAuth from "../lib/hooks/useAuth";
 
 const CollectionEditPage = () => {
 	const { user } = useAuth();

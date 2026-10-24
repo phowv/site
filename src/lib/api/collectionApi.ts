@@ -41,6 +41,17 @@ export async function fetchCollections(owner_login?: string): Promise<Array<Simp
 	}
 }
 
+export async function fetchSelfCollections(): Promise<Array<SimpleCollection>> {
+	try {
+		const response = await api.get("/me/collections");
+		return Array.isArray(response.data) ? response.data : [];
+	} catch (error: any) {
+		const errorText = error.response?.data ?? error.message ?? "<unknown error>";
+
+		throw new Error(`[api] Error loading self collections ${errorText}`);
+	}
+}
+
 export async function fetchCollection(collection_uuid: string): Promise<Collection> {
 	try {
 		return (await api.get(`/collection/${collection_uuid}`)).data;

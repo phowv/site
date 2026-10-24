@@ -107,6 +107,18 @@ export async function fetchPhotos(owner_login?: string): Promise<Array<Photo>> {
 	}
 }
 
+export async function fetchSelfPhotos(): Promise<Array<Photo>> {
+	try {
+		const response = await api.get("/me/photos");
+		return Array.isArray(response.data) ? response.data : [];
+	} catch (error: any) {
+		const errorText = error.response?.data.error ?? error.message ?? "<unknown error>";
+
+		console.error(`[api] Error loading self photos  ${errorText}`);
+		throw new Error(errorText);
+	}
+}
+
 export async function fetchPhoto(photo_uuid: string, access_secret?: string): Promise<Photo> {
 	try {
 		const response = await api.get(`/photo/${photo_uuid}`, {

@@ -3,8 +3,8 @@ import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import AnonymousRoute from "./auth/AnonymousRoute";
-import ProtectedRoute from "./auth/ProtectedRoute";
+import AnonymousRoute from "./lib/auth/AnonymousRoute";
+import ProtectedRoute from "./lib/auth/ProtectedRoute";
 import CreatePage from "./pages/CreatePage";
 import SettingsPage from "./pages/SettingsPage/SettingsPage";
 import VerificaticationPage from "./pages/VerificaticationPage";
@@ -16,7 +16,7 @@ import CollectionEditPage from "./pages/CollectionEditPage";
 import CollectionCreatePage from "./pages/CollectionCreatePage";
 import SinglePhotoViewPage from "./pages/SinglePhotoViewPage";
 import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
-import { AuthProvider } from "./auth/authContext";
+import { AuthProvider } from "./lib/auth/authContext";
 import App from "./App";
 
 export const router = createBrowserRouter(

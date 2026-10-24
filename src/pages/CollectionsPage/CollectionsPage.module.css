@@ -1,16 +1,3 @@
-.nav_link {
-	padding: 0.5rem 0.8rem 0.5rem 0.8rem;
-	background-color: var(--accent);
-	border-radius: var(--button-border-radius);
-	border: var(--accent) solid 2px;
-	cursor: pointer;
-	transition: all var(--transition-time);
-}
-
-.nav_link:hover {
-	background-color: var(--light-color);
-}
-
 .container {
 	box-sizing: border-box;
 	margin: var(--default-space);

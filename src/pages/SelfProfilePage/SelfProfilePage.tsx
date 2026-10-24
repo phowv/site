@@ -1,5 +1,5 @@
-import { useAuth } from "../../auth/authContext";
 import EditSection from "../../components/sections/EditSection/EditSection";
+import useAuth from "../../lib/hooks/useAuth";
 import cl from "./SelfProfilePage.module.css";
 
 const SelfProfilePage = () => {
@@ -26,7 +26,7 @@ const SelfProfilePage = () => {
 
 					<span>
 						<h2>Your photos</h2>
-						<EditSection owner_login={user.login} />
+						<EditSection />
 					</span>
 				</>
 			) : (

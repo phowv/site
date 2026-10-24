@@ -6,7 +6,7 @@ import {
 } from "../../../lib/api/collectionApi";
 import CollectionPreview from "../../UI/CollectionPreview/CollectionPreview";
 import { useNavigate } from "react-router-dom";
-import cl from "./CollectionsSection.module.css"
+import cl from "./CollectionsSection.module.css";
 
 interface CollectionSectionProps {
 	owner_login?: string;
@@ -16,7 +16,7 @@ interface CollectionWithPreview extends SimpleCollection {
 	previewPhoto?: {
 		photoUuid: string;
 		accessKey: string;
-	}
+	};
 }
 
 const CollectionSection = ({ owner_login }: CollectionSectionProps) => {
@@ -29,15 +29,18 @@ const CollectionSection = ({ owner_login }: CollectionSectionProps) => {
 		setStatus("loading");
 		fetchCollections(owner_login)
 			.then(async (collections) => {
-				const newCollections = await Promise.all(collections.map(async (collection) => { // TODO: use request for get preview when it will created
-					const photos = await fetchCollection(collection.collection_uuid)
-					const photo = photos.photos[0] ?? undefined
-					const previewPhoto = photo && {
-						photoUuid: photo.photo_uuid,
-						accessKey: photo.access_key,
-					}
-					return {...collection, previewPhoto: previewPhoto}
-				}))
+				const newCollections = await Promise.all(
+					collections.map(async (collection) => {
+						// TODO: use request for get preview when it will created
+						const photos = await fetchCollection(collection.collection_uuid);
+						const photo = photos.photos[0] ?? undefined;
+						const previewPhoto = photo && {
+							photoUuid: photo.photo_uuid,
+							accessKey: photo.access_key,
+						};
+						return { ...collection, previewPhoto: previewPhoto };
+					}),
+				);
 
 				setCollectionsList(newCollections);
 				setStatus("loaded");
@@ -57,7 +60,10 @@ const CollectionSection = ({ owner_login }: CollectionSectionProps) => {
 			) : (
 				<section
 					className={cl.section}
-					style={{columnCount: localStorage.getItem("feedImageColumnsCount") ?? "5", columnGap: "4px"}}
+					style={{
+						columnCount: localStorage.getItem("feedImageColumnsCount") ?? "5",
+						columnGap: "4px",
+					}}
 				>
 					{collectionsList.map((collection) => (
 						<CollectionPreview

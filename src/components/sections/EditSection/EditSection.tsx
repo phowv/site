@@ -3,11 +3,7 @@ import type { Photo } from "../../../lib/api/photoApi";
 import { useState } from "react";
 import ImageEditingModal from "../../ImageEditingModal/ImageEditingModal";
 
-interface EditSectionProps {
-	owner_login: string;
-}
-
-const EditSection = (props: EditSectionProps) => {
+const EditSection = () => {
 	const [version, setVersion] = useState(0);
 	const [photosList, setPhotosList] = useState<Array<Photo>>([]);
 	const [currentIndex, setCurrentIndex] = useState<number | null>(null);
@@ -38,11 +34,11 @@ const EditSection = (props: EditSectionProps) => {
 				/>
 			)}
 			<ImageSection
-				owner_login={props.owner_login}
 				version={version}
 				openPhoto={openPhoto}
 				photosList={photosList}
 				setPhotosList={setPhotosList}
+				viewSelfPhotos={true}
 			/>
 		</>
 	);
