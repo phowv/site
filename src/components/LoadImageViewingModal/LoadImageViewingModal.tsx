@@ -26,7 +26,7 @@ const LoadImageViewingModal = ({ photoDesc, close }: LoadImageViewingModalProps)
 				console.log("Error fetch photos: ", err);
 				setStatus("error");
 			});
-	}, []);
+	});
 
 	return (
 		<>

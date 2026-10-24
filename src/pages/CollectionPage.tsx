@@ -25,7 +25,7 @@ const CollectionPage = () => {
 				console.log("Error fetch collection: ", err);
 				setStatus("error");
 			});
-	}, []);
+	});
 
 	return (
 		<>

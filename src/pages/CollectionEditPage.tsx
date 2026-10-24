@@ -60,7 +60,7 @@ const CollectionEditPage = () => {
 
 	useEffect(() => {
 		loadCollection();
-	}, [collection_uuid]);
+	}, [loadCollection, collection_uuid]);
 
 	const availablePhotos = useMemo(() => {
 		const collectionIds = new Set(collection?.photos.map((p) => p.photo_uuid) ?? []);

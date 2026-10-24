@@ -31,7 +31,7 @@ const useBlobUrl = (file: File) => {
 
 	useEffect(() => {
 		return () => releaseBlobUrl(file);
-	}, []);
+	});
 
 	return url;
 };

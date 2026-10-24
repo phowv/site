@@ -38,7 +38,7 @@ export async function loginUser(data: LoginRequest): Promise<AuthResponse> {
 	try {
 		const response = await api.post<AuthResponse>("/auth/login", data);
 		return response.data;
-	} catch (e: any) {
+	} catch (e) {
 		if (axios.isAxiosError<DefaultResponse>(e)) {
 			throw new Error(e.response?.data.error || "Login failed");
 		}
@@ -90,7 +90,7 @@ export async function getMe(): Promise<GetMeResponse> {
 	try {
 		const response = await api.get<GetMeResponse>("/auth/me");
 		return response.data;
-	} catch (e: any) {
+	} catch (e) {
 		if (axios.isAxiosError<DefaultResponse>(e)) {
 			throw new Error(e.response?.data.error || "Login failed");
 		}

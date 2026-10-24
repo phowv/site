@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "./authContext";
+import useAuth from "../hooks/useAuth";
 
 const AnonymousRoute = () => {
 	const { isAuth, isLoading } = useAuth();

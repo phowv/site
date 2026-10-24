@@ -48,7 +48,7 @@ const ImageEditingModal = (props: ImageEditingModalProps) => {
 	}, []);
 
 	const doneEditingCallback = async () => {
-		let patchData: PatchPhotoProps = {
+		const patchData: PatchPhotoProps = {
 			access_level: props.photoDesc.access_level,
 		};
 

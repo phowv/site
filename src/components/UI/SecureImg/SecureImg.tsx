@@ -5,7 +5,7 @@ interface SecureImgProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 	photoUuid: string;
 	photoSize?: string;
 	accessKey: string;
-	onLoad?: () => {};
+	onLoad?: () => void;
 }
 
 const SecureImg = ({ photoUuid, accessKey, photoSize, onLoad, ...props }: SecureImgProps) => {

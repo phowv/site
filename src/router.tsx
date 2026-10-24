@@ -16,8 +16,8 @@ import CollectionEditPage from "./pages/CollectionEditPage";
 import CollectionCreatePage from "./pages/CollectionCreatePage";
 import SinglePhotoViewPage from "./pages/SinglePhotoViewPage";
 import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
-import { AuthProvider } from "./lib/auth/authContext";
 import App from "./App";
+import { AuthProvider } from "./lib/auth/authProvider";
 
 export const router = createBrowserRouter(
 	createRoutesFromElements(

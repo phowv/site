@@ -19,7 +19,7 @@ const AuthForm = (props: AuthFormProps) => {
 
 		try {
 			await props.handler();
-		} catch (e: any) {
+		} catch (e) {
 			props.setIsLoading(false);
 			setError(e instanceof Error ? e.message : "Unknown error");
 		}

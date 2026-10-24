@@ -1,16 +1,10 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext } from "react";
 import {
-	getMe,
-	loginUser,
-	registerUser,
 	type LoginRequest,
 	type RegisterRequest,
 } from "../api/authApi";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { subscribeToLogout, triggerLogout } from "../utils/authUtils";
 
-interface User {
+export interface User {
 	login: string;
 	email: string;
 	description: string;
@@ -26,105 +20,3 @@ export interface AuthContextType {
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
-
-interface Props {
-	children: React.ReactNode;
-}
-
-export  function AuthProvider({ children }: Props) {
-	const [user, setUser] = useState<User | null>(null);
-	const [isLoading, setIsLoading] = useState(true);
-	const navigate = useNavigate();
-
-	useEffect(() => {
-		subscribeToLogout(() => {
-			localStorage.removeItem("access_token");
-			localStorage.removeItem("current_user_login");
-			setUser(null);
-		});
-
-		const token = localStorage.getItem("access_token");
-
-		setIsLoading(true);
-
-		if (!token) {
-			setIsLoading(false);
-			return;
-		}
-
-		getMe()
-			.then((userData) => {
-				setUser({
-					login: userData.user_login,
-					email: userData.user_email,
-					description: "not loaded",
-				});
-			})
-			.catch(() => {
-				localStorage.removeItem("access_token");
-				localStorage.removeItem("current_user_login");
-			})
-			.finally(() => {
-				setIsLoading(false);
-			});
-	}, []);
-
-	const login = async (data: LoginRequest) => {
-		try {
-			const response = await loginUser(data);
-			localStorage.setItem("access_token", response.access_token);
-
-			const userData = await getMe();
-			setUser({
-				login: userData.user_login,
-				email: userData.user_email,
-				description: "not loaded",
-			});
-
-			localStorage.setItem("current_user_login", userData.user_login);
-
-			console.debug("fetched user data", userData);
-		} catch (error: any) {
-			localStorage.removeItem("access_token");
-			localStorage.removeItem("current_user_login");
-			setUser(null);
-			throw error;
-		}
-	};
-
-	const register = async (data: RegisterRequest) => {
-		try {
-			const response = await registerUser(data);
-			if (response.error !== undefined) {
-				throw new Error("regisration error: " + response.error);
-			}
-		} catch (error: unknown) {
-			if (axios.isAxiosError(error) && error.response) {
-				throw new Error(error.response.data["error"]);
-			}
-
-			throw error;
-		}
-
-		navigate("/login");
-	};
-
-	const logout = () => {
-		triggerLogout();
-	};
-
-	return (
-		<AuthContext.Provider
-			value={{
-				user,
-				isAuth: !!user,
-				isLoading,
-				login,
-				register,
-				logout,
-			}}
-		>
-			{children}
-		</AuthContext.Provider>
-	);
-}
