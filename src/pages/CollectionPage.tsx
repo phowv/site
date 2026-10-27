@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { fetchCollection, type Collection } from "../lib/api/collectionApi";
 import SecureImage from "../components/UI/SecureImage/SecureImage";
 import { toPhotoSize } from "../lib/api/photoApi";
@@ -8,6 +8,10 @@ import Link from "../components/UI/Link/Link";
 import Container from "../components/UI/Container/Container";
 
 const CollectionPage = () => {
+	const [searchParams] = useSearchParams();
+
+	const accessSecret = searchParams.get("access_secret");
+
 	const { collection_uuid } = useParams();
 
 	const [status, setStatus] = useState("empty");
@@ -18,7 +22,7 @@ const CollectionPage = () => {
 
 	useEffect(() => {
 		setStatus("loading");
-		fetchCollection(collection_uuid ?? "")
+		fetchCollection(collection_uuid ?? "", accessSecret ?? undefined)
 			.then((collection) => {
 				setCollection(collection);
 				setStatus("loaded");

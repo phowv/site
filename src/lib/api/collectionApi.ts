@@ -24,6 +24,15 @@ export interface UploadingCollectionMetadata {
 	access_level: AccessModifier;
 }
 
+export interface GenerateCollectionAccessSecretProps {
+	expires_duration: number; // seconds
+}
+
+export interface GenerateCollectionAccessSecretResponse {
+	collection_uuid: string;
+	access_secret: string;
+}
+
 interface AddPhotoToCollectionRequest {
 	photo_uuid: string;
 }
@@ -52,9 +61,11 @@ export async function fetchSelfCollections(): Promise<Array<SimpleCollection>> {
 	}
 }
 
-export async function fetchCollection(collection_uuid: string): Promise<Collection> {
+export async function fetchCollection(collection_uuid: string, access_secret?: string): Promise<Collection> {
 	try {
-		return (await api.get(`/collection/${collection_uuid}`)).data;
+		return (await api.get(`/collection/${collection_uuid}`, {
+			params: access_secret ? { collection_access_secret: access_secret } : undefined,
+		})).data;
 	} catch (error: any) {
 		const errorText = error.response?.data ?? error.message ?? "<unknown error>";
 
@@ -70,6 +81,37 @@ export async function uploadCollection(metadata: UploadingCollectionMetadata) {
 		const errorText = error.response?.data ?? error.message ?? "<unknown error>";
 
 		throw new Error(`[api] Error uploading collection ${errorText}`);
+	}
+}
+
+export async function generateCollectionAccessSecret(
+	collection_uuid: string,
+	props: GenerateCollectionAccessSecretProps,
+): Promise<GenerateCollectionAccessSecretResponse> {
+	try {
+		const reqestProps: GenerateCollectionAccessSecretProps = {
+			...props,
+			expires_duration: props.expires_duration * 1e9,
+		};
+		const response = await api.post(`/collection/${collection_uuid}/secret`, reqestProps);
+		return response.data;
+	} catch (error: any) {
+		const errorText = error.response?.data.error ?? error.message ?? "<unknown error>";
+
+		console.error(`[api] Error generate collection access secret ${errorText}`);
+		throw new Error(errorText);
+	}
+}
+
+export async function deleteCollectionAccessSecret(collection_uuid: string) {
+	try {
+		const response = await api.delete(`/collection/${collection_uuid}/secret`);
+		return response.data;
+	} catch (error: any) {
+		const errorText = error.response?.data.error ?? error.message ?? "<unknown error>";
+
+		console.error(`[api] Error delete collection access secret ${errorText}`);
+		throw new Error(errorText);
 	}
 }
 
