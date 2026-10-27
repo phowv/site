@@ -1,16 +1,18 @@
 import { useEffect, useState } from "react";
-import { NavLink, useParams } from "react-router-dom";
-import { fetchCollection, type Collection, type SmallPhotoInfo } from "../lib/api/collectionApi";
+import { useParams } from "react-router-dom";
+import { fetchCollection, type Collection } from "../lib/api/collectionApi";
 import SecureImage from "../components/UI/SecureImage/SecureImage";
 import { toPhotoSize } from "../lib/api/photoApi";
 import LoadImageViewingModal from "../components/LoadImageViewingModal/LoadImageViewingModal";
+import Link from "../components/UI/Link/Link";
+import Container from "../components/UI/Container/Container";
 
 const CollectionPage = () => {
 	const { collection_uuid } = useParams();
 
 	const [status, setStatus] = useState("empty");
 	const [collection, setCollection] = useState<Collection>();
-	const [viewingPhoto, setViewingPhoto] = useState<SmallPhotoInfo | null>(null);
+	const [currentIndex, setCurrentIndex] = useState<number | null>(null);
 
 	const requirePhotoSize = toPhotoSize(localStorage.getItem("feedImageRequireSize") ?? "");
 
@@ -25,15 +27,35 @@ const CollectionPage = () => {
 				console.log("Error fetch collection: ", err);
 				setStatus("error");
 			});
-	});
+	}, []);
+
+	const nextPhoto = () => {
+		if (currentIndex === null) return;
+
+		setCurrentIndex((prev) => (prev === null ? null : (prev + 1) % (collection?.photos.length ?? 1)));
+	};
+	const prevPhoto = () => {
+		if (currentIndex === null) return;
+		
+		
+		const len = (collection?.photos.length ?? 1);
+		setCurrentIndex((prev) =>
+			prev === null ? null : (prev - 1 + len) % len,
+		);
+	};
 
 	return (
-		<>
-			{viewingPhoto ? (
-				<LoadImageViewingModal photoDesc={viewingPhoto} close={() => setViewingPhoto(null)} />
-			) : undefined}
+		<Container>
+			{currentIndex !== null && collection && (
+				<LoadImageViewingModal
+					photoDesc={collection.photos[currentIndex]}
+					close={() => setCurrentIndex(null)}
+					next={nextPhoto}
+					prev={prevPhoto}
+				/>
+			)}
 
-			<NavLink to="/collections">Back</NavLink>
+			<Link to="/collections">Back</Link>
 			{status == "loading" && <p>Loading...</p>}
 			{status == "error" && <p>Loading error</p>}
 			{status == "loaded" && collection && (
@@ -49,10 +71,10 @@ const CollectionPage = () => {
 								columnGap: "5px",
 							}}
 						>
-							{collection.photos.map((photoDesc) => (
+							{collection.photos.map((photoDesc, idx) => (
 								<SecureImage
 									key={photoDesc.photo_uuid}
-									open={() => setViewingPhoto(photoDesc)}
+									open={() => setCurrentIndex(idx)}
 									photoUuid={photoDesc.photo_uuid}
 									photoSize={requirePhotoSize}
 									accessKey={photoDesc.access_key}
@@ -62,7 +84,7 @@ const CollectionPage = () => {
 					)}
 				</>
 			)}
-		</>
+		</Container>
 	);
 };
 

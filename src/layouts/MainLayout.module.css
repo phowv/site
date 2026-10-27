@@ -5,19 +5,6 @@
 	align-items: center;
 }
 
-.header__nav_link {
-	padding: 0.5rem 0.8rem 0.5rem 0.8rem;
-	background-color: var(--accent);
-	border-radius: var(--button-border-radius);
-	border: var(--accent) solid 2px;
-	cursor: pointer;
-	transition: all var(--transition-time);
-}
-
-.header__nav_link:hover {
-	background-color: var(--light-color);
-}
-
 .header__home_icon {
 	aspect-ratio: 1 / 1;
 	width: var(--default-icon-size);

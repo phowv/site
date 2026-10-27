@@ -9,8 +9,8 @@ import { useNavigate } from "react-router-dom";
 export interface ImageViewingModalProps {
 	photoDesc: Photo;
 	close: () => void;
-	next: () => void;
-	prev: () => void;
+	next?: () => void;
+	prev?: () => void;
 }
 
 const ImageViewingModal = ({ photoDesc, close, next, prev }: ImageViewingModalProps) => {
@@ -23,9 +23,9 @@ const ImageViewingModal = ({ photoDesc, close, next, prev }: ImageViewingModalPr
 				e.stopPropagation();
 				close();
 			} else if (e.key === "ArrowLeft") {
-				prev();
+				prev?.();
 			} else if (e.key === "ArrowRight") {
-				next();
+				next?.();
 			}
 		};
 		window.addEventListener("keydown", handleKeyDown);

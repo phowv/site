@@ -8,8 +8,8 @@ export interface Photo {
 	access_key: string;
 	description: string;
 	tags: PhotoTagMetadata[];
-	created_at: Date;
-	took_at: Date;
+	created_at: number;
+	took_at: number;
 	access_level: AccessModifier;
 }
 

@@ -1,7 +1,5 @@
 .container {
-	margin: var(--default-space);
 	display: grid;
-	gap: var(--default-space);
 }
 
 .settings_line {

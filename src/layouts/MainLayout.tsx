@@ -2,6 +2,8 @@ import { NavLink, Outlet } from "react-router-dom";
 import Header from "../components/Header/Header";
 import cl from "./MainLayout.module.css";
 import useAuth from "../lib/hooks/useAuth";
+import Link from "../components/UI/Link/Link";
+import A from "../components/UI/A/A";
 
 export default function MainLayout() {
 	const { isAuth, user, logout } = useAuth();
@@ -13,35 +15,35 @@ export default function MainLayout() {
 					<NavLink to="/">
 						<img className={cl.header__home_icon} src="/ico.svg" alt="Home" />
 					</NavLink>
-					<NavLink className={cl.header__nav_link} to="/collections">
+					<Link to="/collections">
 						Collections
-					</NavLink>
-					<NavLink className={cl.header__nav_link} to="/settings">
+					</Link>
+					<Link to="/settings">
 						Settings
-					</NavLink>
-					<NavLink className={cl.header__nav_link} to="/profile">
+					</Link>
+					<Link to="/profile">
 						Profile
-					</NavLink>
-					<NavLink className={cl.header__nav_link} to="/create">
+					</Link>
+					<Link to="/create">
 						Create
-					</NavLink>
-					{/* <NavLink className={cl.header__nav_link} to="/tags">Tags</NavLink> */}
+					</Link>
+					{/* <Link  to="/tags">Tags</Link> */}
 
 					{isAuth ? (
 						<>
 							<p>Hello, {user?.login}</p>
-							<a className={cl.header__nav_link} onClick={logout}>
+							<A onClick={logout}>
 								Logout
-							</a>
+							</A>
 						</>
 					) : (
 						<>
-							<NavLink className={cl.header__nav_link} to="/login">
+							<Link to="/login">
 								Login
-							</NavLink>
-							<NavLink className={cl.header__nav_link} to="/register">
+							</Link>
+							<Link to="/register">
 								Register
-							</NavLink>
+							</Link>
 						</>
 					)}
 				</nav>

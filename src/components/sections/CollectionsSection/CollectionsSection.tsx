@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import {
 	fetchCollection,
 	fetchCollections,
+	fetchSelfCollections,
 	type SimpleCollection,
 } from "../../../lib/api/collectionApi";
 import CollectionPreview from "../../UI/CollectionPreview/CollectionPreview";
@@ -10,6 +11,7 @@ import cl from "./CollectionsSection.module.css";
 
 interface CollectionSectionProps {
 	owner_login?: string;
+	viewSelfCollections?: boolean;
 }
 
 interface CollectionWithPreview extends SimpleCollection {
@@ -19,7 +21,7 @@ interface CollectionWithPreview extends SimpleCollection {
 	};
 }
 
-const CollectionSection = ({ owner_login }: CollectionSectionProps) => {
+const CollectionsSection = ({ owner_login, viewSelfCollections }: CollectionSectionProps) => {
 	const [status, setStatus] = useState("empty");
 	const [collectionsList, setCollectionsList] = useState<Array<CollectionWithPreview>>([]);
 
@@ -27,8 +29,15 @@ const CollectionSection = ({ owner_login }: CollectionSectionProps) => {
 
 	useEffect(() => {
 		setStatus("loading");
-		fetchCollections(owner_login)
-			.then(async (collections) => {
+		let collectionsPromise: Promise<Array<SimpleCollection>>
+
+		if (viewSelfCollections) {
+			collectionsPromise = fetchSelfCollections()
+		} else {
+			collectionsPromise = fetchCollections(owner_login)
+		}
+		
+		collectionsPromise.then(async (collections) => {
 				const newCollections = await Promise.all(
 					collections.map(async (collection) => {
 						// TODO: use request for get preview when it will created
@@ -70,7 +79,11 @@ const CollectionSection = ({ owner_login }: CollectionSectionProps) => {
 							key={collection.collection_uuid}
 							collection={collection}
 							open={() => {
-								navigate(`/collection/${collection.collection_uuid}`);
+								if (viewSelfCollections) {
+									navigate(`/collection/${collection.collection_uuid}/edit`);
+								} else {
+									navigate(`/collection/${collection.collection_uuid}`);
+								}
 							}}
 							previewPhoto={collection.previewPhoto}
 						/>
@@ -81,4 +94,4 @@ const CollectionSection = ({ owner_login }: CollectionSectionProps) => {
 	);
 };
 
-export default CollectionSection;
+export default CollectionsSection;

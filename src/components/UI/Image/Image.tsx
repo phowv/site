@@ -1,14 +1,15 @@
 import type React from "react";
 import cl from "./Image.module.css";
 
-interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+export interface ImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 	src: string;
 	open: () => void;
+	containerStyle?: React.CSSProperties;
 }
 
-const Image = ({ src, open, ...props }: ImageProps) => {
+const Image = ({ src, open, containerStyle, ...props }: ImageProps) => {
 	return (
-		<div className={cl.imageCard} onClick={open}>
+		<div className={cl.imageCard} onClick={open} style={containerStyle}>
 			<img src={src} {...props} />
 		</div>
 	);

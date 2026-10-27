@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { fetchPhotos, toPhotoSize, type Photo } from "../lib/api/photoApi";
-import { NavLink, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
 	fetchCollection,
 	type SmallPhotoInfo,
@@ -11,6 +11,8 @@ import {
 import SecureImage from "../components/UI/SecureImage/SecureImage";
 import Button from "../components/UI/Button/Button";
 import useAuth from "../lib/hooks/useAuth";
+import Link from "../components/UI/Link/Link";
+import Container from "../components/UI/Container/Container";
 
 const CollectionEditPage = () => {
 	const { user } = useAuth();
@@ -19,6 +21,7 @@ const CollectionEditPage = () => {
 	const [status, setStatus] = useState<"empty" | "loading" | "loaded" | "error">("empty");
 	const [collection, setCollection] = useState<Collection>();
 	const [selectedToDelete, setSelectedToDelete] = useState<SmallPhotoInfo[]>([]);
+	const [selectedToAdd, setSelectedToAdd] = useState<SmallPhotoInfo[]>([]);
 
 	const [statusPhotos, setStatusPhotos] = useState<"empty" | "loading" | "loaded" | "error">(
 		"empty",
@@ -35,6 +38,7 @@ const CollectionEditPage = () => {
 			const data = await fetchCollection(collection_uuid);
 			setCollection(data);
 			setStatus("loaded");
+			setSelectedToAdd([]);
 			setSelectedToDelete([]);
 		} catch (err) {
 			console.log("Error fetch collection: ", err);
@@ -60,7 +64,7 @@ const CollectionEditPage = () => {
 
 	useEffect(() => {
 		loadCollection();
-	}, [loadCollection, collection_uuid]);
+	}, [collection_uuid]);
 
 	const availablePhotos = useMemo(() => {
 		const collectionIds = new Set(collection?.photos.map((p) => p.photo_uuid) ?? []);
@@ -82,22 +86,35 @@ const CollectionEditPage = () => {
 		}
 	};
 
-	const handleAddPhoto = async (photo: Photo) => {
-		if (!collection_uuid) return;
+	const handleAdd = async () => {
+		if (!collection_uuid || selectedToAdd.length === 0) return;
 
 		try {
-			await addPhotoToCollection(collection_uuid, photo.photo_uuid);
+			await Promise.all(
+				selectedToAdd.map((photo) =>
+					addPhotoToCollection(collection_uuid, photo.photo_uuid),
+				),
+			);
 			await loadCollection();
 		} catch (err) {
+			
 			console.error("Error add photo to collection: ", err);
 		}
 	};
 
-	return (
-		<>
-			<NavLink to="/collections">Back</NavLink>
+	const handleClear = () => {
+		setSelectedToAdd([]);
+		setSelectedToDelete([]);
+	}
 
-			{selectedToDelete.length !== 0 && <Button onClick={handleRemove}>Remove</Button>}
+	return (
+		<Container>
+			<div>
+				<Link to="/collections/my">Back</Link>
+				{selectedToDelete.length !== 0 && <Button onClick={handleRemove}>Remove</Button>}
+				{selectedToAdd.length !== 0 && <Button onClick={handleAdd}>Add</Button>}
+				{(selectedToDelete.length !== 0 || selectedToAdd.length !== 0) && <Button onClick={handleClear}>Clear</Button>}
+			</div>
 
 			{(status === "loading" || statusPhotos === "loading") && <p>Loading...</p>}
 			{status === "error" && <p>Loading error</p>}
@@ -123,8 +140,10 @@ const CollectionEditPage = () => {
 
 								const img = (
 									<SecureImage
+										containerStyle={{border: isSelected ? "2px solid red" : undefined}}
 										key={photoDesc.photo_uuid}
-										open={() =>
+										open={() => {
+											setSelectedToAdd([]);
 											setSelectedToDelete((prev) => {
 												const exists = prev.some((p) => p.photo_uuid === photoDesc.photo_uuid);
 												if (exists) {
@@ -132,20 +151,14 @@ const CollectionEditPage = () => {
 												}
 												return [...prev, photoDesc];
 											})
-										}
+										}}
 										photoUuid={photoDesc.photo_uuid}
 										photoSize={requirePhotoSize}
 										accessKey={photoDesc.access_key}
 									/>
 								);
 
-								return isSelected ? (
-									<div key={photoDesc.photo_uuid} style={{ border: "2px solid red" }}>
-										{img}
-									</div>
-								) : (
-									img
-								);
+								return img;
 							})}
 						</section>
 					)}
@@ -158,19 +171,37 @@ const CollectionEditPage = () => {
 							columnGap: "5px",
 						}}
 					>
-						{availablePhotos.map((photoDesc) => (
-							<SecureImage
-								key={photoDesc.photo_uuid}
-								open={() => handleAddPhoto(photoDesc)}
-								photoUuid={photoDesc.photo_uuid}
-								photoSize={requirePhotoSize}
-								accessKey={photoDesc.access_key}
-							/>
-						))}
+							{availablePhotos.map((photoDesc) => {
+								const isSelected = selectedToAdd.some(
+									(p) => p.photo_uuid === photoDesc.photo_uuid,
+								);
+
+								const img = (
+								<SecureImage
+									containerStyle={{border: isSelected ? "2px solid green" : undefined}}
+									key={photoDesc.photo_uuid}
+									open={() => {
+										setSelectedToDelete([]);
+										setSelectedToAdd((prev) => {
+											const exists = prev.some((p) => p.photo_uuid === photoDesc.photo_uuid);
+											if (exists) {
+												return prev.filter((p) => p.photo_uuid !== photoDesc.photo_uuid);
+											}
+											return [...prev, photoDesc];
+										})
+									}}
+									photoUuid={photoDesc.photo_uuid}
+									photoSize={requirePhotoSize}
+									accessKey={photoDesc.access_key}
+								/>
+							);
+
+							return img;
+						})}
 					</section>
 				</>
 			)}
-		</>
+		</Container>
 	);
 };
 

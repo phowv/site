@@ -38,9 +38,9 @@ const ImageEditingModal = (props: ImageEditingModalProps) => {
 				e.stopPropagation();
 				close();
 			} else if (e.key === "ArrowLeft") {
-				props.prev();
+				props.prev?.();
 			} else if (e.key === "ArrowRight") {
-				props.next();
+				props.next?.();
 			}
 		};
 		window.addEventListener("keydown", handleKeyDown);
