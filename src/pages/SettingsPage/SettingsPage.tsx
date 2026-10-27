@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { PhotoSize } from "../../lib/api/photoApi";
 import cl from "./SettingsPage.module.css";
 import { applyTheme, type ThemeMode } from "../../lib/utils/themeUtils";
+import Container from "../../components/UI/Container/Container";
 
 const SettingsPage = () => {
 	const [feedImageColumnsCount, setFeedImageColumnsCount] = useState(
@@ -23,7 +24,7 @@ const SettingsPage = () => {
 	}, [themeMode]);
 
 	return (
-		<section style={{ padding: "10px" }} className={cl.container}>
+		<Container className={cl.container}>
 			<label className={cl.settings_line}>
 				<p>Feed image columns count: {feedImageColumnsCount}</p>
 				<input
@@ -55,7 +56,7 @@ const SettingsPage = () => {
 					<option value="dark">Dark</option>
 				</select>
 			</label>
-		</section>
+		</Container>
 	);
 };
 

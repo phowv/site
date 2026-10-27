@@ -9,11 +9,29 @@ import cl from "./LoadImageViewingModal.module.css";
 interface LoadImageViewingModalProps {
 	photoDesc: SmallPhotoInfo;
 	close: () => void;
+	next?: () => void;
+	prev?: () => void;
 }
 
-const LoadImageViewingModal = ({ photoDesc, close }: LoadImageViewingModalProps) => {
+const LoadImageViewingModal = ({ photoDesc, close, next, prev }: LoadImageViewingModalProps) => {
 	const [status, setStatus] = useState("empty");
 	const [photo, setPhoto] = useState<Photo>();
+
+	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === "Escape") {
+				e.preventDefault();
+				e.stopPropagation();
+				close();
+			} else if (e.key === "ArrowLeft") {
+				prev?.();
+			} else if (e.key === "ArrowRight") {
+				next?.();
+			}
+		};
+		window.addEventListener("keydown", handleKeyDown);
+		return () => window.removeEventListener("keydown", handleKeyDown);
+	});
 
 	useEffect(() => {
 		setStatus("loading");
@@ -33,7 +51,7 @@ const LoadImageViewingModal = ({ photoDesc, close }: LoadImageViewingModalProps)
 			{status == "loading" && <p>Loading...</p>}
 			{status == "error" && <p>Loading error</p>}
 			{status == "loaded" && photo && (
-				<FormModal visible={true} close={close}>
+				<FormModal visible={true} close={close} next={next} prev={prev}>
 					<div className={cl.imageDescription}>
 						<h1>{photo.title}</h1>
 						<p>

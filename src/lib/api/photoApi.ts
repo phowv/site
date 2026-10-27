@@ -8,8 +8,8 @@ export interface Photo {
 	access_key: string;
 	description: string;
 	tags: PhotoTagMetadata[];
-	created_at: Date;
-	took_at: Date;
+	created_at: number;
+	took_at: number;
 	access_level: AccessModifier;
 }
 
@@ -103,6 +103,18 @@ export async function fetchPhotos(owner_login?: string): Promise<Array<Photo>> {
 		const errorText = error.response?.data.error ?? error.message ?? "<unknown error>";
 
 		console.error(`[api] Error loading photos  ${errorText}`);
+		throw new Error(errorText);
+	}
+}
+
+export async function fetchSelfPhotos(): Promise<Array<Photo>> {
+	try {
+		const response = await api.get("/me/photos");
+		return Array.isArray(response.data) ? response.data : [];
+	} catch (error: any) {
+		const errorText = error.response?.data.error ?? error.message ?? "<unknown error>";
+
+		console.error(`[api] Error loading self photos  ${errorText}`);
 		throw new Error(errorText);
 	}
 }

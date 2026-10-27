@@ -38,9 +38,9 @@ const ImageEditingModal = (props: ImageEditingModalProps) => {
 				e.stopPropagation();
 				close();
 			} else if (e.key === "ArrowLeft") {
-				props.prev();
+				props.prev?.();
 			} else if (e.key === "ArrowRight") {
-				props.next();
+				props.next?.();
 			}
 		};
 		window.addEventListener("keydown", handleKeyDown);
@@ -48,7 +48,7 @@ const ImageEditingModal = (props: ImageEditingModalProps) => {
 	}, []);
 
 	const doneEditingCallback = async () => {
-		let patchData: PatchPhotoProps = {
+		const patchData: PatchPhotoProps = {
 			access_level: props.photoDesc.access_level,
 		};
 

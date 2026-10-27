@@ -3,8 +3,8 @@ import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import AnonymousRoute from "./auth/AnonymousRoute";
-import ProtectedRoute from "./auth/ProtectedRoute";
+import AnonymousRoute from "./lib/auth/AnonymousRoute";
+import ProtectedRoute from "./lib/auth/ProtectedRoute";
 import CreatePage from "./pages/CreatePage";
 import SettingsPage from "./pages/SettingsPage/SettingsPage";
 import VerificaticationPage from "./pages/VerificaticationPage";
@@ -16,8 +16,8 @@ import CollectionEditPage from "./pages/CollectionEditPage";
 import CollectionCreatePage from "./pages/CollectionCreatePage";
 import SinglePhotoViewPage from "./pages/SinglePhotoViewPage";
 import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
-import { AuthProvider } from "./auth/authContext";
 import App from "./App";
+import { AuthProvider } from "./lib/auth/authProvider";
 
 export const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -42,13 +42,14 @@ export const router = createBrowserRouter(
 				<Route path="create" element={<CreatePage />} />
 				<Route path="tags" element={<TagsPage />} />
 				<Route path="collection/create" element={<CollectionCreatePage />} />
+				<Route path="collections/my" element={<CollectionsPage viewSelfCollections={true}/>} />
+				<Route path="collection/:collection_uuid/edit" element={<CollectionEditPage />} />
 			</Route>
 
 			<Route path="photo/:photo_uuid" element={<SinglePhotoViewPage />} />
 			<Route path="profile/:user" element={<ProfilePage />} />
 			<Route path="collections" element={<CollectionsPage />} />
 			<Route path="collection/:collection_uuid" element={<CollectionPage />} />
-			<Route path="collection/:collection_uuid/edit" element={<CollectionEditPage />} />
 
 			<Route path="settings" element={<SettingsPage />} />
 			<Route path="notfound" element={<NotFoundPage />} />

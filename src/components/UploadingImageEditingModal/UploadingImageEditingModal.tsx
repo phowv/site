@@ -42,7 +42,7 @@ const UploadingImageEditingModal = ({
 		};
 		window.addEventListener("keydown", handleKeyDown);
 		return () => window.removeEventListener("keydown", handleKeyDown);
-	}, []);
+	});
 
 	const rotateEditingImage = async (isRight: boolean) => {
 		if (!inputFile) return;

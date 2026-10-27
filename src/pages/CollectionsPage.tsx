@@ -1,13 +1,22 @@
-import { NavLink } from "react-router-dom";
-import CollectionSection from "../components/sections/CollectionSection";
+import CollectionsSection from "../components/sections/CollectionsSection/CollectionsSection";
+import Container from "../components/UI/Container/Container";
+import Link from "../components/UI/Link/Link";
 
-const CollectionsPage = () => {
+interface Props {
+	viewSelfCollections?: boolean;
+}
+
+const CollectionsPage = ({ viewSelfCollections }: Props) => {
 	return (
-		<>
-			<NavLink to="/collection/create">Create</NavLink>
+		<Container>
+			{viewSelfCollections &&
+				<Link to="/collection/create">
+					Create collection
+				</Link>
+			}
 
-			<CollectionSection />
-		</>
+			<CollectionsSection viewSelfCollections={viewSelfCollections}/>
+		</Container>
 	);
 };
 

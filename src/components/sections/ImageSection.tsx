@@ -1,5 +1,11 @@
 import { useEffect, useRef, useState } from "react";
-import { fetchPhotos, PhotoSize, toPhotoSize, type Photo } from "../../lib/api/photoApi";
+import {
+	fetchPhotos,
+	fetchSelfPhotos,
+	PhotoSize,
+	toPhotoSize,
+	type Photo,
+} from "../../lib/api/photoApi";
 import SecureImage from "../UI/SecureImage/SecureImage";
 import { MasonryGrid, type MasonryGridHandle } from "../MasonryGrid/MasonryGrid";
 
@@ -8,6 +14,7 @@ interface ImageSectionProps {
 	setPhotosList: (a: Array<Photo>) => void;
 	openPhoto: (idx: number) => void;
 	owner_login?: string;
+	viewSelfPhotos?: boolean;
 	version?: number;
 }
 
@@ -26,7 +33,15 @@ const ImageSection = (props: ImageSectionProps) => {
 
 	useEffect(() => {
 		setStatus("loading");
-		fetchPhotos(props.owner_login)
+		let loadingPhotos: Promise<Array<Photo>>;
+
+		if (props.viewSelfPhotos) {
+			loadingPhotos = fetchSelfPhotos();
+		} else {
+			loadingPhotos = fetchPhotos(props.owner_login);
+		}
+
+		loadingPhotos
 			.then((photos) => {
 				props.setPhotosList(photos);
 				setStatus("loaded");

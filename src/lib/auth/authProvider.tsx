@@ -1,47 +1,21 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
 	getMe,
 	loginUser,
 	registerUser,
 	type LoginRequest,
 	type RegisterRequest,
-} from "../lib/api/authApi";
+} from "../api/authApi";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { subscribeToLogout, triggerLogout } from "../lib/utils/authUtils";
-
-interface User {
-	login: string;
-	email: string;
-	description: string;
-}
-
-interface AuthContextType {
-	user: User | null;
-	isAuth: boolean;
-	isLoading: boolean;
-	login: (data: LoginRequest) => Promise<void>;
-	register: (data: RegisterRequest) => Promise<void>;
-	logout: () => void;
-}
-
-const AuthContext = createContext<AuthContextType | null>(null);
-
-export function useAuth(): AuthContextType {
-	const context = useContext(AuthContext);
-
-	if (!context) {
-		throw new Error("useAuth must be used within AuthProvider");
-	}
-
-	return context;
-}
+import { subscribeToLogout, triggerLogout } from "../utils/authUtils";
+import { AuthContext, type User } from "./authContext";
 
 interface Props {
 	children: React.ReactNode;
 }
 
-export function AuthProvider({ children }: Props) {
+export  function AuthProvider({ children }: Props) {
 	const [user, setUser] = useState<User | null>(null);
 	const [isLoading, setIsLoading] = useState(true);
 	const navigate = useNavigate();
@@ -49,6 +23,7 @@ export function AuthProvider({ children }: Props) {
 	useEffect(() => {
 		subscribeToLogout(() => {
 			localStorage.removeItem("access_token");
+			localStorage.removeItem("current_user_login");
 			setUser(null);
 		});
 
@@ -71,6 +46,7 @@ export function AuthProvider({ children }: Props) {
 			})
 			.catch(() => {
 				localStorage.removeItem("access_token");
+				localStorage.removeItem("current_user_login");
 			})
 			.finally(() => {
 				setIsLoading(false);
@@ -88,9 +64,13 @@ export function AuthProvider({ children }: Props) {
 				email: userData.user_email,
 				description: "not loaded",
 			});
+
+			localStorage.setItem("current_user_login", userData.user_login);
+
 			console.debug("fetched user data", userData);
 		} catch (error: any) {
 			localStorage.removeItem("access_token");
+			localStorage.removeItem("current_user_login");
 			setUser(null);
 			throw error;
 		}

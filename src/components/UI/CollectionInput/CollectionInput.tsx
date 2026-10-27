@@ -52,13 +52,13 @@ const CollectionInput = ({ upload }: CollectionInputProps) => {
 				}}
 			>
 				<Input
-					placeholder="Tag name..."
+					placeholder="Collection name..."
 					value={collection.title}
 					onChange={(e) => setCollectionTitle(e.target.value)}
 				/>
 
 				<Input
-					placeholder="Tag description (optional)..."
+					placeholder="Collection description (optional)..."
 					value={collection.description ?? ""}
 					onChange={(e) => setCollectionDescription(e.target.value)}
 				/>

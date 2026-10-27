@@ -24,7 +24,7 @@ export async function rotateFile90(file: File, isRight: boolean = true): Promise
 	ctx.drawImage(img, -w / 2, -h / 2);
 
 	const blob = await new Promise<Blob | null>((res) =>
-		canvas.toBlob(res as any, file.type || "image/png"),
+		canvas.toBlob(res, file.type || "image/png"),
 	);
 	return new File([blob as Blob], file.name, { type: (blob as Blob).type });
 }

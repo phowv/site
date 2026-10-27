@@ -1,16 +1,21 @@
 import { useEffect, useMemo, useState } from "react";
 import { fetchPhotos, toPhotoSize, type Photo } from "../lib/api/photoApi";
-import { NavLink, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
 	fetchCollection,
 	type SmallPhotoInfo,
 	type Collection,
 	removePhotoFromCollection,
 	addPhotoToCollection,
+	generateCollectionAccessSecret,
+	deleteCollectionAccessSecret,
 } from "../lib/api/collectionApi";
 import SecureImage from "../components/UI/SecureImage/SecureImage";
 import Button from "../components/UI/Button/Button";
-import { useAuth } from "../auth/authContext";
+import useAuth from "../lib/hooks/useAuth";
+import Link from "../components/UI/Link/Link";
+import Container from "../components/UI/Container/Container";
+import Input from "../components/UI/Input/Input";
 
 const CollectionEditPage = () => {
 	const { user } = useAuth();
@@ -19,6 +24,12 @@ const CollectionEditPage = () => {
 	const [status, setStatus] = useState<"empty" | "loading" | "loaded" | "error">("empty");
 	const [collection, setCollection] = useState<Collection>();
 	const [selectedToDelete, setSelectedToDelete] = useState<SmallPhotoInfo[]>([]);
+	const [selectedToAdd, setSelectedToAdd] = useState<SmallPhotoInfo[]>([]);
+
+	const [error, setError] = useState<string | undefined>(undefined);
+	const [copied, setCopied] = useState(false);
+	const [accessLink, setAccessLink] = useState<string>("");
+	const [expiresDuration, setExpiresDuration] = useState(60); // default 1 hour
 
 	const [statusPhotos, setStatusPhotos] = useState<"empty" | "loading" | "loaded" | "error">(
 		"empty",
@@ -35,6 +46,7 @@ const CollectionEditPage = () => {
 			const data = await fetchCollection(collection_uuid);
 			setCollection(data);
 			setStatus("loaded");
+			setSelectedToAdd([]);
 			setSelectedToDelete([]);
 		} catch (err) {
 			console.log("Error fetch collection: ", err);
@@ -82,22 +94,91 @@ const CollectionEditPage = () => {
 		}
 	};
 
-	const handleAddPhoto = async (photo: Photo) => {
-		if (!collection_uuid) return;
+	const handleAdd = async () => {
+		if (!collection_uuid || selectedToAdd.length === 0) return;
 
 		try {
-			await addPhotoToCollection(collection_uuid, photo.photo_uuid);
+			await Promise.all(
+				selectedToAdd.map((photo) =>
+					addPhotoToCollection(collection_uuid, photo.photo_uuid),
+				),
+			);
 			await loadCollection();
 		} catch (err) {
+			
 			console.error("Error add photo to collection: ", err);
 		}
 	};
 
-	return (
-		<>
-			<NavLink to="/collections">Back</NavLink>
+	const handleClear = () => {
+		setSelectedToAdd([]);
+		setSelectedToDelete([]);
+	}
 
-			{selectedToDelete.length !== 0 && <Button onClick={handleRemove}>Remove</Button>}
+	const generateAccessLinkHandler = () => {
+		if (!collection_uuid) return;
+
+		generateCollectionAccessSecret(collection_uuid, {
+			expires_duration: expiresDuration * 60,
+		})
+			.then((accessSecret) => {
+				setAccessLink(
+					`${window.location.origin}/collection/${collection_uuid}?access_secret=${accessSecret.access_secret}`,
+				);
+			})
+			.catch((err) => {
+				const message = err instanceof Error ? err.message : String(err);
+
+				console.log("Error generate photo access link: ", message);
+				setError(message);
+			});
+	};
+
+	const deleteAccessLinkHandler = () => {
+		if (!collection_uuid) return;
+
+		deleteCollectionAccessSecret(collection_uuid)
+			.then(() => {
+				setAccessLink("");
+			})
+			.catch((err) => {
+				console.log("Error delete photo access link: ", err);
+			})
+			.finally(() => setError(undefined));
+	};
+
+	const copyAccessLink = () => {
+		navigator.clipboard.writeText(accessLink);
+		setCopied(true);
+	};
+
+	return (
+		<Container>
+			<div>
+				<Link to="/collections/my">Back</Link>
+				{error && <p style={{color: 'red'}}>{error}</p>}
+
+				{selectedToDelete.length !== 0 && <Button onClick={handleRemove}>Remove</Button>}
+				{selectedToAdd.length !== 0 && <Button onClick={handleAdd}>Add</Button>}
+				{(selectedToDelete.length !== 0 || selectedToAdd.length !== 0) && <Button onClick={handleClear}>Clear</Button>}
+
+				<label>
+					<p>Link access duration (minutes):</p>
+					<Input
+						value={expiresDuration}
+						onChange={(e) => setExpiresDuration(Number(e.target.value))}
+						type="number"
+						min={1}
+					/>
+				</label>
+				
+				<Button onClick={generateAccessLinkHandler}>Generate access link</Button>
+				<Button onClick={deleteAccessLinkHandler}>Delete access link</Button>
+
+				{accessLink !== "" && (
+					<Button onClick={copyAccessLink}>{copied ? "Copied" : "Copy access link"}</Button>
+				)}
+			</div>
 
 			{(status === "loading" || statusPhotos === "loading") && <p>Loading...</p>}
 			{status === "error" && <p>Loading error</p>}
@@ -123,8 +204,10 @@ const CollectionEditPage = () => {
 
 								const img = (
 									<SecureImage
+										containerStyle={{border: isSelected ? "2px solid red" : undefined}}
 										key={photoDesc.photo_uuid}
-										open={() =>
+										open={() => {
+											setSelectedToAdd([]);
 											setSelectedToDelete((prev) => {
 												const exists = prev.some((p) => p.photo_uuid === photoDesc.photo_uuid);
 												if (exists) {
@@ -132,20 +215,14 @@ const CollectionEditPage = () => {
 												}
 												return [...prev, photoDesc];
 											})
-										}
+										}}
 										photoUuid={photoDesc.photo_uuid}
 										photoSize={requirePhotoSize}
 										accessKey={photoDesc.access_key}
 									/>
 								);
 
-								return isSelected ? (
-									<div key={photoDesc.photo_uuid} style={{ border: "2px solid red" }}>
-										{img}
-									</div>
-								) : (
-									img
-								);
+								return img;
 							})}
 						</section>
 					)}
@@ -158,19 +235,37 @@ const CollectionEditPage = () => {
 							columnGap: "5px",
 						}}
 					>
-						{availablePhotos.map((photoDesc) => (
-							<SecureImage
-								key={photoDesc.photo_uuid}
-								open={() => handleAddPhoto(photoDesc)}
-								photoUuid={photoDesc.photo_uuid}
-								photoSize={requirePhotoSize}
-								accessKey={photoDesc.access_key}
-							/>
-						))}
+							{availablePhotos.map((photoDesc) => {
+								const isSelected = selectedToAdd.some(
+									(p) => p.photo_uuid === photoDesc.photo_uuid,
+								);
+
+								const img = (
+								<SecureImage
+									containerStyle={{border: isSelected ? "2px solid green" : undefined}}
+									key={photoDesc.photo_uuid}
+									open={() => {
+										setSelectedToDelete([]);
+										setSelectedToAdd((prev) => {
+											const exists = prev.some((p) => p.photo_uuid === photoDesc.photo_uuid);
+											if (exists) {
+												return prev.filter((p) => p.photo_uuid !== photoDesc.photo_uuid);
+											}
+											return [...prev, photoDesc];
+										})
+									}}
+									photoUuid={photoDesc.photo_uuid}
+									photoSize={requirePhotoSize}
+									accessKey={photoDesc.access_key}
+								/>
+							);
+
+							return img;
+						})}
 					</section>
 				</>
 			)}
-		</>
+		</Container>
 	);
 };
 

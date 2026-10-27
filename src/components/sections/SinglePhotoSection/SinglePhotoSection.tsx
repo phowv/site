@@ -24,7 +24,7 @@ const SinglePhotoSection = ({ photoUuid, accessSecret }: SinglePhotoSection) => 
 			.catch((err) => {
 				console.log("Error fetch photos: ", err);
 			});
-	}, []);
+	}, [photoUuid, accessSecret]);
 
 	return (
 		<div className={cl.wrapper}>

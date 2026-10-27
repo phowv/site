@@ -1,22 +1,33 @@
 import type { SimpleCollection } from "../../../lib/api/collectionApi";
-import Button from "../Button/Button";
+import { PhotoSize } from "../../../lib/api/photoApi";
+import SecureImg from "../SecureImg/SecureImg";
 import cl from "./CollectionPreview.module.css";
 
 interface CollectionPreviewProps {
 	collection: SimpleCollection;
-	open: (collection_uuid: string) => void;
-	edit: (collection_uuid: string) => void;
-	remove: (collection_uuid: string) => void;
+	open: () => void;
+	previewPhoto?: {
+		photoUuid: string;
+		accessKey: string;
+	};
 }
 
-const CollectionPreview = ({ collection, open, edit, remove }: CollectionPreviewProps) => {
+const CollectionPreview = ({ collection, open, previewPhoto }: CollectionPreviewProps) => {
 	return (
-		<div className={cl.collectionPreview}>
-			<h2>{collection.title}</h2>
-			<span>{collection.description}</span>
-			<Button onClick={() => open(collection.collection_uuid)}>Open</Button>
-			<Button onClick={() => edit(collection.collection_uuid)}>Edit</Button>
-			<Button onClick={() => remove(collection.collection_uuid)}>Remove</Button>
+		<div className={`${cl.collectionPreview} ${!previewPhoto ? cl.noPreview : ""}`} onClick={open}>
+			<div className={cl.descriptionContainer}>
+				<h2 className={cl.title}>{collection.title}</h2>
+			</div>
+			{previewPhoto && (
+				<>
+					<SecureImg
+						className={cl.previewPhoto}
+						photoUuid={previewPhoto.photoUuid}
+						photoSize={PhotoSize.small}
+						accessKey={previewPhoto.accessKey}
+					/>
+				</>
+			)}
 		</div>
 	);
 };
